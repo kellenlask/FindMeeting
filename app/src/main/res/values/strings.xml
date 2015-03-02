@@ -27,5 +27,7 @@
     <string name="title_activity_people_pane">people_pane</string>
     <string name="peopleTitle_3">People</string>
     <string name="calcAvailability_3">Find Meeting Times</string>
+    <string name="title_activity_saved_people">SavedPeople</string>
+    <string name="savedPeople_4">Saved People</string>
 
 </resources>
