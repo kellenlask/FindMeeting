@@ -1,6 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FindMeeting</string>
 
+    <string name="app_name">Test</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="meetingInfoTitle_1">Meeting Information</string>
+    <string name="meetingDaysLabel_1">Working Days</string>
+    <string name="mondayLabel_1">M</string>
+    <string name="sundayLabel_1">Su</string>
+    <string name="tuesdayLabel_1">T</string>
+    <string name="wednesdayLabel_1">W</string>
+    <string name="thursdayLabel_1">Th</string>
+    <string name="fridayLabel_1">F</string>
+    <string name="saturdayLabel_1">S</string>
+    <string name="daysDescription_1">Input the meeting\'s available days</string>
+    <string name="timeRangeLabel_1">Time Range</string>
+    <string name="fromLabel_1">From:</string>
+    <string name="toLabel_1">To:</string>
+    <string name="meetingLengthLabel_1">Meeting Length</string>
+    <string name="nextLabel">Next</string>
+    <string name="title_activity_summary_pane">SummaryPane</string>
+
 </resources>
