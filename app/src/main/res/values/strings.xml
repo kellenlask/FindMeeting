@@ -20,5 +20,9 @@
     <string name="meetingLengthLabel_1">Meeting Length</string>
     <string name="nextLabel">Next</string>
     <string name="title_activity_summary_pane">SummaryPane</string>
+    <string name="summaryTitle_2">Meeting Summary</string>
+    <string name="lengthLabel_2">Meeting Length:</string>
+    <string name="dayLabel_2">Day(s)</string>
+    <string name="timeLabel_2">Times</string>
 
 </resources>
