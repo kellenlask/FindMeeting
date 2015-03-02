@@ -24,5 +24,8 @@
     <string name="lengthLabel_2">Meeting Length:</string>
     <string name="dayLabel_2">Day(s)</string>
     <string name="timeLabel_2">Times</string>
+    <string name="title_activity_people_pane">people_pane</string>
+    <string name="peopleTitle_3">People</string>
+    <string name="calcAvailability_3">Find Meeting Times</string>
 
 </resources>
