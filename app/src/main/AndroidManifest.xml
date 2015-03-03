@@ -48,6 +48,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="FM.BK.MainActivity" />
         </activity>
+        <activity
+            android:name=".ResultsPage"
+            android:label="@string/title_activity_results_page"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="FM.BK.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
