@@ -40,6 +40,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="FM.BK.MainActivity" />
         </activity>
+        <activity
+            android:name=".NewObAv_Page"
+            android:label="@string/title_activity_new_ob_av__page"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="FM.BK.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
