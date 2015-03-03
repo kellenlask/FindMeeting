@@ -21,7 +21,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/possibleMeetings"
             android:id="@+id/textView30"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"/>
 
         <ListView
             android:layout_width="match_parent"
