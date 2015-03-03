@@ -29,5 +29,10 @@
     <string name="calcAvailability_3">Find Meeting Times</string>
     <string name="title_activity_saved_people">SavedPeople</string>
     <string name="savedPeople_4">Saved People</string>
+    <string name="title_activity_availability_page">AvailabilityPage</string>
+    <string name="availibilityTitle_5">Availability - </string>
+    <string name="availButtonText_5">New Availability</string>
+    <string name="saveText_5">Save</string>
+    <string name="newObligation_5">New Obligation</string>
 
 </resources>
