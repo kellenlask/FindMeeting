@@ -1,12 +1,12 @@
 package FM.BK;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class people_pane extends ActionBarActivity {
+public class PeoplePane extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

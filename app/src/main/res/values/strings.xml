@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Test</string>
+    <string name="app_name">Find Meeting</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="meetingInfoTitle_1">Meeting Information</string>
@@ -30,7 +30,7 @@
     <string name="title_activity_saved_people">SavedPeople</string>
     <string name="savedPeople_4">Saved People</string>
     <string name="title_activity_availability_page">AvailabilityPage</string>
-    <string name="availibilityTitle_5">Availability - </string>
+    <string name="availabilityTitle_5">Availability - </string>
     <string name="availButtonText_5">New Availability</string>
     <string name="saveText_5">Save</string>
     <string name="newObligation_5">New Obligation</string>

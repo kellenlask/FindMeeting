@@ -2,26 +2,26 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="FM.BK.NewObAv_Page">
+                tools:context="FM.BK.NewObAvPage">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:weightSum="1"
-        android:id="@+id/linearLayout">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <TextView
+            android:id="@+id/addTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/addTitle_6"
-            android:id="@+id/addTitle"
             android:layout_gravity="center_horizontal"
+            android:text="@string/addTitle_6"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold"/>
 
         <Space
@@ -31,11 +31,11 @@
             android:layout_weight="0.15"/>
 
         <TextView
+            android:id="@+id/textView21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/dayLabel_2"
-            android:id="@+id/textView21"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             />
 
         <TableLayout
@@ -50,60 +50,60 @@
                 android:layout_height="fill_parent">
 
                 <CheckBox
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/checkBox8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="0"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"/>
 
                 <CheckBox
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/checkBox9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="1"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"/>
 
                 <CheckBox
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/checkBox10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="2"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"/>
 
                 <CheckBox
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/checkBox11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="3"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"/>
 
                 <CheckBox
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/checkBox12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="4"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"/>
 
                 <CheckBox
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/checkBox13"
-                    android:layout_column="5"
-                    android:layout_gravity="center_horizontal"/>
-
-                <CheckBox
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_column="5"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"/>
+
+                <CheckBox
                     android:id="@+id/checkBox14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="6"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"/>
             </TableRow>
 
             <TableRow
@@ -111,74 +111,74 @@
                 android:layout_height="fill_parent">
 
                 <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/sundayLabel_1"
                     android:id="@+id/textView210"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="0"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/sundayLabel_1"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                 <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/mondayLabel_1"
                     android:id="@+id/textView22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="1"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/mondayLabel_1"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                 <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/tuesdayLabel_1"
                     android:id="@+id/textView23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="2"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/tuesdayLabel_1"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                 <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/wednesdayLabel_1"
                     android:id="@+id/textView24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="3"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/wednesdayLabel_1"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                 <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/thursdayLabel_1"
                     android:id="@+id/textView25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="4"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/thursdayLabel_1"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                 <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/fridayLabel_1"
                     android:id="@+id/textView26"
-                    android:layout_column="5"
-                    android:layout_gravity="center_horizontal"/>
-
-                <TextView
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/saturdayLabel_1"
+                    android:layout_column="5"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/fridayLabel_1"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                <TextView
                     android:id="@+id/textView27"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_column="6"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/saturdayLabel_1"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
             </TableRow>
         </TableLayout>
 
@@ -188,40 +188,40 @@
             android:layout_weight="0.15"/>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/textView28"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/fromLabel_1"
-                android:id="@+id/textView28"/>
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
 
             <EditText
+                android:id="@+id/editText4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="time"
+                android:layout_weight="1"
                 android:ems="10"
-                android:id="@+id/editText4"
-                android:layout_weight="1"/>
+                android:inputType="time"/>
 
             <TextView
+                android:id="@+id/textView29"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/toLabel_1"
-                android:id="@+id/textView29"/>
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
 
             <EditText
+                android:id="@+id/editText5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="time"
+                android:layout_weight="1"
                 android:ems="10"
-                android:id="@+id/editText5"
-                android:layout_weight="1"/>
+                android:inputType="time"/>
         </LinearLayout>
 
         <Space
@@ -230,12 +230,12 @@
             android:layout_weight="0.15"/>
 
         <Button
+            android:id="@+id/button9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/saveText_5"
-            android:id="@+id/button9"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true"
+            android:text="@string/saveText_5"
             android:textStyle="bold"/>
     </LinearLayout>
 
