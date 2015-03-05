@@ -41,22 +41,23 @@ public class MeetingParams extends ActionBarActivity {
 
 		initializeFields();
 
+		setCheckBoxActionHandlers();
+
 		setButtonActionHandler();
 
 	} //End protected void onCreate(Bundle)
 
 //----------------------------------------------------
 //
-//	Logical Methods
+//	Action Handlers
 //
 //----------------------------------------------------
-//Set the Next Button's action handler
 	public void setButtonActionHandler() {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				//Make Meeting Object
-				
+
 
 				//Send the Meeting Object along to the Summary Activity
 
@@ -64,6 +65,36 @@ public class MeetingParams extends ActionBarActivity {
 			}
 		});
 	} //End public void setButtonActionHandler()
+
+	public void setCheckBoxActionHandlers() {
+		View.OnClickListener comboBoxListener = new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				updateComboBox();
+			}
+		};
+
+		sunday.setOnClickListener(comboBoxListener);
+
+		monday.setOnClickListener(comboBoxListener);
+
+		tuesday.setOnClickListener(comboBoxListener);
+
+		wednesday.setOnClickListener(comboBoxListener);
+
+		thursday.setOnClickListener(comboBoxListener);
+
+		friday.setOnClickListener(comboBoxListener);
+
+		saturday.setOnClickListener(comboBoxListener);
+
+	} //End public void setCheckBoxActionHandlers()
+
+//----------------------------------------------------
+//
+//	Logical Methods
+//
+//----------------------------------------------------
 
 //Make a boolean array representing the available days as selected by the user via checkboxes.
 	public boolean[] makeDaysArray(){
@@ -79,6 +110,12 @@ public class MeetingParams extends ActionBarActivity {
 
 		return days;
 	} //End public boolean[] makeDaysArray()
+
+
+	public void updateComboBox() {
+
+
+	}//End public void updateComboBox()
 
 
 //Set the fields' values.
