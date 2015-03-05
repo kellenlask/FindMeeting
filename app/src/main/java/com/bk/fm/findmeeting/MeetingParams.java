@@ -2,6 +2,7 @@ package com.bk.fm.findmeeting;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -39,6 +40,9 @@ public class MeetingParams extends ActionBarActivity {
 		setContentView(R.layout.activity_meeting_params);
 
 		initializeFields();
+
+		setButtonActionHandler();
+
 	} //End protected void onCreate(Bundle)
 
 //----------------------------------------------------
@@ -46,8 +50,22 @@ public class MeetingParams extends ActionBarActivity {
 //	Logical Methods
 //
 //----------------------------------------------------
+//Set the Next Button's action handler
+	public void setButtonActionHandler() {
+		nextButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//Make Meeting Object
+				
 
-	//Make a boolean array representing the available days as selected by the user via checkboxes.
+				//Send the Meeting Object along to the Summary Activity
+
+
+			}
+		});
+	} //End public void setButtonActionHandler()
+
+//Make a boolean array representing the available days as selected by the user via checkboxes.
 	public boolean[] makeDaysArray(){
 		boolean[] days = new boolean[7];
 
@@ -62,6 +80,8 @@ public class MeetingParams extends ActionBarActivity {
 		return days;
 	} //End public boolean[] makeDaysArray()
 
+
+//Set the fields' values.
 	public void initializeFields() {
 	//Checkboxes
 		sunday = (CheckBox) findViewById(R.id.sunday);
