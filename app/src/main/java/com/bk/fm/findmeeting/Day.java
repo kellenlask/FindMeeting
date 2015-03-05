@@ -1,6 +1,9 @@
 /**
  * Created by Kellen on 3/4/2015.
  */
+
+package com.bk.fm.findmeeting;
+
 public enum Day {
 	SUNDAY (0),
 	MONDAY (1),
@@ -38,4 +41,24 @@ public enum Day {
 				return "Saturday";
 		}
 	} //End public String toString()
+
+	public static Day getDay(int index) {
+		switch(index) {
+			case 0:
+				return Day.SUNDAY;
+			case 1:
+				return Day.MONDAY;
+			case 2:
+				return Day.TUESDAY;
+			case 3:
+				return Day.WEDNESDAY;
+			case 4:
+				return Day.THURSDAY;
+			case 5:
+				return Day.FRIDAY;
+			default:
+				return Day.SATURDAY;
+		}
+
+	} //End public Day getDay(int)
 } //End public enum Day

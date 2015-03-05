@@ -1,6 +1,9 @@
 /**
  * Created by Kellen on 3/4/2015.
  */
+
+package com.bk.fm.findmeeting;
+
 public class Meeting {
 //Fields
 	private boolean[] days;

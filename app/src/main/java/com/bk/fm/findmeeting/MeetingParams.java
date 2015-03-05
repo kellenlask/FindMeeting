@@ -3,10 +3,13 @@ package com.bk.fm.findmeeting;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 
 public class MeetingParams extends ActionBarActivity {
 //----------------------------------------------------
@@ -28,6 +31,7 @@ public class MeetingParams extends ActionBarActivity {
 	private TextView endTime;
 	private TextView meetingDuration;
 
+	private Spinner dayComboBox;
 
 //----------------------------------------------------
 //
@@ -97,7 +101,7 @@ public class MeetingParams extends ActionBarActivity {
 //----------------------------------------------------
 
 //Make a boolean array representing the available days as selected by the user via checkboxes.
-	public boolean[] makeDaysArray(){
+	public boolean[] getSelectedDays(){
 		boolean[] days = new boolean[7];
 
 		days[0] = sunday.isChecked();
@@ -109,11 +113,23 @@ public class MeetingParams extends ActionBarActivity {
 		days[6] = saturday.isChecked();
 
 		return days;
-	} //End public boolean[] makeDaysArray()
+	} //End public boolean[] getSelectedDays()
 
 
 	public void updateComboBox() {
+		boolean[] days = getSelectedDays();
+		ArrayList<String> selectedDays = new ArrayList<>();
 
+		for(int i = 0; i < days.length; i++) {
+			if(days[i]) {
+				selectedDays.add(Day.getDay(i).toString());
+			}
+		}
+
+		ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectedDays);
+		data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		dayComboBox.setAdapter(data);
 
 	}//End public void updateComboBox()
 
@@ -136,6 +152,9 @@ public class MeetingParams extends ActionBarActivity {
 		startTime = (TextView) findViewById(R.id.startTime);
 		endTime = (TextView) findViewById(R.id.endTime);
 		meetingDuration = (TextView) findViewById(R.id.duration);
+
+	//Spinner
+		dayComboBox = (Spinner) findViewById(R.id.dayComboBox);
 
 	} //End public void initializeFields()
 
