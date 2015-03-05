@@ -2,11 +2,11 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="@dimen/activity_vertical_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="FM.BK.NewObAvPage">
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                tools:context="com.bk.fm.findmeeting.NewObligAvail">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -226,17 +226,16 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20px"
+            android:layout_height="20dp"
             android:layout_weight="0.15"/>
 
         <Button
             android:id="@+id/button9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/linearLayout"
-            android:layout_centerHorizontal="true"
             android:text="@string/saveText_5"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_weight="0.06"/>
     </LinearLayout>
 
 </RelativeLayout>

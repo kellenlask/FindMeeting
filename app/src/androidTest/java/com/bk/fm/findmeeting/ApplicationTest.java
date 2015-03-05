@@ -1,4 +1,4 @@
-package FM.BK;
+package com.bk.fm.findmeeting;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
