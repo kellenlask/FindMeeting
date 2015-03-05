@@ -54,7 +54,7 @@
                 android:layout_height="fill_parent">
 
                 <CheckBox
-                    android:id="@+id/checkBox2"
+                    android:id="@+id/sunday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="0"
@@ -62,7 +62,7 @@
                     android:layout_weight="1"/>
 
                 <CheckBox
-                    android:id="@+id/checkBox"
+                    android:id="@+id/monday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
@@ -70,7 +70,7 @@
                     android:layout_weight="1"/>
 
                 <CheckBox
-                    android:id="@+id/checkBox3"
+                    android:id="@+id/tuesday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="2"
@@ -78,7 +78,7 @@
                     android:layout_weight="1"/>
 
                 <CheckBox
-                    android:id="@+id/checkBox4"
+                    android:id="@+id/wednesday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="3"
@@ -86,7 +86,7 @@
                     android:layout_weight="1"/>
 
                 <CheckBox
-                    android:id="@+id/checkBox5"
+                    android:id="@+id/thursday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="4"
@@ -94,7 +94,7 @@
                     android:layout_weight="1"/>
 
                 <CheckBox
-                    android:id="@+id/checkBox6"
+                    android:id="@+id/friday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="5"
@@ -102,7 +102,7 @@
                     android:layout_weight="1"/>
 
                 <CheckBox
-                    android:id="@+id/checkBox7"
+                    android:id="@+id/saturday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="6"
@@ -199,7 +199,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/dayComboBox"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@android:color/darker_gray"/>
@@ -218,7 +218,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"/>
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/startTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -233,7 +233,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"/>
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/endTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -256,7 +256,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -270,7 +270,7 @@
             android:layout_weight="0.18"/>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/nextButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.16"
