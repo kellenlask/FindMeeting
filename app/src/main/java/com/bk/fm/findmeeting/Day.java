@@ -4,6 +4,8 @@
 
 package com.bk.fm.findmeeting;
 
+import android.content.Context;
+
 public enum Day {
 	SUNDAY (0),
 	MONDAY (1),
@@ -23,22 +25,22 @@ public enum Day {
 		return index;
 	} //End public int getIndex()
 
-	public String toString() {
+	public String toString(Context c) {
 		switch(index) {
 			case 0:
-				return "Sunday";
+				return c.getString(R.string.sunday);
 			case 1:
-				return "Monday";
+				return c.getString(R.string.monday);
 			case 2:
-				return "Tuesday";
+				return c.getString(R.string.tuesday);
 			case 3:
-				return "Wednesday";
+				return c.getString(R.string.wednesday);
 			case 4:
-				return "Thursday";
+				return c.getString(R.string.thursday);
 			case 5:
-				return "Friday";
+				return c.getString(R.string.friday);
 			default:
-				return "Saturday";
+				return c.getString(R.string.saturday);
 		}
 	} //End public String toString()
 

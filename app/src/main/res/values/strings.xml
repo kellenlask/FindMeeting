@@ -2,7 +2,7 @@
     <string name="app_name">FindMeeting</string>
     <string name="action_settings">Settings</string>
     <string name="meetingInfoTitle_1">Meeting Information</string>
-    <string name="meetingDaysLabel_1">Working Days</string>
+    <string name="meetingDaysLabel_1">Working Days:</string>
     <string name="mondayLabel_1">M</string>
     <string name="sundayLabel_1">Su</string>
     <string name="tuesdayLabel_1">T</string>
@@ -11,10 +11,10 @@
     <string name="fridayLabel_1">F</string>
     <string name="saturdayLabel_1">S</string>
     <string name="daysDescription_1">Input the meeting\'s available days</string>
-    <string name="timeRangeLabel_1">Time Range</string>
+    <string name="timeRangeLabel_1">Time Range:</string>
     <string name="fromLabel_1">From:</string>
     <string name="toLabel_1">To:</string>
-    <string name="meetingLengthLabel_1">Meeting Length</string>
+    <string name="meetingLengthLabel_1">Meeting Length:</string>
     <string name="nextLabel">Next</string>
     <string name="title_activity_summary_pane">SummaryPane</string>
     <string name="summaryTitle_2">Meeting Summary</string>
@@ -40,4 +40,16 @@
     <string name="title_activity_availability">Availability</string>
     <string name="title_activity_new_oblig_avail">Find Meeting</string>
     <string name="title_activity_results">Results</string>
+    <string name="all_selected_days">All Selected Days</string>
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+
+
+
+
 </resources>

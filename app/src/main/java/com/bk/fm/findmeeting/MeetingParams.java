@@ -120,9 +120,11 @@ public class MeetingParams extends ActionBarActivity {
 		boolean[] days = getSelectedDays();
 		ArrayList<String> selectedDays = new ArrayList<>();
 
+		selectedDays.add(getString(R.string.all_selected_days));
+
 		for(int i = 0; i < days.length; i++) {
 			if(days[i]) {
-				selectedDays.add(Day.getDay(i).toString());
+				selectedDays.add(Day.getDay(i).toString(this)); //You've got to pass the context to toString() in order to access the strings.xml resources.
 			}
 		}
 
