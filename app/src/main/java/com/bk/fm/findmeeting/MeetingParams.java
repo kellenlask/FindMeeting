@@ -9,7 +9,10 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.joda.time.Interval;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MeetingParams extends ActionBarActivity {
 //----------------------------------------------------
@@ -17,6 +20,8 @@ public class MeetingParams extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
+	private HashMap<Day, Interval> map;
+
 	private CheckBox sunday;
 	private CheckBox monday;
 	private CheckBox tuesday;
