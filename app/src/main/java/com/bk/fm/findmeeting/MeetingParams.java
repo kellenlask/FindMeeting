@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.TimePicker;
 
 import org.joda.time.Interval;
 
@@ -32,9 +32,9 @@ public class MeetingParams extends ActionBarActivity {
 
 	private Button nextButton;
 
-	private TextView startTime;
-	private TextView endTime;
-	private TextView meetingDuration;
+	private TimePicker startTime;
+	private TimePicker endTime;
+	private TimePicker meetingDuration;
 
 	private Spinner dayComboBox;
 
@@ -156,9 +156,9 @@ public class MeetingParams extends ActionBarActivity {
 		nextButton = (Button) findViewById(R.id.nextButton);
 
 	//Time Inputs
-		startTime = (TextView) findViewById(R.id.startTime);
-		endTime = (TextView) findViewById(R.id.endTime);
-		meetingDuration = (TextView) findViewById(R.id.duration);
+		startTime = (TimePicker) findViewById(R.id.startTime);
+		endTime = (TimePicker) findViewById(R.id.endTime);
+		meetingDuration = (TimePicker) findViewById(R.id.duration);
 
 	//Spinner
 		dayComboBox = (Spinner) findViewById(R.id.dayComboBox);
