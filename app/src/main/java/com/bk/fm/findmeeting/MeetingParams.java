@@ -1,5 +1,6 @@
 package com.bk.fm.findmeeting;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import org.joda.time.Interval;
@@ -32,9 +34,9 @@ public class MeetingParams extends ActionBarActivity {
 
 	private Button nextButton;
 
-	private TimePicker startTime;
-	private TimePicker endTime;
-	private TimePicker meetingDuration;
+	private TextView startTime;
+	private TextView endTime;
+	private TextView meetingDuration;
 
 	private Spinner dayComboBox;
 
@@ -99,6 +101,12 @@ public class MeetingParams extends ActionBarActivity {
 
 	} //End public void setCheckBoxActionHandlers()
 
+	public void setTimeInputActionHandlers() {
+		
+
+
+	} //End public void setTimeInputActionHandlers()
+
 //----------------------------------------------------
 //
 //	Logical Methods
@@ -156,14 +164,86 @@ public class MeetingParams extends ActionBarActivity {
 		nextButton = (Button) findViewById(R.id.nextButton);
 
 	//Time Inputs
-		startTime = (TimePicker) findViewById(R.id.startTime);
-		endTime = (TimePicker) findViewById(R.id.endTime);
-		meetingDuration = (TimePicker) findViewById(R.id.duration);
+		startTime = (TextView) findViewById(R.id.startTime);
+		endTime = (TextView) findViewById(R.id.endTime);
+		meetingDuration = (TextView) findViewById(R.id.duration);
 
 	//Spinner
 		dayComboBox = (Spinner) findViewById(R.id.dayComboBox);
 
 	} //End public void initializeFields()
 
+
+//Get the time for a time input
+	public void showTimePicker(final TextView txtTime) {
+
+		int hours = parseHours(txtTime.getText());
+		int minutes = parseMinutes(txtTime.getText());
+
+		TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+
+			@Override
+			public void onTimeSet(TimePicker view, int hour, int minute) {
+				// Display Selected time in textbox
+				txtTime.setText(hour + ":" + minute);
+			}
+		}, hours, minutes, true);
+		tpd.show();
+
+
+	} //End public void showTimePicker(final TextView)
+
+//Parse hours or minutes
+	public int parseHours(String s) {
+		try {
+
+			return Integer.parseInt(s.substring(0, 1));
+
+		} catch(Exception e) {
+			return 0;
+		}
+
+	} //End public int parseHours(String)
+
+	public int parseMinutes(String s) {
+		try {
+
+			return Integer.parseInt(s.substring(3));
+
+		} catch(Exception e) {
+			return 0;
+		}
+
+	} //End public int parseMinutes(String)
+
+	public int parseHours(CharSequence seq) {
+		try {
+
+			StringBuilder str = new StringBuilder(seq);
+
+			String s = str.toString();
+
+			return Integer.parseInt(s.substring(0, 1));
+
+		} catch(Exception e) {
+			return 0;
+		}
+
+	} //End public int parseHours(CharSequence)
+
+	public int parseMinutes(CharSequence seq) {
+		try {
+
+			StringBuilder str = new StringBuilder(seq);
+
+			String s = str.toString();
+
+			return Integer.parseInt(s.substring(3));
+
+		} catch(Exception e) {
+			return 0;
+		}
+
+	} //End public int parseMinutes(CharSequence)
 
 } //End class MeetingParams extends ActionBarActivity

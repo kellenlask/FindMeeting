@@ -217,7 +217,7 @@
                 android:text="@string/fromLabel_1"
                 android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-            <TimePicker
+            <EditText
                 android:id="@+id/startTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -232,7 +232,7 @@
                 android:text="@string/toLabel_1"
                 android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-            <TimePicker
+            <EditText
                 android:id="@+id/endTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -255,7 +255,7 @@
             android:text="@string/meetingLengthLabel_1"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <TimePicker
+        <EditText
             android:id="@+id/duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
