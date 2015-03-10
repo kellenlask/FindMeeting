@@ -50,11 +50,14 @@ public class MeetingParams extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_meeting_params);
 
+		//Give the View variables a value
 		initializeFields();
 
+		//Add our event handlers
 		setCheckBoxActionHandlers();
-
 		setButtonActionHandler();
+		setTimeInputActionHandlers();
+
 
 	} //End protected void onCreate(Bundle)
 
@@ -102,8 +105,17 @@ public class MeetingParams extends ActionBarActivity {
 	} //End public void setCheckBoxActionHandlers()
 
 	public void setTimeInputActionHandlers() {
-		
+		View.OnClickListener listener = new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showTimePicker((TextView) v);
+			}
+		};
 
+		//Currently, all three have the same listener, as the input is only in 24h format.
+		startTime.setOnClickListener(listener);
+		endTime.setOnClickListener(listener);
+		meetingDuration.setOnClickListener(listener);
 
 	} //End public void setTimeInputActionHandlers()
 
