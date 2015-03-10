@@ -12,8 +12,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import org.joda.time.Interval;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
