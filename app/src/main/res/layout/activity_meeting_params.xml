@@ -223,7 +223,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="time"/>
+                android:inputType="time"
+                android:gravity="center_horizontal"
+                android:editable="false"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/textView12"
@@ -238,7 +241,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="time"/>
+                android:inputType="time"
+                android:gravity="center_horizontal"
+                android:editable="false"
+                android:clickable="true"/>
 
         </LinearLayout>
 
@@ -261,7 +267,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:ems="10"
-            android:inputType="time"/>
+            android:inputType="time"
+            android:gravity="center_horizontal"
+            android:editable="false"
+            android:clickable="true"/>
 
         <Space
             android:layout_width="match_parent"

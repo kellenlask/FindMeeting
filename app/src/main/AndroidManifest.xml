@@ -41,7 +41,7 @@
                 android:value="com.bk.fm.findmeeting.InvolvedPeople" />
         </activity>
         <activity
-            android:name=".Availability"
+            android:name=".AvailabilitySummary"
             android:label="@string/title_activity_availability"
             android:parentActivityName=".InvolvedPeople" >
             <meta-data
@@ -51,10 +51,10 @@
         <activity
             android:name=".NewObligAvail"
             android:label="@string/title_activity_new_oblig_avail"
-            android:parentActivityName=".Availability" >
+            android:parentActivityName=".AvailabilitySummary" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bk.fm.findmeeting.Availability" />
+                android:value=".AvailabilitySummary" />
         </activity>
         <activity
             android:name=".Results"

@@ -4,6 +4,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -57,6 +58,7 @@ public class MeetingParams extends ActionBarActivity {
 		setCheckBoxActionHandlers();
 		setButtonActionHandler();
 		setTimeInputActionHandlers();
+		setSpinnerActionHandler();
 
 
 	} //End protected void onCreate(Bundle)
@@ -118,6 +120,18 @@ public class MeetingParams extends ActionBarActivity {
 		meetingDuration.setOnClickListener(listener);
 
 	} //End public void setTimeInputActionHandlers()
+
+	public void setSpinnerActionHandler() {
+		dayComboBox.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {}
+		});
+	}
 
 //----------------------------------------------------
 //
@@ -182,6 +196,7 @@ public class MeetingParams extends ActionBarActivity {
 
 	//Spinner
 		dayComboBox = (Spinner) findViewById(R.id.dayComboBox);
+		updateComboBox();
 
 	} //End public void initializeFields()
 
@@ -196,8 +211,21 @@ public class MeetingParams extends ActionBarActivity {
 
 			@Override
 			public void onTimeSet(TimePicker view, int hour, int minute) {
+				String h = "" + hour;
+				String m = "" + minute;
+
+				//Ensure the output hour is two digits.
+				if(h.length() == 1) {
+					h = "0" + h;
+				}
+
+				//Ensure the output minutes are two digits.
+				if(m.length() == 1) {
+					m = "0" + m;
+				}
+
 				// Display Selected time in textbox
-				txtTime.setText(hour + ":" + minute);
+				txtTime.setText(h + ":" + m);
 			}
 		}, hours, minutes, true);
 		tpd.show();
