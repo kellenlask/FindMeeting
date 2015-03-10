@@ -21,6 +21,7 @@ public class MeetingParams extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
+	//ToDo: This should be HashMap<Day, Range>
 	private HashMap<Day, Interval> map;
 
 	private CheckBox sunday;
