@@ -3,7 +3,7 @@ package com.bk.fm.findmeeting;
 /**
  * Created by Kellen on 3/9/2015.
  */
-public class Time implements Comparable<Time> {
+public class Time implements Comparable<Time>, Cloneable{
 //Fields
 	private int hours;
 	private int minutes;
@@ -51,10 +51,12 @@ public class Time implements Comparable<Time> {
 		return getTimeInMinutes() == t.getTimeInMinutes();
 	}
 
+	//Compares by earlier/later
 	public int compareTo(Time t) {
 		return getTimeInMinutes() - t.getTimeInMinutes();
 	}
 
+	@Override
 	public String toString() {
 		String h = hours + "";
 		String m = minutes + "";
@@ -91,6 +93,11 @@ public class Time implements Comparable<Time> {
 		} else {
 			return 'a';
 		}
+	}
+
+	@Override
+	public Time clone() {
+		return new Time(hours, minutes);
 	}
 
 //Mutators

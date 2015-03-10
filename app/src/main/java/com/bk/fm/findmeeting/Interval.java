@@ -3,7 +3,7 @@ package com.bk.fm.findmeeting;
 /**
  * Created by Kellen on 3/9/2015.
  */
-public class Interval {
+public class Interval implements Comparable<Interval>, Cloneable{
 //Fields
 	private Time startTime;
 	private Time stopTime;
@@ -43,6 +43,15 @@ public class Interval {
 
 	public boolean equals(Interval i) {
 		return startTime.equals(i.getStartTime()) && stopTime.equals(i.getStopTime());
+	}
+
+	//Compares by length
+	public int compareTo(Interval i) {
+		return getLengthInMinutes() - i.getLengthInMinutes();
+	}
+
+	public Interval clone() {
+		return new Interval(startTime.clone(), stopTime.clone());
 	}
 
 //Mutators
