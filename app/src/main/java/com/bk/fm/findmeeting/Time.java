@@ -21,6 +21,12 @@ public class Time implements Comparable<Time>, Cloneable{
 
 	} //End Constructor
 
+	public Time(int minutes) throws Exception {
+		this.minutes = 0;
+		this.hours = 0;
+		addMinutes(minutes);
+	}
+
 //Accessors
 	public int getHours() {
 		return hours;
@@ -151,6 +157,53 @@ public class Time implements Comparable<Time>, Cloneable{
 		} else {
 			throw new IllegalArgumentException("\"" + amPM + "\" does not constitute an appropriate time delineation. Accepted: 'a'(AM) or 'p'(PM)");
 		}
+	}
+
+	public void addHours(int hours) throws Exception {
+		if(this.hours + hours <= 23){
+			this.hours += hours;
+		} else {
+			throw new Exception("Adding " + hours + " hours to " + this.hours + " hours makes for an illegal time. Note: this may have been caused by adding minutes.");
+		}
+	}
+
+	public void addMinutes(int minutes) throws Exception {
+		if(this.minutes + minutes >= 60) {
+			addHours((this.minutes + minutes) / 60);
+			addMinutes((this.minutes + minutes) % 60);
+
+		} else {
+			this.minutes += minutes;
+		}
+	}
+
+//Static Methods
+	public static boolean isValidTime(int hours, int minutes) {
+		boolean valid = true;
+
+		if(hours < 0 || hours >= 24) {
+			valid = false;
+		}
+
+		if(minutes < 0 || minutes >= 60) {
+			valid = false;
+		}
+
+		return valid;
+	}
+
+	public static boolean isValidAMPMTime(int hours, int minutes) {
+		boolean valid = true;
+
+		if(hours < 1 || hours > 12) {
+			valid = false;
+		}
+
+		if(minutes < 0 || minutes >= 60) {
+			valid = false;
+		}
+
+		return valid;
 	}
 
 }

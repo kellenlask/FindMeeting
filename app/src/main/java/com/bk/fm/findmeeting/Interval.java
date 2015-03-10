@@ -54,6 +54,57 @@ public class Interval implements Comparable<Interval>, Cloneable{
 		return new Interval(startTime.clone(), stopTime.clone());
 	}
 
+	public boolean contains(Time t) {
+		int time = t.getTimeInMinutes();
+
+		return startTime.getTimeInMinutes() <= time && time <= stopTime.getTimeInMinutes();
+	}
+
+	public boolean contains(Interval i) {
+		return contains(i.getStartTime()) && contains(i.getStopTime());
+	}
+
+	public boolean overlaps(Interval i) {
+		if(contains(i.getStartTime())) {
+			return true;
+
+		} else if(contains(i.getStopTime())) {
+			return true;
+
+		} else {
+			return false;
+
+		}
+	}
+
+	public boolean startsSooner(Interval i) {
+		return startTime.getTimeInMinutes() < i.getStartTime().getTimeInMinutes();
+	}
+
+	public boolean stopsSooner(Interval i) {
+		return stopTime.getTimeInMinutes() < i.getStopTime().getTimeInMinutes();
+	}
+
+	//ToDo: Double-check this method:
+	public Interval getOverlap(Interval i) {
+		if (overlaps(i)) {
+			if (i.contains(this)) {
+				return this.clone();
+
+			} else if (contains(i)) {
+				return i.clone();
+
+			} else if(startsSooner(i)) {
+				return new Interval(i.getStartTime().clone(), stopTime.clone());
+
+			} else {
+				return new Interval(startTime.clone(), i.getStopTime().clone());
+			}
+		}
+
+		return null;
+	}
+
 //Mutators
 	public void setStartTime(Time t) throws IllegalArgumentException {
 		if(stopTime == null || t.getTimeInMinutes() < stopTime.getTimeInMinutes()) {
@@ -87,5 +138,19 @@ public class Interval implements Comparable<Interval>, Cloneable{
 
 	public void setStopTime(int hours, int minutes, char amPM) throws IllegalArgumentException {
 		setStopTime(new Time(hours, minutes, amPM));
+	}
+
+	public void addTime(int hours, int minutes) throws Exception {
+		stopTime.addHours(hours);
+		stopTime.addMinutes(minutes);
+	}
+
+	public void addTime(int minutes) throws Exception {
+		stopTime.addMinutes(minutes);
+	}
+
+//Static Methods
+	public static boolean isValidInterval(Time start, Time stop) {
+		return start.getTimeInMinutes() < stop.getTimeInMinutes();
 	}
 }
