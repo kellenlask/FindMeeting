@@ -156,31 +156,31 @@ public class MeetingParams extends ActionBarActivity {
 
 				switch (str.toString()) {
 					case "Sunday":
-
+						addDay(Day.SUNDAY, startTime.getText(), endTime.getText());
 						break;
 
 					case "Monday":
-
+						addDay(Day.MONDAY, startTime.getText(), endTime.getText());
 						break;
 
 					case "Tuesday":
-
+						addDay(Day.TUESDAY, startTime.getText(), endTime.getText());
 						break;
 
 					case "Wednesday":
-
+						addDay(Day.WEDNESDAY, startTime.getText(), endTime.getText());
 						break;
 
 					case "Thursday":
-
+						addDay(Day.THURSDAY, startTime.getText(), endTime.getText());
 						break;
 
 					case "Friday":
-
+						addDay(Day.FRIDAY, startTime.getText(), endTime.getText());
 						break;
 
 					case "Saturday":
-
+						addDay(Day.SATURDAY, startTime.getText(), endTime.getText());
 						break;
 
 					default:
@@ -192,6 +192,14 @@ public class MeetingParams extends ActionBarActivity {
 				Toast.makeText(getApplicationContext(), getString(R.string.invalidInterval_1), Toast.LENGTH_LONG).show();
 			}
 		}
+	}
+
+	//Update an existing day in the HashMap<Day, Range>
+	public void addDay(Day d, CharSequence startTime, CharSequence endTime) {
+		Time start = new Time(Time.parseHours(startTime), Time.parseMinutes(startTime));
+		Time end = new Time(Time.parseHours(endTime), Time.parseMinutes(endTime));
+
+		map.put(d, new Range(start, end, d));
 	}
 
 //Make a boolean array representing the available days as selected by the user via checkboxes.

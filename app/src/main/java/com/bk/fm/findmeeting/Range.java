@@ -19,6 +19,11 @@ public class Range implements Comparable<Range>, Cloneable {
 		interval = i;
 	}
 
+	public Range(Time start, Time stop, Day d) {
+		interval = new Interval(start, stop);
+		day = d;
+	}
+
 //Accessors
 	public int compareTo(Range r) {
 		if(!isSameDay(r)) {
