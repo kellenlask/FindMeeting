@@ -3,7 +3,7 @@ package com.bk.fm.findmeeting;
 /**
  * Created by Kellen on 3/9/2015.
  */
-public class Time implements Comparable<Time>, Cloneable{
+public class Time implements Comparable<Time>, Cloneable {
 //Fields
 	private int hours;
 	private int minutes;
@@ -206,4 +206,55 @@ public class Time implements Comparable<Time>, Cloneable{
 		return valid;
 	}
 
+//Parse hours or minutes
+	public static int parseHours(String s) {
+		try {
+			return Integer.parseInt(s.substring(0, 1));
+
+		} catch(Exception e) {
+			return 0;
+		}
+
+	} //End public int parseHours(String)
+
+	public static int parseMinutes(String s) {
+		try {
+
+			return Integer.parseInt(s.substring(3));
+
+		} catch(Exception e) {
+			return 0;
+		}
+
+	} //End public int parseMinutes(String)
+
+	public static int parseHours(CharSequence seq) {
+		try {
+
+			StringBuilder str = new StringBuilder(seq);
+
+			String s = str.toString();
+
+			return Integer.parseInt(s.substring(0, 1));
+
+		} catch(Exception e) {
+			return 0;
+		}
+
+	} //End public int parseHours(CharSequence)
+
+	public static int parseMinutes(CharSequence seq) {
+		try {
+
+			StringBuilder str = new StringBuilder(seq);
+
+			String s = str.toString();
+
+			return Integer.parseInt(s.substring(3));
+
+		} catch(Exception e) {
+			return 0;
+		}
+
+	} //End public int parseMinutes(CharSequence)
 }

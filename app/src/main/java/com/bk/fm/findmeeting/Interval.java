@@ -153,4 +153,14 @@ public class Interval implements Comparable<Interval>, Cloneable{
 	public static boolean isValidInterval(Time start, Time stop) {
 		return start.getTimeInMinutes() < stop.getTimeInMinutes();
 	}
+
+	public static boolean isValidInterval(int startHours, int startMinutes, int stopHours, int stopMinutes) {
+		if(Time.isValidTime(startHours, startMinutes) && Time.isValidTime(stopHours, stopMinutes)) {
+			Time start = new Time(startHours, startMinutes);
+			Time stop = new Time(stopHours, stopMinutes);
+			return isValidInterval(start, stop);
+		}
+
+		return false;
+	}
 }

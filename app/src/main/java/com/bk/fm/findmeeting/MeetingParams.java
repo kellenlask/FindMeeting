@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +22,7 @@ public class MeetingParams extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
-	//ToDo: This should be HashMap<Day, Range>
-	private HashMap<Day, Interval> map;
+	private HashMap<Day, Range> map;
 
 	private CheckBox sunday;
 	private CheckBox monday;
@@ -74,7 +74,7 @@ public class MeetingParams extends ActionBarActivity {
 				//Make Meeting Object
 
 
-				//Send the Meeting Object along to the Summary Activity
+				//Send the Meeting Object along to the Summary Activity (Make an intent)
 
 
 			}
@@ -85,22 +85,16 @@ public class MeetingParams extends ActionBarActivity {
 		View.OnClickListener comboBoxListener = new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				updateComboBox();
+				updateComboBox(); //Update the comboBox when a checkbox is clicked.
 			}
 		};
 
 		sunday.setOnClickListener(comboBoxListener);
-
 		monday.setOnClickListener(comboBoxListener);
-
 		tuesday.setOnClickListener(comboBoxListener);
-
 		wednesday.setOnClickListener(comboBoxListener);
-
 		thursday.setOnClickListener(comboBoxListener);
-
 		friday.setOnClickListener(comboBoxListener);
-
 		saturday.setOnClickListener(comboBoxListener);
 
 	} //End public void setCheckBoxActionHandlers()
@@ -125,10 +119,11 @@ public class MeetingParams extends ActionBarActivity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> parent) {}
+			public void onNothingSelected(AdapterView<?> parent) {} //This had to be here, but is useless.
 		});
 	}
 
@@ -137,6 +132,67 @@ public class MeetingParams extends ActionBarActivity {
 //	Logical Methods
 //
 //----------------------------------------------------
+
+//Determine whether or not the time fields contain valid times
+	public boolean validTimes() {
+		if(!(Time.isValidTime(Time.parseHours(startTime.getText()), Time.parseMinutes(startTime.getText())))) {
+			return false;
+		}
+
+		if(!(Time.isValidTime(Time.parseHours(endTime.getText()), Time.parseMinutes(endTime.getText())))) {
+			return false;
+		}
+
+		return true;
+	}
+
+//Store the current GUI config to a Time Range
+	public void storeDay() {
+		if(validTimes()) {
+			try {
+				//Grab selection from comboBox
+				TextView selected = (TextView) dayComboBox.getSelectedItem();
+				StringBuilder str = new StringBuilder(selected.getText());
+
+				switch (str.toString()) {
+					case "Sunday":
+
+						break;
+
+					case "Monday":
+
+						break;
+
+					case "Tuesday":
+
+						break;
+
+					case "Wednesday":
+
+						break;
+
+					case "Thursday":
+
+						break;
+
+					case "Friday":
+
+						break;
+
+					case "Saturday":
+
+						break;
+
+					default:
+						break;
+
+				}
+
+			} catch (Exception e) {
+				Toast.makeText(getApplicationContext(), getString(R.string.invalidInterval_1), Toast.LENGTH_LONG).show();
+			}
+		}
+	}
 
 //Make a boolean array representing the available days as selected by the user via checkboxes.
 	public boolean[] getSelectedDays(){
@@ -153,12 +209,14 @@ public class MeetingParams extends ActionBarActivity {
 		return days;
 	} //End public boolean[] getSelectedDays()
 
-
+//For each selected checkbox, add the day to the comboBox
 	public void updateComboBox() {
 		boolean[] days = getSelectedDays();
 		ArrayList<String> selectedDays = new ArrayList<>();
 
-		selectedDays.add(getString(R.string.all_selected_days));
+		if(map.size() == 0) {
+			selectedDays.add(getString(R.string.all_selected_days));
+		}
 
 		for(int i = 0; i < days.length; i++) {
 			if(days[i]) {
@@ -176,6 +234,8 @@ public class MeetingParams extends ActionBarActivity {
 
 //Set the fields' values.
 	public void initializeFields() {
+		map = new HashMap<>();
+
 	//Checkboxes
 		sunday = (CheckBox) findViewById(R.id.sunday);
 		monday = (CheckBox) findViewById(R.id.monday);
@@ -203,8 +263,8 @@ public class MeetingParams extends ActionBarActivity {
 //Get the time for a time input
 	public void showTimePicker(final TextView txtTime) {
 
-		int hours = parseHours(txtTime.getText());
-		int minutes = parseMinutes(txtTime.getText());
+		int hours = Time.parseHours(txtTime.getText());
+		int minutes = Time.parseMinutes(txtTime.getText());
 
 		TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
 
@@ -228,61 +288,5 @@ public class MeetingParams extends ActionBarActivity {
 			}
 		}, hours, minutes, true);
 		tpd.show();
-
-
 	} //End public void showTimePicker(final TextView)
-
-//Parse hours or minutes
-	public int parseHours(String s) {
-		try {
-
-			return Integer.parseInt(s.substring(0, 1));
-
-		} catch(Exception e) {
-			return 0;
-		}
-
-	} //End public int parseHours(String)
-
-	public int parseMinutes(String s) {
-		try {
-
-			return Integer.parseInt(s.substring(3));
-
-		} catch(Exception e) {
-			return 0;
-		}
-
-	} //End public int parseMinutes(String)
-
-	public int parseHours(CharSequence seq) {
-		try {
-
-			StringBuilder str = new StringBuilder(seq);
-
-			String s = str.toString();
-
-			return Integer.parseInt(s.substring(0, 1));
-
-		} catch(Exception e) {
-			return 0;
-		}
-
-	} //End public int parseHours(CharSequence)
-
-	public int parseMinutes(CharSequence seq) {
-		try {
-
-			StringBuilder str = new StringBuilder(seq);
-
-			String s = str.toString();
-
-			return Integer.parseInt(s.substring(3));
-
-		} catch(Exception e) {
-			return 0;
-		}
-
-	} //End public int parseMinutes(CharSequence)
-
 } //End class MeetingParams extends ActionBarActivity
