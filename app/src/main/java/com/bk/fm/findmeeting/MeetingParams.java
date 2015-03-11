@@ -133,6 +133,34 @@ public class MeetingParams extends ActionBarActivity {
 //
 //----------------------------------------------------
 
+//Set the fields' values.
+	public void initializeFields() {
+		map = new HashMap<>();
+
+		//Checkboxes
+		sunday = (CheckBox) findViewById(R.id.sunday);
+		monday = (CheckBox) findViewById(R.id.monday);
+		tuesday = (CheckBox) findViewById(R.id.tuesday);
+		wednesday = (CheckBox) findViewById(R.id.wednesday);
+		thursday = (CheckBox) findViewById(R.id.thursday);
+		friday = (CheckBox) findViewById(R.id.friday);
+		saturday = (CheckBox) findViewById(R.id.saturday);
+
+		//Button
+		nextButton = (Button) findViewById(R.id.nextButton);
+
+		//Time Inputs
+		startTime = (TextView) findViewById(R.id.startTime);
+		endTime = (TextView) findViewById(R.id.endTime);
+		meetingDuration = (TextView) findViewById(R.id.duration);
+
+		//Spinner
+		dayComboBox = (Spinner) findViewById(R.id.dayComboBox);
+		updateComboBox();
+
+	} //End public void initializeFields()
+
+
 //Determine whether or not the time fields contain valid times
 	public boolean validTimes() {
 		if(!(Time.isValidTime(Time.parseHours(startTime.getText()), Time.parseMinutes(startTime.getText())))) {
@@ -238,34 +266,6 @@ public class MeetingParams extends ActionBarActivity {
 		dayComboBox.setAdapter(data);
 
 	}//End public void updateComboBox()
-
-
-//Set the fields' values.
-	public void initializeFields() {
-		map = new HashMap<>();
-
-	//Checkboxes
-		sunday = (CheckBox) findViewById(R.id.sunday);
-		monday = (CheckBox) findViewById(R.id.monday);
-		tuesday = (CheckBox) findViewById(R.id.tuesday);
-		wednesday = (CheckBox) findViewById(R.id.wednesday);
-		thursday = (CheckBox) findViewById(R.id.thursday);
-		friday = (CheckBox) findViewById(R.id.friday);
-		saturday = (CheckBox) findViewById(R.id.saturday);
-
-	//Button
-		nextButton = (Button) findViewById(R.id.nextButton);
-
-	//Time Inputs
-		startTime = (TextView) findViewById(R.id.startTime);
-		endTime = (TextView) findViewById(R.id.endTime);
-		meetingDuration = (TextView) findViewById(R.id.duration);
-
-	//Spinner
-		dayComboBox = (Spinner) findViewById(R.id.dayComboBox);
-		updateComboBox();
-
-	} //End public void initializeFields()
 
 
 //Get the time for a time input
