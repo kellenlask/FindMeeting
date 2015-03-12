@@ -169,56 +169,50 @@ public class MeetingParams extends ActionBarActivity {
 		if(validTimes()) {
 			try {
 				//Grab selection from comboBox
-				TextView selected = (TextView) dayComboBox.getSelectedItem();
-				StringBuilder str = new StringBuilder(selected.getText());
+				String day = (String) dayComboBox.getSelectedItem();
+				/*StringBuilder str = new StringBuilder(selected.getText());
+				String day = str.toString();*/
 
-				switch (str.toString()) {
-					case "Sunday":
-						addDay(Day.SUNDAY, startTime.getText(), endTime.getText());
-						break;
+				if(day.equals(getString(R.string.sunday))) {
+					addDay(Day.SUNDAY, startTime.getText(), endTime.getText());
 
-					case "Monday":
-						addDay(Day.MONDAY, startTime.getText(), endTime.getText());
-						break;
+				} else if(day.equals(getString(R.string.monday))) {
+					addDay(Day.MONDAY, startTime.getText(), endTime.getText());
 
-					case "Tuesday":
-						addDay(Day.TUESDAY, startTime.getText(), endTime.getText());
-						break;
+				} else if(day.equals(getString(R.string.tuesday))) {
+					addDay(Day.TUESDAY, startTime.getText(), endTime.getText());
 
-					case "Wednesday":
-						addDay(Day.WEDNESDAY, startTime.getText(), endTime.getText());
-						break;
+				} else if(day.equals(getString(R.string.wednesday))) {
+					addDay(Day.WEDNESDAY, startTime.getText(), endTime.getText());
 
-					case "Thursday":
-						addDay(Day.THURSDAY, startTime.getText(), endTime.getText());
-						break;
+				} else if(day.equals(getString(R.string.thursday))) {
+					addDay(Day.THURSDAY, startTime.getText(), endTime.getText());
 
-					case "Friday":
-						addDay(Day.FRIDAY, startTime.getText(), endTime.getText());
-						break;
+				} else if(day.equals(getString(R.string.friday))) {
+					addDay(Day.FRIDAY, startTime.getText(), endTime.getText());
 
-					case "Saturday":
-						addDay(Day.SATURDAY, startTime.getText(), endTime.getText());
-						break;
-
-					default:
-						break;
+				} else if(day.equals(getString(R.string.saturday))) {
+					addDay(Day.SATURDAY, startTime.getText(), endTime.getText());
 
 				}
 
 			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(), getString(R.string.invalidInterval_1), Toast.LENGTH_LONG).show();
+				//R.string.invalidInterval_1 +
+				Toast.makeText(getApplicationContext(), "Invalid Range", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
 
 
 	//Update an existing day in the HashMap<Day, Range>
-	public void addDay(Day d, CharSequence startTime, CharSequence endTime) {
+	public void addDay(Day d, CharSequence startTime, CharSequence endTime) throws Exception {
+
 		Time start = new Time(Time.parseHours(startTime), Time.parseMinutes(startTime));
 		Time end = new Time(Time.parseHours(endTime), Time.parseMinutes(endTime));
 
 		map.put(d, new Range(start, end, d));
+
+		Toast.makeText(getApplicationContext(), getString(R.string.stored_1), Toast.LENGTH_SHORT).show();
 	}
 
 
@@ -327,8 +321,4 @@ public class MeetingParams extends ActionBarActivity {
 		}, hours, minutes, true);
 		tpd.show();
 	} //End public void showTimePicker(final TextView)
-
-
-
-
 } //End class MeetingParams extends ActionBarActivity

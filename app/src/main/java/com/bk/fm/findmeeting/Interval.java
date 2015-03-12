@@ -107,12 +107,19 @@ public class Interval implements Comparable<Interval>, Cloneable{
 
 //Mutators
 	public void setStartTime(Time t) throws IllegalArgumentException {
-		if(stopTime == null || t.getTimeInMinutes() < stopTime.getTimeInMinutes()) {
+		if(stopTime == null) {
 			startTime = t;
-
+		} else if(!stopTime.equals(t)) {
+			startTime = t;
 		} else {
 			throw new IllegalArgumentException("Invalid Start Time.");
 		}
+
+		//If the times are defined backwards, switch them.
+		if(stopTime != null && startTime.getTimeInMinutes() > stopTime.getTimeInMinutes()) {
+			switchTimes();
+		}
+
 	}
 
 	public void setStartTime(int hours, int minutes) throws IllegalArgumentException {
@@ -124,11 +131,17 @@ public class Interval implements Comparable<Interval>, Cloneable{
 	}
 
 	public void setStopTime(Time t) throws IllegalArgumentException {
-		if(startTime == null || startTime.getTimeInMinutes() < t.getTimeInMinutes()) {
+		if(startTime == null) {
 			stopTime = t;
-
+		} else if(!startTime.equals(t)) {
+			startTime = t;
 		} else {
-			throw new IllegalArgumentException("Invalid Start Time.");
+			throw new IllegalArgumentException("Invalid Stop Time.");
+		}
+
+		//If the times are defined backwards, switch them.
+		if(stopTime != null && startTime.getTimeInMinutes() > stopTime.getTimeInMinutes()) {
+			switchTimes();
 		}
 	}
 
@@ -147,6 +160,12 @@ public class Interval implements Comparable<Interval>, Cloneable{
 
 	public void addTime(int minutes) throws Exception {
 		stopTime.addMinutes(minutes);
+	}
+
+	public void switchTimes(){
+		Time tmp = startTime;
+		startTime = stopTime;
+		stopTime = tmp;
 	}
 
 //Static Methods

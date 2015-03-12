@@ -114,7 +114,6 @@ public class Time implements Comparable<Time>, Cloneable {
 		}  else {
 			throw new IllegalArgumentException("\"" + hours + "\" is an illegal number of hours.");
 		}
-
 	}
 
 	public void setMinutes(int minutes) throws IllegalArgumentException {

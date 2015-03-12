@@ -1,4 +1,5 @@
 <resources>
+    <string name="stored_1">Stored</string>
     <string name="invalidInterval_1">Invalid Time Range.</string>
     <string name="app_name">FindMeeting</string>
     <string name="action_settings">Settings</string>
