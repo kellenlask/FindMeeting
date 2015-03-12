@@ -13,7 +13,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 public class MeetingParams extends ActionBarActivity {
 //----------------------------------------------------
@@ -21,7 +21,7 @@ public class MeetingParams extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
-	private HashMap<Day, Range> map;
+	private TreeMap<Day, Range> map;
 
 	private CheckBox sunday;
 	private CheckBox monday;
@@ -116,7 +116,12 @@ public class MeetingParams extends ActionBarActivity {
 
 		startTime.setOnClickListener(getTime);
 		endTime.setOnClickListener(getTime);
-		meetingDuration.setOnClickListener(getTime);
+		meetingDuration.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showTimePicker((Button) v);
+			}
+		});
 
 	} //End public void setTimeInputActionHandlers()
 
@@ -145,7 +150,7 @@ public class MeetingParams extends ActionBarActivity {
 
 	//Set the fields' values.
 	public void initializeFields() {
-		map = new HashMap<>(); //To store the selected days and their time ranges
+		map = new TreeMap<>(); //To store the selected days and their time ranges
 
 		//Checkboxes
 		sunday = (CheckBox) findViewById(R.id.sunday);
@@ -176,7 +181,12 @@ public class MeetingParams extends ActionBarActivity {
 		boolean[] days = getSelectedDays();
 		ArrayList<String> selectedDays = new ArrayList<>(); //This'll be the list we hand the box.
 
-		//If they haven't made times for any particular day, they can set one for all days.
+		//Update the internal map to reflect the checkBoxes
+		updateMap();
+
+		Toast.makeText(getApplicationContext(), "" + map.size(), Toast.LENGTH_SHORT).show();
+
+		//If we don't have times for any particular day, they can set one for all days.
 		if(map.size() == 0) {
 			selectedDays.add(getString(R.string.all_selected_days));
 		}
@@ -306,7 +316,7 @@ public class MeetingParams extends ActionBarActivity {
 	}
 
 
-	//Update an existing day in the HashMap<Day, Range>
+	//Update an existing day in the TreeMap<Day, Range>
 	public void addDay(Day d, CharSequence startTime, CharSequence endTime) throws Exception {
 
 		int n = map.size();
@@ -314,15 +324,33 @@ public class MeetingParams extends ActionBarActivity {
 		Time start = new Time(Time.parseHours(startTime), Time.parseMinutes(startTime));
 		Time end = new Time(Time.parseHours(endTime), Time.parseMinutes(endTime));
 
-		map.put(d, new Range(start, end, d));
+		if(map.containsKey(d)) {
+			Range r = map.get(d);
+			r.setStartTime(start);
+			r.setStopTime(end);
+
+		} else {
+			map.put(d, new Range(start, end, d));
+		}
 
 		if(map.size() > n) {
-			//updateComboBox();
+			updateComboBox();
 			Toast.makeText(getApplicationContext(), getString(R.string.stored_1), Toast.LENGTH_SHORT).show();
 		}
 
 	}
 
+	//Update the map to reflect the check boxes
+	public void updateMap() {
+		boolean[] days = getSelectedDays();
+
+		//Update the internal map to reflect the checkBoxes
+		for(int i = 0; i < days.length; i++) {
+			if(!days[i] && map.containsKey(Day.getDay(i))) {
+				map.remove(Day.getDay(i));
+			}
+		}
+	}
 
 //Make a boolean array representing the available days as selected by the user via checkboxes.
 	public boolean[] getSelectedDays(){

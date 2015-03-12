@@ -12,7 +12,7 @@
     <string name="thursdayLabel_1">Th</string>
     <string name="fridayLabel_1">F</string>
     <string name="saturdayLabel_1">S</string>
-    <string name="daysDescription_1">Input the meeting\'s available days</string>
+    <string name="daysDescription_1">Input the meeting\'s available possibleDays</string>
     <string name="timeRangeLabel_1">Time Range:</string>
     <string name="fromLabel_1">From:</string>
     <string name="toLabel_1">to</string>

@@ -4,20 +4,55 @@
 
 package com.bk.fm.findmeeting;
 
-public class Person {
-//Fields
+import android.os.Parcel;
+import android.os.Parcelable;
+
+
+public class Person implements Parcelable{
+//----------------------------------------------------
+//
+//	Fields
+//
+//----------------------------------------------------
 	private String name;
 
-//Constructor
+//----------------------------------------------------
+//
+//	Constructors
+//
+//----------------------------------------------------
 	public Person(String name) {
 		this.name = name;
 
 	}
 
-//Accessors
+//----------------------------------------------------
+//
+//	Interfaces
+//
+//----------------------------------------------------
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		//ToDo: implement parcelable
+	}
+
+//----------------------------------------------------
+//
+//	Accessors
+//
+//----------------------------------------------------
 
 
-//Mutators
+//----------------------------------------------------
+//
+//	Mutators
+//
+//----------------------------------------------------
 
 
 

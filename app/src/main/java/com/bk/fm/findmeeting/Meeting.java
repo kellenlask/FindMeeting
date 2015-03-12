@@ -4,23 +4,119 @@
 
 package com.bk.fm.findmeeting;
 
-import java.util.HashMap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Meeting {
-//Fields
-	private HashMap<Day, Range> days;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-//Constructor
-	public Meeting(HashMap<Day, Range> days) {
-		this.days = days;
+public class Meeting implements Parcelable {
+//----------------------------------------------------
+//
+//	Fields
+//
+//----------------------------------------------------
+	private TreeMap<Day, Range> possibleDays;
+	private Interval meetingDuration;
+	private TreeMap<Integer, TreeSet<Range>> totalAvailability;
 
+//----------------------------------------------------
+//
+//	Constructors
+//
+//----------------------------------------------------
+	public Meeting(TreeMap<Day, Range> days, Interval meetingDuration) {
+		this.setPossibleDays(days);
+		this.setMeetingDuration(meetingDuration);
 	} //End constructor
 
-//Accessors
+
+//----------------------------------------------------
+//
+//	Interfaces
+//
+//----------------------------------------------------
+	//Parcelable
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		//ToDo: Implement Parcelable
+	}
+
+//----------------------------------------------------
+//
+//	Accessors
+//
+//----------------------------------------------------
+
+	public TreeMap<Day, Range> getPossibleDays() {
+		return possibleDays;
+	}
+
+	public Interval getMeetingDuration() {
+		return meetingDuration;
+	}
 
 
-//Mutators
+//----------------------------------------------------
+//
+//	Mutators
+//
+//----------------------------------------------------
+	public void setPossibleDays(TreeMap<Day, Range> possibleDays) {
+		this.possibleDays = possibleDays;
+	}
 
+	public void setMeetingDuration(Interval meetingDuration) {
+		this.meetingDuration = meetingDuration;
+	}
+
+	public TreeMap<Integer, TreeSet<Range>> calcTotalAvailability(ArrayList<Person> people) {
+		totalAvailability = new TreeMap<>();
+
+		//For each possible level of availability, create a TreeSet<Range> to store the matching time ranges
+		for(int i = 0; i <= people.size(); i++) {
+			totalAvailability.put(i, new TreeSet<Range>());
+		}
+
+
+		//ToDo: Add the logic (I'm too tired right now, I'll fuck it up)
+
+
+		pruneMap();
+
+		return totalAvailability;
+	}
+
+	//Remove all Ranges from the map that are shorter than the meeting time
+	//After this, the Map will only contain valid meeting time Ranges
+	private void pruneMap() {
+
+		//For each TreeSet<Range>
+		for(Integer i : totalAvailability.keySet()) {
+			TreeSet<Range> tmp = totalAvailability.get(i);
+
+			//Iterate over the TreeSet<Range>
+			Iterator itr = tmp.iterator();
+
+			while(itr.hasNext()) {
+				Range r = (Range) itr.next();
+
+				//Remove the small Range objects
+				if(r.smallerThan(meetingDuration)) {
+					tmp.remove(r);
+				}
+			} //End While
+
+		} //End For-Each Loop
+
+	} //End private void pruneMap()
 
 
 } //End public class Meeting

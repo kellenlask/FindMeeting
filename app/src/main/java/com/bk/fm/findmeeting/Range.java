@@ -4,11 +4,19 @@ package com.bk.fm.findmeeting;
  * Created by Kellen on 3/11/2015.
  */
 public class Range implements Comparable<Range>, Cloneable {
-//Fields
+//----------------------------------------------------
+//
+//	Fields
+//
+//----------------------------------------------------
 	private Day day;
 	private Interval interval;
 
-//Constructors
+//----------------------------------------------------
+//
+//	Constructors
+//
+//----------------------------------------------------
 	public Range(Interval i, Day d) {
 		day = d;
 		interval = i;
@@ -24,7 +32,11 @@ public class Range implements Comparable<Range>, Cloneable {
 		day = d;
 	}
 
-//Accessors
+//----------------------------------------------------
+//
+//	Interfaces
+//
+//----------------------------------------------------
 	public int compareTo(Range r) {
 		if(!isSameDay(r)) {
 			return day.getIndex() - r.getDay().getIndex();
@@ -37,6 +49,12 @@ public class Range implements Comparable<Range>, Cloneable {
 	public Range clone() {
 		return new Range(interval.clone(), day.getIndex());
 	}
+
+//----------------------------------------------------
+//
+//	Accessors
+//
+//----------------------------------------------------
 
 	public boolean isSameDay(Range r) {
 		return day.getIndex() == r.getDay().getIndex();
@@ -57,7 +75,21 @@ public class Range implements Comparable<Range>, Cloneable {
 	public Time getStopTime() {
 		return interval.getStopTime();
 	}
-//Mutators
+
+	//Is this Range smaller than the passed Range?
+	public boolean smallerThan(Range r) {
+		return r.getInterval().getLengthInMinutes() < interval.getLengthInMinutes();
+	}
+
+	public boolean smallerThan(Interval i) {
+		return i.getLengthInMinutes() < interval.getLengthInMinutes();
+	}
+
+//----------------------------------------------------
+//
+//	Mutators
+//
+//----------------------------------------------------
 	public void setDay(Day d) {
 		day = d;
 	}
@@ -73,5 +105,14 @@ public class Range implements Comparable<Range>, Cloneable {
 	public void setInterval(int startHours, int startMinutes, int stopHours, int stopMinutes) {
 		interval = new Interval(startHours, startMinutes, stopHours, stopMinutes);
 	}
+
+	public void setStartTime(Time t) {
+		interval.setStartTime(t);
+	}
+
+	public void setStopTime(Time t) {
+		interval.setStopTime(t);
+	}
+
 
 }

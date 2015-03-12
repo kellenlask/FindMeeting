@@ -3,12 +3,20 @@ package com.bk.fm.findmeeting;
 /**
  * Created by Kellen on 3/9/2015.
  */
-public class Interval implements Comparable<Interval>, Cloneable{
-//Fields
+public class Interval implements Comparable<Interval>, Cloneable {
+//----------------------------------------------------
+//
+//	Fields
+//
+//----------------------------------------------------
 	private Time startTime;
 	private Time stopTime;
 
-//Constructors
+//----------------------------------------------------
+//
+//	Constructors
+//
+//----------------------------------------------------
 	public Interval(Time startTime, Time stopTime) throws IllegalArgumentException {
 		setStartTime(startTime);
 		setStopTime(stopTime);
@@ -24,7 +32,33 @@ public class Interval implements Comparable<Interval>, Cloneable{
 		setStopTime(stopHours, stopMinutes, stopAMPM);
 	}
 
-//Accessors
+//----------------------------------------------------
+//
+//	Interfaces
+//
+//----------------------------------------------------
+	//Compares by length
+	public int compareTo(Interval i) {
+	return getLengthInMinutes() - i.getLengthInMinutes();
+}
+
+	public Interval clone() {
+		return new Interval(startTime.clone(), stopTime.clone());
+	}
+
+
+//----------------------------------------------------
+//
+//	Accessors
+//
+//----------------------------------------------------
+
+	public boolean contains(Time t) {
+		int time = t.getTimeInMinutes();
+
+		return startTime.getTimeInMinutes() <= time && time <= stopTime.getTimeInMinutes();
+	}
+
 	public int getLengthInMinutes(){
 		return stopTime.getTimeInMinutes() - startTime.getTimeInMinutes();
 	}
@@ -43,21 +77,6 @@ public class Interval implements Comparable<Interval>, Cloneable{
 
 	public boolean equals(Interval i) {
 		return startTime.equals(i.getStartTime()) && stopTime.equals(i.getStopTime());
-	}
-
-	//Compares by length
-	public int compareTo(Interval i) {
-		return getLengthInMinutes() - i.getLengthInMinutes();
-	}
-
-	public Interval clone() {
-		return new Interval(startTime.clone(), stopTime.clone());
-	}
-
-	public boolean contains(Time t) {
-		int time = t.getTimeInMinutes();
-
-		return startTime.getTimeInMinutes() <= time && time <= stopTime.getTimeInMinutes();
 	}
 
 	public boolean contains(Interval i) {
@@ -105,7 +124,11 @@ public class Interval implements Comparable<Interval>, Cloneable{
 		return null;
 	}
 
-//Mutators
+//----------------------------------------------------
+//
+//	Mutators
+//
+//----------------------------------------------------
 	public void setStartTime(Time t) throws IllegalArgumentException {
 		if(stopTime == null) {
 			startTime = t;
@@ -168,7 +191,11 @@ public class Interval implements Comparable<Interval>, Cloneable{
 		stopTime = tmp;
 	}
 
-//Static Methods
+//----------------------------------------------------
+//
+//	Static Methods
+//
+//----------------------------------------------------
 	public static boolean isValidInterval(Time start, Time stop) {
 		return start.getTimeInMinutes() < stop.getTimeInMinutes();
 	}

@@ -4,11 +4,19 @@ package com.bk.fm.findmeeting;
  * Created by Kellen on 3/9/2015.
  */
 public class Time implements Comparable<Time>, Cloneable {
-//Fields
+//----------------------------------------------------
+//
+//	Fields
+//
+//----------------------------------------------------
 	private int hours;
 	private int minutes;
 
-//Constructor
+//----------------------------------------------------
+//
+//	"Constructor"
+//
+//----------------------------------------------------
 	public Time(int hours, int minutes) throws IllegalArgumentException {
 		setHours(hours);
 		setMinutes(minutes);
@@ -27,7 +35,26 @@ public class Time implements Comparable<Time>, Cloneable {
 		addMinutes(minutes);
 	}
 
-//Accessors
+//----------------------------------------------------
+//
+//	Interfaces
+//
+//----------------------------------------------------
+	@Override
+	public Time clone() {
+		return new Time(hours, minutes);
+	}
+
+	//Compares by earlier/later
+	public int compareTo(Time t) {
+		return getTimeInMinutes() - t.getTimeInMinutes();
+	}
+
+//----------------------------------------------------
+//
+//	Accessors
+//
+//----------------------------------------------------
 	public int getHours() {
 		return hours;
 	}
@@ -57,12 +84,7 @@ public class Time implements Comparable<Time>, Cloneable {
 		return getTimeInMinutes() == t.getTimeInMinutes();
 	}
 
-	//Compares by earlier/later
-	public int compareTo(Time t) {
-		return getTimeInMinutes() - t.getTimeInMinutes();
-	}
 
-	@Override
 	public String toString() {
 		String h = hours + "";
 		String m = minutes + "";
@@ -101,12 +123,13 @@ public class Time implements Comparable<Time>, Cloneable {
 		}
 	}
 
-	@Override
-	public Time clone() {
-		return new Time(hours, minutes);
-	}
 
-//Mutators
+
+//----------------------------------------------------
+//
+//	Mutators
+//
+//----------------------------------------------------
 	public void setHours(int hours) throws IllegalArgumentException {
 		if(hours >= 0 && hours < 24) {
 			this.hours = hours;
@@ -176,7 +199,11 @@ public class Time implements Comparable<Time>, Cloneable {
 		}
 	}
 
-//Static Methods
+//----------------------------------------------------
+//
+//	Static Methods
+//
+//----------------------------------------------------
 	public static boolean isValidTime(int hours, int minutes) {
 		boolean valid = true;
 
