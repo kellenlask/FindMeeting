@@ -4,13 +4,15 @@
 
 package com.bk.fm.findmeeting;
 
+import java.util.HashMap;
+
 public class Meeting {
 //Fields
-	private boolean[] days;
+	private HashMap<Day, Range> days;
 
 //Constructor
-	public Meeting(boolean[] days) {
-		this.days = days; //Length 7 (1 for each day) true or false for available or not.
+	public Meeting(HashMap<Day, Range> days) {
+		this.days = days;
 
 	} //End constructor
 

@@ -15,7 +15,7 @@
     <string name="daysDescription_1">Input the meeting\'s available days</string>
     <string name="timeRangeLabel_1">Time Range:</string>
     <string name="fromLabel_1">From:</string>
-    <string name="toLabel_1">To:</string>
+    <string name="toLabel_1">to</string>
     <string name="meetingLengthLabel_1">Meeting Length:</string>
     <string name="nextLabel">Next</string>
     <string name="title_activity_summary_pane">SummaryPane</string>

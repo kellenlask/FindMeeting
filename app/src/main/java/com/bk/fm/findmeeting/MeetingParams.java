@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -34,9 +33,9 @@ public class MeetingParams extends ActionBarActivity {
 
 	private Button nextButton;
 
-	private TextView startTime;
-	private TextView endTime;
-	private TextView meetingDuration;
+	private Button startTime;
+	private Button endTime;
+	private Button meetingDuration;
 
 	private Spinner dayComboBox;
 
@@ -106,24 +105,18 @@ public class MeetingParams extends ActionBarActivity {
 
 
 	public void setTimeInputActionHandlers() {
-		View.OnClickListener listener = new View.OnClickListener() {
+		//Show the time picker when the field is clicked.
+		View.OnClickListener getTime = new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showTimePicker((TextView) v);
+				showTimePicker((Button) v);
+				storeDay();
 			}
 		};
 
-		//Currently, all three have the same listener, as the input is only in 24h format.
-		startTime.setOnClickListener(listener);
-		endTime.setOnClickListener(listener);
-		meetingDuration.setOnClickListener(listener);
-
-		startTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				storeDay();
-			}
-		});
+		startTime.setOnClickListener(getTime);
+		endTime.setOnClickListener(getTime);
+		meetingDuration.setOnClickListener(getTime);
 
 	} //End public void setTimeInputActionHandlers()
 
@@ -133,7 +126,8 @@ public class MeetingParams extends ActionBarActivity {
 			@Override
 			//This will be triggered twice: once on creation, and then once every time the user selects something...
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				//Pull up the item's start and stop time and throw it in the boxes
+				//Pull up the day's start and stop times (if any) and throw them in the boxes
+				populateTimeFields();
 
 			}
 
@@ -145,103 +139,13 @@ public class MeetingParams extends ActionBarActivity {
 
 //----------------------------------------------------
 //
-//	Logical Methods
-//
-//----------------------------------------------------
-
-
-//Determine whether or not the time fields contain valid times
-	public boolean validTimes() {
-		if(!(Time.isValidTime(Time.parseHours(startTime.getText()), Time.parseMinutes(startTime.getText())))) {
-			return false;
-		}
-
-		if(!(Time.isValidTime(Time.parseHours(endTime.getText()), Time.parseMinutes(endTime.getText())))) {
-			return false;
-		}
-
-		return true;
-	}
-
-
-//Store the current GUI config to a Time Range
-	public void storeDay() {
-		if(validTimes()) {
-			try {
-				//Grab selection from comboBox
-				String day = (String) dayComboBox.getSelectedItem();
-				/*StringBuilder str = new StringBuilder(selected.getText());
-				String day = str.toString();*/
-
-				if(day.equals(getString(R.string.sunday))) {
-					addDay(Day.SUNDAY, startTime.getText(), endTime.getText());
-
-				} else if(day.equals(getString(R.string.monday))) {
-					addDay(Day.MONDAY, startTime.getText(), endTime.getText());
-
-				} else if(day.equals(getString(R.string.tuesday))) {
-					addDay(Day.TUESDAY, startTime.getText(), endTime.getText());
-
-				} else if(day.equals(getString(R.string.wednesday))) {
-					addDay(Day.WEDNESDAY, startTime.getText(), endTime.getText());
-
-				} else if(day.equals(getString(R.string.thursday))) {
-					addDay(Day.THURSDAY, startTime.getText(), endTime.getText());
-
-				} else if(day.equals(getString(R.string.friday))) {
-					addDay(Day.FRIDAY, startTime.getText(), endTime.getText());
-
-				} else if(day.equals(getString(R.string.saturday))) {
-					addDay(Day.SATURDAY, startTime.getText(), endTime.getText());
-
-				}
-
-			} catch (Exception e) {
-				//R.string.invalidInterval_1 +
-				Toast.makeText(getApplicationContext(), "Invalid Range", Toast.LENGTH_SHORT).show();
-			}
-		}
-	}
-
-
-	//Update an existing day in the HashMap<Day, Range>
-	public void addDay(Day d, CharSequence startTime, CharSequence endTime) throws Exception {
-
-		Time start = new Time(Time.parseHours(startTime), Time.parseMinutes(startTime));
-		Time end = new Time(Time.parseHours(endTime), Time.parseMinutes(endTime));
-
-		map.put(d, new Range(start, end, d));
-
-		Toast.makeText(getApplicationContext(), getString(R.string.stored_1), Toast.LENGTH_SHORT).show();
-	}
-
-
-//Make a boolean array representing the available days as selected by the user via checkboxes.
-	public boolean[] getSelectedDays(){
-		boolean[] days = new boolean[7];
-
-		days[0] = sunday.isChecked();
-		days[1] = monday.isChecked();
-		days[2] = tuesday.isChecked();
-		days[3] = wednesday.isChecked();
-		days[4] = thursday.isChecked();
-		days[5] = friday.isChecked();
-		days[6] = saturday.isChecked();
-
-		return days;
-	} //End public boolean[] getSelectedDays()
-
-
-//----------------------------------------------------
-//
 //	GUI Methods
 //
 //----------------------------------------------------
 
-
-//Set the fields' values.
+	//Set the fields' values.
 	public void initializeFields() {
-		map = new HashMap<>();
+		map = new HashMap<>(); //To store the selected days and their time ranges
 
 		//Checkboxes
 		sunday = (CheckBox) findViewById(R.id.sunday);
@@ -252,22 +156,22 @@ public class MeetingParams extends ActionBarActivity {
 		friday = (CheckBox) findViewById(R.id.friday);
 		saturday = (CheckBox) findViewById(R.id.saturday);
 
-		//Button
-		nextButton = (Button) findViewById(R.id.nextButton);
-
-		//Time Inputs
-		startTime = (TextView) findViewById(R.id.startTime);
-		endTime = (TextView) findViewById(R.id.endTime);
-		meetingDuration = (TextView) findViewById(R.id.duration);
-
 		//Spinner
 		dayComboBox = (Spinner) findViewById(R.id.dayComboBox);
 		updateComboBox();
 
+		//Time Inputs
+		startTime = (Button) findViewById(R.id.startTime); startTime.setText("00:00");
+		endTime = (Button) findViewById(R.id.endTime); endTime.setText("01:00");
+		meetingDuration = (Button) findViewById(R.id.duration); meetingDuration.setText("00:30");
+
+		//Button
+		nextButton = (Button) findViewById(R.id.nextButton);
+
 	} //End public void initializeFields()
 
 
-//For each selected checkbox, add the day to the comboBox
+	//For each selected checkbox, add the day to the comboBox
 	public void updateComboBox() {
 		boolean[] days = getSelectedDays();
 		ArrayList<String> selectedDays = new ArrayList<>(); //This'll be the list we hand the box.
@@ -292,8 +196,44 @@ public class MeetingParams extends ActionBarActivity {
 	}//End public void updateComboBox()
 
 
-//Get the time for a time input
-	public void showTimePicker(final TextView txtTime) {
+	//Update the time fields to reflect the selected day in the combobox
+	public void populateTimeFields() {
+		String day = (String) dayComboBox.getSelectedItem();
+
+		if(day.equals(getString(R.string.sunday)) && map.containsKey(Day.SUNDAY)) {
+			startTime.setText(map.get(Day.SUNDAY).getStartTime().toString());
+			endTime.setText(map.get(Day.SUNDAY).getStopTime().toString());
+
+		} else if(day.equals(getString(R.string.monday)) && map.containsKey(Day.MONDAY)) {
+			startTime.setText(map.get(Day.MONDAY).getStartTime().toString());
+			endTime.setText(map.get(Day.MONDAY).getStopTime().toString());
+
+		} else if(day.equals(getString(R.string.tuesday)) && map.containsKey(Day.TUESDAY)) {
+			startTime.setText(map.get(Day.TUESDAY).getStartTime().toString());
+			endTime.setText(map.get(Day.TUESDAY).getStopTime().toString());
+
+		} else if(day.equals(getString(R.string.wednesday)) && map.containsKey(Day.WEDNESDAY)) {
+			startTime.setText(map.get(Day.WEDNESDAY).getStartTime().toString());
+			endTime.setText(map.get(Day.WEDNESDAY).getStopTime().toString());
+
+		} else if(day.equals(getString(R.string.thursday)) && map.containsKey(Day.THURSDAY)) {
+			startTime.setText(map.get(Day.THURSDAY).getStartTime().toString());
+			endTime.setText(map.get(Day.THURSDAY).getStopTime().toString());
+
+		} else if(day.equals(getString(R.string.friday)) && map.containsKey(Day.FRIDAY)) {
+			startTime.setText(map.get(Day.FRIDAY).getStartTime().toString());
+			endTime.setText(map.get(Day.FRIDAY).getStopTime().toString());
+
+		} else if(day.equals(getString(R.string.saturday)) && map.containsKey(Day.SATURDAY)) {
+			startTime.setText(map.get(Day.SATURDAY).getStartTime().toString());
+			endTime.setText(map.get(Day.SATURDAY).getStopTime().toString());
+
+		}
+	}
+
+
+	//Get the time for a time input
+	public void showTimePicker(final Button txtTime) {
 
 		int hours = Time.parseHours(txtTime.getText());
 		int minutes = Time.parseMinutes(txtTime.getText());
@@ -321,4 +261,82 @@ public class MeetingParams extends ActionBarActivity {
 		}, hours, minutes, true);
 		tpd.show();
 	} //End public void showTimePicker(final TextView)
+
+
+//----------------------------------------------------
+//
+//	Logical Methods
+//
+//----------------------------------------------------
+
+
+//Store the current GUI config to a Time Range
+	public void storeDay() {
+		try {
+			//Grab selection from comboBox
+			String day = (String) dayComboBox.getSelectedItem();
+
+			if(day.equals(getString(R.string.sunday))) {
+				addDay(Day.SUNDAY, startTime.getText(), endTime.getText());
+
+			} else if(day.equals(getString(R.string.monday))) {
+				addDay(Day.MONDAY, startTime.getText(), endTime.getText());
+
+			} else if(day.equals(getString(R.string.tuesday))) {
+				addDay(Day.TUESDAY, startTime.getText(), endTime.getText());
+
+			} else if(day.equals(getString(R.string.wednesday))) {
+				addDay(Day.WEDNESDAY, startTime.getText(), endTime.getText());
+
+			} else if(day.equals(getString(R.string.thursday))) {
+				addDay(Day.THURSDAY, startTime.getText(), endTime.getText());
+
+			} else if(day.equals(getString(R.string.friday))) {
+				addDay(Day.FRIDAY, startTime.getText(), endTime.getText());
+
+			} else if(day.equals(getString(R.string.saturday))) {
+				addDay(Day.SATURDAY, startTime.getText(), endTime.getText());
+
+			}
+
+		} catch (Exception e) {
+			//R.string.invalidInterval_1 +
+			Toast.makeText(getApplicationContext(), "Invalid Range", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+
+	//Update an existing day in the HashMap<Day, Range>
+	public void addDay(Day d, CharSequence startTime, CharSequence endTime) throws Exception {
+
+		int n = map.size();
+
+		Time start = new Time(Time.parseHours(startTime), Time.parseMinutes(startTime));
+		Time end = new Time(Time.parseHours(endTime), Time.parseMinutes(endTime));
+
+		map.put(d, new Range(start, end, d));
+
+		if(map.size() > n) {
+			//updateComboBox();
+			Toast.makeText(getApplicationContext(), getString(R.string.stored_1), Toast.LENGTH_SHORT).show();
+		}
+
+	}
+
+
+//Make a boolean array representing the available days as selected by the user via checkboxes.
+	public boolean[] getSelectedDays(){
+		boolean[] days = new boolean[7];
+
+		days[0] = sunday.isChecked();
+		days[1] = monday.isChecked();
+		days[2] = tuesday.isChecked();
+		days[3] = wednesday.isChecked();
+		days[4] = thursday.isChecked();
+		days[5] = friday.isChecked();
+		days[6] = saturday.isChecked();
+
+		return days;
+	} //End public boolean[] getSelectedDays()
+
 } //End class MeetingParams extends ActionBarActivity
