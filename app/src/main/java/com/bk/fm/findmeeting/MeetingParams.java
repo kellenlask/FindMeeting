@@ -45,6 +45,8 @@ public class MeetingParams extends ActionBarActivity {
 //	"Constructor"
 //
 //----------------------------------------------------
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,14 +61,16 @@ public class MeetingParams extends ActionBarActivity {
 		setTimeInputActionHandlers();
 		setSpinnerActionHandler();
 
-
 	} //End protected void onCreate(Bundle)
+
 
 //----------------------------------------------------
 //
 //	Action Handlers
 //
 //----------------------------------------------------
+
+
 	public void setButtonActionHandler() {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -80,6 +84,7 @@ public class MeetingParams extends ActionBarActivity {
 			}
 		});
 	} //End public void setButtonActionHandler()
+
 
 	public void setCheckBoxActionHandlers() {
 		View.OnClickListener comboBoxListener = new View.OnClickListener() {
@@ -99,6 +104,7 @@ public class MeetingParams extends ActionBarActivity {
 
 	} //End public void setCheckBoxActionHandlers()
 
+
 	public void setTimeInputActionHandlers() {
 		View.OnClickListener listener = new View.OnClickListener() {
 			@Override
@@ -112,13 +118,22 @@ public class MeetingParams extends ActionBarActivity {
 		endTime.setOnClickListener(listener);
 		meetingDuration.setOnClickListener(listener);
 
+		startTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				storeDay();
+			}
+		});
+
 	} //End public void setTimeInputActionHandlers()
+
 
 	public void setSpinnerActionHandler() {
 		dayComboBox.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
+			//This will be triggered twice: once on creation, and then once every time the user selects something...
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+				//Pull up the item's start and stop time and throw it in the boxes
 
 			}
 
@@ -127,38 +142,12 @@ public class MeetingParams extends ActionBarActivity {
 		});
 	}
 
+
 //----------------------------------------------------
 //
 //	Logical Methods
 //
 //----------------------------------------------------
-
-//Set the fields' values.
-	public void initializeFields() {
-		map = new HashMap<>();
-
-		//Checkboxes
-		sunday = (CheckBox) findViewById(R.id.sunday);
-		monday = (CheckBox) findViewById(R.id.monday);
-		tuesday = (CheckBox) findViewById(R.id.tuesday);
-		wednesday = (CheckBox) findViewById(R.id.wednesday);
-		thursday = (CheckBox) findViewById(R.id.thursday);
-		friday = (CheckBox) findViewById(R.id.friday);
-		saturday = (CheckBox) findViewById(R.id.saturday);
-
-		//Button
-		nextButton = (Button) findViewById(R.id.nextButton);
-
-		//Time Inputs
-		startTime = (TextView) findViewById(R.id.startTime);
-		endTime = (TextView) findViewById(R.id.endTime);
-		meetingDuration = (TextView) findViewById(R.id.duration);
-
-		//Spinner
-		dayComboBox = (Spinner) findViewById(R.id.dayComboBox);
-		updateComboBox();
-
-	} //End public void initializeFields()
 
 
 //Determine whether or not the time fields contain valid times
@@ -173,6 +162,7 @@ public class MeetingParams extends ActionBarActivity {
 
 		return true;
 	}
+
 
 //Store the current GUI config to a Time Range
 	public void storeDay() {
@@ -222,6 +212,7 @@ public class MeetingParams extends ActionBarActivity {
 		}
 	}
 
+
 	//Update an existing day in the HashMap<Day, Range>
 	public void addDay(Day d, CharSequence startTime, CharSequence endTime) {
 		Time start = new Time(Time.parseHours(startTime), Time.parseMinutes(startTime));
@@ -229,6 +220,7 @@ public class MeetingParams extends ActionBarActivity {
 
 		map.put(d, new Range(start, end, d));
 	}
+
 
 //Make a boolean array representing the available days as selected by the user via checkboxes.
 	public boolean[] getSelectedDays(){
@@ -245,24 +237,62 @@ public class MeetingParams extends ActionBarActivity {
 		return days;
 	} //End public boolean[] getSelectedDays()
 
+
+//----------------------------------------------------
+//
+//	GUI Methods
+//
+//----------------------------------------------------
+
+
+//Set the fields' values.
+	public void initializeFields() {
+		map = new HashMap<>();
+
+		//Checkboxes
+		sunday = (CheckBox) findViewById(R.id.sunday);
+		monday = (CheckBox) findViewById(R.id.monday);
+		tuesday = (CheckBox) findViewById(R.id.tuesday);
+		wednesday = (CheckBox) findViewById(R.id.wednesday);
+		thursday = (CheckBox) findViewById(R.id.thursday);
+		friday = (CheckBox) findViewById(R.id.friday);
+		saturday = (CheckBox) findViewById(R.id.saturday);
+
+		//Button
+		nextButton = (Button) findViewById(R.id.nextButton);
+
+		//Time Inputs
+		startTime = (TextView) findViewById(R.id.startTime);
+		endTime = (TextView) findViewById(R.id.endTime);
+		meetingDuration = (TextView) findViewById(R.id.duration);
+
+		//Spinner
+		dayComboBox = (Spinner) findViewById(R.id.dayComboBox);
+		updateComboBox();
+
+	} //End public void initializeFields()
+
+
 //For each selected checkbox, add the day to the comboBox
 	public void updateComboBox() {
 		boolean[] days = getSelectedDays();
-		ArrayList<String> selectedDays = new ArrayList<>();
+		ArrayList<String> selectedDays = new ArrayList<>(); //This'll be the list we hand the box.
 
+		//If they haven't made times for any particular day, they can set one for all days.
 		if(map.size() == 0) {
 			selectedDays.add(getString(R.string.all_selected_days));
 		}
 
+		//For each day, if selected, add it to the list
 		for(int i = 0; i < days.length; i++) {
 			if(days[i]) {
 				selectedDays.add(Day.getDay(i).toString(this)); //You've got to pass the context to toString() in order to access the strings.xml resources.
 			}
 		}
 
+		//Throw the list into the combo box.
 		ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectedDays);
 		data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
 		dayComboBox.setAdapter(data);
 
 	}//End public void updateComboBox()
@@ -297,4 +327,8 @@ public class MeetingParams extends ActionBarActivity {
 		}, hours, minutes, true);
 		tpd.show();
 	} //End public void showTimePicker(final TextView)
+
+
+
+
 } //End class MeetingParams extends ActionBarActivity

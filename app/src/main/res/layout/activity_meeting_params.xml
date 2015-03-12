@@ -189,7 +189,7 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.22"/>
+            android:layout_weight="0.20"/>
 
         <TextView
             android:id="@+id/textView10"
@@ -252,7 +252,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.22"/>
+            android:layout_weight="0.20"/>
 
         <TextView
             android:id="@+id/textView13"
@@ -276,7 +276,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.18"/>
+            android:layout_weight="0.22"/>
 
         <Button
             android:id="@+id/nextButton"
