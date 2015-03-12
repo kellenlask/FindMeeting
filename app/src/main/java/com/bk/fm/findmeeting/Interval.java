@@ -122,19 +122,11 @@ public class Interval implements Comparable<Interval>, Cloneable{
 
 	}
 
-	public void setStartTime(int hours, int minutes) throws IllegalArgumentException {
-		setStartTime(new Time(hours, minutes));
-	}
-
-	public void setStartTime(int hours, int minutes, char amPM) throws IllegalArgumentException {
-		setStartTime(new Time(hours, minutes, amPM));
-	}
-
 	public void setStopTime(Time t) throws IllegalArgumentException {
 		if(startTime == null) {
 			stopTime = t;
 		} else if(!startTime.equals(t)) {
-			startTime = t;
+			stopTime = t;
 		} else {
 			throw new IllegalArgumentException("Invalid Stop Time.");
 		}
@@ -143,6 +135,14 @@ public class Interval implements Comparable<Interval>, Cloneable{
 		if(stopTime != null && startTime.getTimeInMinutes() > stopTime.getTimeInMinutes()) {
 			switchTimes();
 		}
+	}
+
+	public void setStartTime(int hours, int minutes) throws IllegalArgumentException {
+		setStartTime(new Time(hours, minutes));
+	}
+
+	public void setStartTime(int hours, int minutes, char amPM) throws IllegalArgumentException {
+		setStartTime(new Time(hours, minutes, amPM));
 	}
 
 	public void setStopTime(int hours, int minutes) throws IllegalArgumentException {
