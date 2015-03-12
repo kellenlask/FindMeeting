@@ -1,5 +1,7 @@
 package com.bk.fm.findmeeting;
 
+import android.content.Context;
+
 /**
  * Created by Kellen on 3/11/2015.
  */
@@ -83,6 +85,10 @@ public class Range implements Comparable<Range>, Cloneable {
 
 	public boolean smallerThan(Interval i) {
 		return i.getLengthInMinutes() < interval.getLengthInMinutes();
+	}
+
+	public String toString(Context c) {
+		return day.toString(c) + ": " + interval.toString();
 	}
 
 //----------------------------------------------------

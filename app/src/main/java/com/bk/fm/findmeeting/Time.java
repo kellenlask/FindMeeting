@@ -254,6 +254,8 @@ public class Time implements Comparable<Time>, Cloneable {
 
 	} //End public int parseMinutes(String)
 
+
+	//ToDo: These guys aren't parsing minutes and hours properly.
 	public static int parseHours(CharSequence seq) {
 		try {
 
@@ -264,7 +266,7 @@ public class Time implements Comparable<Time>, Cloneable {
 			return Integer.parseInt(s.substring(0, 1));
 
 		} catch(Exception e) {
-			return 0;
+			return -1;
 		}
 
 	} //End public int parseHours(CharSequence)
@@ -279,7 +281,7 @@ public class Time implements Comparable<Time>, Cloneable {
 			return Integer.parseInt(s.substring(3));
 
 		} catch(Exception e) {
-			return 0;
+			return -1;
 		}
 
 	} //End public int parseMinutes(CharSequence)

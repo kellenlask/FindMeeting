@@ -53,6 +53,10 @@ public class Interval implements Comparable<Interval>, Cloneable {
 //
 //----------------------------------------------------
 
+	public String toString() {
+		return startTime.toString() + " - " + stopTime.toString();
+	}
+
 	public boolean contains(Time t) {
 		int time = t.getTimeInMinutes();
 

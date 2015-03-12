@@ -215,7 +215,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/startTime"
                 android:layout_weight="1"
-                android:gravity="center_horizontal"/>
+                android:gravity="center_horizontal"
+                android:text="00:00"
+                tools:ignore="HardcodedText"/>
 
             <TextView
                 android:id="@+id/textView12"
@@ -231,7 +233,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/endTime"
                 android:layout_weight="1"
-                android:gravity="center_horizontal"/>
+                android:gravity="center_horizontal"
+                android:text="01:00"
+                tools:ignore="HardcodedText"/>
 
         </LinearLayout>
 
@@ -253,7 +257,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/duration"
             android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"/>
+            android:gravity="center_horizontal"
+            android:text="00:30"
+            tools:ignore="HardcodedText"/>
 
         <Space
             android:layout_width="match_parent"

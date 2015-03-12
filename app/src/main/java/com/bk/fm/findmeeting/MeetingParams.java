@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -75,7 +76,20 @@ public class MeetingParams extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				//Make Meeting Object
+				updateMap();
 
+				String day = (String) dayComboBox.getSelectedItem();
+				if(day.equals(getString(R.string.all_selected_days))) {
+					//ToDo: Get the range, go through the map and give the same range to all days
+
+
+				}
+
+				Time srt = new Time(0, 0);
+				Time stp = new Time(Time.parseHours(meetingDuration.getText()), Time.parseMinutes(meetingDuration.getText()));
+				Interval meetingLength = new Interval(srt, stp);
+
+				Meeting meeting = new Meeting(map, meetingLength);
 
 				//Send the Meeting Object along to the Summary Activity (Make an intent)
 
@@ -85,21 +99,22 @@ public class MeetingParams extends ActionBarActivity {
 	} //End public void setButtonActionHandler()
 
 
-	public void setCheckBoxActionHandlers() {
-		View.OnClickListener comboBoxListener = new View.OnClickListener() {
+	public void setCheckBoxActionHandlers() { //ToDo: Figure out why the times are cleared when a checkbox is unchecked... Dafuq?
+		CompoundButton.OnCheckedChangeListener comboBoxListener = new CompoundButton.OnCheckedChangeListener() {
+
 			@Override
-			public void onClick(View v) {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				updateComboBox(); //Update the comboBox when a checkbox is clicked.
 			}
 		};
 
-		sunday.setOnClickListener(comboBoxListener);
-		monday.setOnClickListener(comboBoxListener);
-		tuesday.setOnClickListener(comboBoxListener);
-		wednesday.setOnClickListener(comboBoxListener);
-		thursday.setOnClickListener(comboBoxListener);
-		friday.setOnClickListener(comboBoxListener);
-		saturday.setOnClickListener(comboBoxListener);
+		sunday.setOnCheckedChangeListener(comboBoxListener);
+		monday.setOnCheckedChangeListener(comboBoxListener);
+		tuesday.setOnCheckedChangeListener(comboBoxListener);
+		wednesday.setOnCheckedChangeListener(comboBoxListener);
+		thursday.setOnCheckedChangeListener(comboBoxListener);
+		friday.setOnCheckedChangeListener(comboBoxListener);
+		saturday.setOnCheckedChangeListener(comboBoxListener);
 
 	} //End public void setCheckBoxActionHandlers()
 
@@ -110,18 +125,12 @@ public class MeetingParams extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				showTimePicker((Button) v);
-				storeDay();
 			}
 		};
 
 		startTime.setOnClickListener(getTime);
 		endTime.setOnClickListener(getTime);
-		meetingDuration.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showTimePicker((Button) v);
-			}
-		});
+		meetingDuration.setOnClickListener(getTime);
 
 	} //End public void setTimeInputActionHandlers()
 
@@ -166,9 +175,9 @@ public class MeetingParams extends ActionBarActivity {
 		updateComboBox();
 
 		//Time Inputs
-		startTime = (Button) findViewById(R.id.startTime); startTime.setText("00:00");
-		endTime = (Button) findViewById(R.id.endTime); endTime.setText("01:00");
-		meetingDuration = (Button) findViewById(R.id.duration); meetingDuration.setText("00:30");
+		startTime = (Button) findViewById(R.id.startTime);
+		endTime = (Button) findViewById(R.id.endTime);
+		meetingDuration = (Button) findViewById(R.id.duration);
 
 		//Button
 		nextButton = (Button) findViewById(R.id.nextButton);
@@ -267,6 +276,7 @@ public class MeetingParams extends ActionBarActivity {
 
 				// Display Selected time in textbox
 				txtTime.setText(h + ":" + m);
+				storeDay();
 			}
 		}, hours, minutes, true);
 		tpd.show();
@@ -335,7 +345,7 @@ public class MeetingParams extends ActionBarActivity {
 
 		if(map.size() > n) {
 			updateComboBox();
-			Toast.makeText(getApplicationContext(), getString(R.string.stored_1), Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), getString(R.string.stored_1) + ": " + map.get(d).toString(this), Toast.LENGTH_SHORT).show();
 		}
 
 	}
