@@ -97,7 +97,7 @@ public class MeetingParams extends ActionBarActivity {
 					}
 
 
-					if (map.size() != 0) {
+					if (!map.isEmpty()) {
 						//Parse the meeting duration, and turn it into a dummy interval
 						Time srt = new Time(0, 0);
 						Time stp = new Time(meetingDuration.getText());
@@ -217,10 +217,8 @@ public class MeetingParams extends ActionBarActivity {
 		//Update the internal map to reflect the checkBoxes
 		updateMap();
 
-		Toast.makeText(getApplicationContext(), "" + map.size(), Toast.LENGTH_SHORT).show();
-
 		//If we don't have times for any particular day, they can set one for all days.
-		if(map.size() == 0) {
+		if(map.isEmpty()) {
 			selectedDays.add(getString(R.string.all_selected_days));
 		}
 
