@@ -123,7 +123,7 @@ public class MeetingParams extends ActionBarActivity {
 	} //End public void setButtonActionHandler()
 
 
-	public void setCheckBoxActionHandlers() { //ToDo: Figure out why the times are cleared when a checkbox is unchecked... Dafuq?
+	public void setCheckBoxActionHandlers() {
 		CompoundButton.OnCheckedChangeListener comboBoxListener = new CompoundButton.OnCheckedChangeListener() {
 
 			@Override

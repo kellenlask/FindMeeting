@@ -277,7 +277,7 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 	} //End public int parseMinutes(String)
 
 
-	//ToDo: These guys aren't parsing minutes and hours properly.
+
 	public static int parseHours(CharSequence seq) {
 		try {
 
