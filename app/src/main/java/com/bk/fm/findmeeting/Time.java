@@ -35,7 +35,27 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 		this.minutes = 0;
 		this.hours = 0;
 		addMinutes(minutes);
-	}
+	} //End Constructor
+
+	public Time(String t) throws Exception {
+		try {
+			hours = parseHours(t);
+			minutes = parseMinutes(t);
+
+		} catch(Exception e) {
+			throw new Exception("Cannot parse string into time: " + t);
+		}
+	} //End Constructor
+
+	public Time(CharSequence t) throws Exception {
+		try {
+			hours = parseHours(t);
+			minutes = parseMinutes(t);
+
+		} catch(Exception e) {
+			throw new Exception("Cannot parse CharSequence into time: " + t);
+		}
+	} //End Constructor
 
 //----------------------------------------------------
 //

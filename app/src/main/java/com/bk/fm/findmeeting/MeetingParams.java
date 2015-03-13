@@ -1,7 +1,9 @@
 package com.bk.fm.findmeeting;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -61,8 +63,6 @@ public class MeetingParams extends ActionBarActivity {
 		setTimeInputActionHandlers();
 		setSpinnerActionHandler();
 
-
-
 	} //End protected void onCreate(Bundle)
 
 
@@ -77,24 +77,46 @@ public class MeetingParams extends ActionBarActivity {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				try {
 				//Make Meeting Object
-				updateMap();
+					updateMap();
 
-				String day = (String) dayComboBox.getSelectedItem();
-				if(day.equals(getString(R.string.all_selected_days))) {
-					//ToDo: Get the range, go through the map and give the same range to all days
+					//If a time is set for all available days, make a usable map to reflect that
+					String day = (String) dayComboBox.getSelectedItem();
+					if(day.equals(getString(R.string.all_selected_days))) {
+						boolean[] days = getSelectedDays();
+
+						Interval inter = getInterval();
+
+						for(int i = 0; i < days.length; i++) {
+							if(days[i]) {
+								map.put(Day.getDay(i), new Range(inter, Day.getDay(i)));
+							}
+						}
+
+					}
 
 
+					if (map.size() != 0) {
+						//Parse the meeting duration, and turn it into a dummy interval
+						Time srt = new Time(0, 0);
+						Time stp = new Time(meetingDuration.getText());
+						Interval meetingLength = new Interval(srt, stp);
+
+						//Make the meeting object with the day information and meeting length
+						Meeting meeting = new Meeting(map, meetingLength);
+
+						//Send the Meeting Object along to the Summary Activity (Make an intent)
+						Intent i = new Intent(getBaseContext(), Summary.class);
+						i.putExtra("meeting", (Parcelable) meeting);
+						startActivity(i);
+					} else {
+						throw new Exception("No days selected.");
+					}
+
+				} catch (Exception e) {
+					Toast.makeText(getApplicationContext(), "Invalid Meeting Configuration", Toast.LENGTH_SHORT).show();
 				}
-
-				Time srt = new Time(0, 0);
-				Time stp = new Time(Time.parseHours(meetingDuration.getText()), Time.parseMinutes(meetingDuration.getText()));
-				Interval meetingLength = new Interval(srt, stp);
-
-				Meeting meeting = new Meeting(map, meetingLength);
-
-				//Send the Meeting Object along to the Summary Activity (Make an intent)
-
 
 			}
 		});
@@ -148,7 +170,7 @@ public class MeetingParams extends ActionBarActivity {
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> parent) {} //This had to be here, but is useless.
+			public void onNothingSelected(AdapterView<?> parent) {} //Empty Override.
 		});
 	}
 
@@ -323,7 +345,7 @@ public class MeetingParams extends ActionBarActivity {
 
 		} catch (Exception e) {
 			//R.string.invalidInterval_1 +
-			Toast.makeText(getApplicationContext(), "Invalid Range", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Invalid Time Range", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -333,8 +355,8 @@ public class MeetingParams extends ActionBarActivity {
 
 		int n = map.size();
 
-		Time start = new Time(Time.parseHours(startTime), Time.parseMinutes(startTime));
-		Time end = new Time(Time.parseHours(endTime), Time.parseMinutes(endTime));
+		Time start = new Time(startTime);
+		Time end = new Time(endTime);
 
 		if(map.containsKey(d)) {
 			Range r = map.get(d);
@@ -349,6 +371,14 @@ public class MeetingParams extends ActionBarActivity {
 			Toast.makeText(getApplicationContext(), getString(R.string.stored_1) + ": " + map.get(d).toString(this), Toast.LENGTH_SHORT).show();
 		}
 
+	}
+
+	public Interval getInterval() throws Exception {
+
+		Time start = new Time(startTime.getText());
+		Time end = new Time(endTime.getText());
+
+		return new Interval(start, end);
 	}
 
 	//Update the map to reflect the check boxes
