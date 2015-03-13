@@ -1,9 +1,11 @@
 package com.bk.fm.findmeeting;
 
+import java.io.Serializable;
+
 /**
  * Created by Kellen on 3/9/2015.
  */
-public class Interval implements Comparable<Interval>, Cloneable {
+public class Interval implements Comparable<Interval>, Cloneable, Serializable {
 //----------------------------------------------------
 //
 //	Fields

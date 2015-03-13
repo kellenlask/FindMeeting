@@ -2,10 +2,12 @@ package com.bk.fm.findmeeting;
 
 import android.content.Context;
 
+import java.io.Serializable;
+
 /**
  * Created by Kellen on 3/11/2015.
  */
-public class Range implements Comparable<Range>, Cloneable {
+public class Range implements Comparable<Range>, Cloneable, Serializable {
 //----------------------------------------------------
 //
 //	Fields

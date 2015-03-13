@@ -1,9 +1,11 @@
 package com.bk.fm.findmeeting;
 
+import java.io.Serializable;
+
 /**
  * Created by Kellen on 3/9/2015.
  */
-public class Time implements Comparable<Time>, Cloneable {
+public class Time implements Comparable<Time>, Cloneable, Serializable {
 //----------------------------------------------------
 //
 //	Fields
@@ -235,7 +237,7 @@ public class Time implements Comparable<Time>, Cloneable {
 //Parse hours or minutes
 	public static int parseHours(String s) {
 		try {
-			return Integer.parseInt(s.substring(0, 1));
+			return Integer.parseInt(s.substring(0, 2));
 
 		} catch(Exception e) {
 			return 0;
@@ -263,7 +265,7 @@ public class Time implements Comparable<Time>, Cloneable {
 
 			String s = str.toString();
 
-			return Integer.parseInt(s.substring(0, 1));
+			return Integer.parseInt(s.substring(0, 2));
 
 		} catch(Exception e) {
 			return -1;

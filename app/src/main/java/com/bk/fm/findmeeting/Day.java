@@ -6,7 +6,9 @@ package com.bk.fm.findmeeting;
 
 import android.content.Context;
 
-public enum Day {
+import java.io.Serializable;
+
+public enum Day implements Serializable {
 	SUNDAY (0),
 	MONDAY (1),
 	TUESDAY (2),

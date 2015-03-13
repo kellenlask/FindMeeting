@@ -61,6 +61,8 @@ public class MeetingParams extends ActionBarActivity {
 		setTimeInputActionHandlers();
 		setSpinnerActionHandler();
 
+
+
 	} //End protected void onCreate(Bundle)
 
 
@@ -141,7 +143,7 @@ public class MeetingParams extends ActionBarActivity {
 			//This will be triggered twice: once on creation, and then once every time the user selects something...
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				//Pull up the day's start and stop times (if any) and throw them in the boxes
-				populateTimeFields();
+				updateTimeFields();
 
 			}
 
@@ -216,7 +218,7 @@ public class MeetingParams extends ActionBarActivity {
 
 
 	//Update the time fields to reflect the selected day in the combobox
-	public void populateTimeFields() {
+	public void updateTimeFields() {
 		String day = (String) dayComboBox.getSelectedItem();
 
 		if(day.equals(getString(R.string.sunday)) && map.containsKey(Day.SUNDAY)) {
@@ -344,7 +346,6 @@ public class MeetingParams extends ActionBarActivity {
 		}
 
 		if(map.size() > n) {
-			updateComboBox();
 			Toast.makeText(getApplicationContext(), getString(R.string.stored_1) + ": " + map.get(d).toString(this), Toast.LENGTH_SHORT).show();
 		}
 

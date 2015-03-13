@@ -7,8 +7,10 @@ package com.bk.fm.findmeeting;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 
-public class Person implements Parcelable{
+
+public class Person implements Parcelable, Serializable {
 //----------------------------------------------------
 //
 //	Fields

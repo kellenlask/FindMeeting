@@ -7,12 +7,13 @@ package com.bk.fm.findmeeting;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class Meeting implements Parcelable {
+public class Meeting implements Parcelable, Serializable {
 //----------------------------------------------------
 //
 //	Fields
@@ -44,10 +45,37 @@ public class Meeting implements Parcelable {
 		return 0;
 	}
 
+	public Meeting(Parcel in) {
+		possibleDays = (TreeMap<Day, Range>) in.readSerializable();
+		meetingDuration = (Interval) in.readSerializable();
+
+		if (in.dataSize() == 3) {
+			in.readSerializable();
+		}
+	}
+
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		//ToDo: Implement Parcelable
+		dest.writeSerializable(possibleDays);
+		dest.writeSerializable(meetingDuration);
+
+		if (totalAvailability != null) {
+			dest.writeSerializable(totalAvailability);
+		}
 	}
+
+	//This is actually a field, shhhhh...
+	public static final Creator<Meeting> CREATOR = new Creator<Meeting>() {
+		@Override
+		public Meeting createFromParcel(Parcel source) {
+			return new Meeting(source);
+		}
+
+		@Override
+		public Meeting[] newArray(int size) {
+			return new Meeting[size];
+		}
+	};
 
 //----------------------------------------------------
 //
