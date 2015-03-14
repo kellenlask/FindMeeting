@@ -8,6 +8,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 
 
 public class Person implements Parcelable, Serializable {
@@ -17,7 +18,7 @@ public class Person implements Parcelable, Serializable {
 //
 //----------------------------------------------------
 	private String name;
-
+	private LinkedList<ScheduleObject> availability;
 //----------------------------------------------------
 //
 //	Constructors
@@ -25,6 +26,10 @@ public class Person implements Parcelable, Serializable {
 //----------------------------------------------------
 	public Person(String name) {
 		this.name = name;
+
+	}
+
+	public Person(Parcel in) {
 
 	}
 
@@ -42,6 +47,19 @@ public class Person implements Parcelable, Serializable {
 	public void writeToParcel(Parcel dest, int flags) {
 		//ToDo: implement parcelable
 	}
+
+	//Technically a field
+	public static final Creator<Person> CREATOR = new Creator<Person>() {
+		@Override
+		public Person createFromParcel(Parcel source) {
+			return new Person(source);
+		}
+
+		@Override
+		public Person[] newArray(int size) {
+			return new Person[size];
+		}
+	};
 
 //----------------------------------------------------
 //
