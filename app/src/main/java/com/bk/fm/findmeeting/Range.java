@@ -80,17 +80,37 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 		return interval.getStopTime();
 	}
 
-	//Is this Range smaller than the passed Range?
-	public boolean smallerThan(Range r) {
-		return r.getInterval().getLengthInMinutes() < interval.getLengthInMinutes();
-	}
-
+	//Is this Range smaller than the passed Interval?
 	public boolean smallerThan(Interval i) {
 		return i.getLengthInMinutes() < interval.getLengthInMinutes();
 	}
 
 	public String toString(Context c) {
 		return day.toString(c) + ": " + interval.toString();
+	}
+
+	public boolean contains(Range r) { //Is the passed range completely contained within this one?
+		boolean days = r.getDay().equals(day);
+		boolean startTimes = getStartTime().getTimeInMinutes() < r.getStartTime().getTimeInMinutes();
+		boolean stopTimes = getStopTime().getTimeInMinutes() > r.getStopTime().getTimeInMinutes();
+
+		return startTimes && stopTimes && days;
+	}
+
+	public boolean overlaps(Range r) {
+		if(day.equals(r.getDay())) {
+			int os = r.getStartTime().getTimeInMinutes();
+			int oe = r.getStopTime().getTimeInMinutes();
+			int s = getStartTime().getTimeInMinutes();
+			int e = getStopTime().getTimeInMinutes();
+
+			//    (The other's end time falls between our start and stop)
+			// or (The other's start time falls between our start and stop)
+			return (oe > s && oe < e) || (os < e && os > s);
+
+		} else {
+			return false;
+		}
 	}
 
 //----------------------------------------------------
@@ -122,5 +142,32 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 		interval.setStopTime(t);
 	}
 
+	public Range removeOverlap(Range r) {
+		//If the ranges don't overlap, then return null
+		if(!overlaps(r)) {
+			return null;
+		}
 
-}
+		//Store the starts and stops
+		int os = r.getStartTime().getTimeInMinutes();
+		int oe = r.getStopTime().getTimeInMinutes();
+		int s = getStartTime().getTimeInMinutes();
+		int e = getStopTime().getTimeInMinutes();
+		Range returnRange;
+
+
+		//The other's end time falls between our start and stop
+		if(oe > s && oe < e) {
+			returnRange = new Range(getStartTime(), r.getStopTime(), getDay()); //This is the overlap
+			setStartTime(r.getStopTime()); //Hack off the overlap
+
+		} else { // os < e && os > s -- The other's start time falls between our start and stop
+			returnRange = new Range(r.getStartTime(), getStopTime(), getDay()); //This is the overlap
+			setStopTime(r.getStartTime()); //Hack off the overlap
+		}
+
+		return returnRange;
+	} //End public Range removeOverlap(Range)
+
+
+} //End public class Range

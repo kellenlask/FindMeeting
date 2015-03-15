@@ -19,6 +19,7 @@ public class Person implements Parcelable, Serializable {
 //----------------------------------------------------
 	private String name;
 	private LinkedList<ScheduleObject> availability;
+
 //----------------------------------------------------
 //
 //	Constructors
@@ -30,7 +31,8 @@ public class Person implements Parcelable, Serializable {
 	}
 
 	public Person(Parcel in) {
-
+		this.name = in.readString();
+		this.availability = (LinkedList<ScheduleObject>) in.readSerializable();
 	}
 
 //----------------------------------------------------
@@ -45,7 +47,8 @@ public class Person implements Parcelable, Serializable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		//ToDo: implement parcelable
+		dest.writeString(name);
+		dest.writeSerializable(availability);
 	}
 
 	//Technically a field
@@ -67,13 +70,19 @@ public class Person implements Parcelable, Serializable {
 //
 //----------------------------------------------------
 
+	public LinkedList<ScheduleObject> getAvailability() {
+		return availability;
+	}
+
 
 //----------------------------------------------------
 //
 //	Mutators
 //
 //----------------------------------------------------
-
+	public void addScheduleObject(ScheduleObject o) {
+		availability.addFirst(o);
+	}
 
 
 } //End public class Person

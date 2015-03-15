@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -108,11 +109,24 @@ public class Meeting implements Parcelable, Serializable {
 	public TreeMap<Integer, TreeSet<Range>> calcTotalAvailability(ArrayList<Person> people) {
 		initializeAverages(people);
 
+		for(Person p : people) {
+			LinkedList<ScheduleObject> list = p.getAvailability();
 
+			while(list.size() > 0) {
+				ScheduleObject o = list.getLast();
+				list.removeLast();
 
+				for(Integer i : totalAvailability.keySet()) {
+					for(Range r : totalAvailability.get(i)) {
 
+						if(r.overlaps(o)) {
+							fixOverlap(o, r, i);
+						}
 
-
+					}
+				} //End for-each integer in totalAvailability
+			} //End While LinkedList is Loop 
+		} //End for-each person in people
 
 		pruneMap();
 
@@ -135,14 +149,23 @@ public class Meeting implements Parcelable, Serializable {
 
 
 	public void fixOverlap(ScheduleObject o, Range r, int index) {
-		if() { //We need to make two ranges
+		if (r.contains(o)) { //We need to make two ranges
+			totalAvailability.get(index).remove(r);
 
+			//Add the two new ranges to the map
+			Range r1 = new Range(r.getStartTime(), o.getStartTime(), r.getDay());
+			Range r2 = new Range(o.getStopTime(), r.getStopTime(), r.getDay());
+			totalAvailability.get(index).add(r1);
+			totalAvailability.get(index).add(r2);
 
-		} else if() { //The Range is trash
+			moveRange(o.clone(), o.isObligation(), index);
 
+		} else if (o.contains(r) || r.equals(o)) { //The whole Range is moving
+			totalAvailability.get(index).remove(r);
+			moveRange(r, o.isObligation(), index);
 
 		} else { //We can safely truncate and move the Range
-
+			moveRange(r.removeOverlap(o), o.isObligation(), index);
 
 		}
 
