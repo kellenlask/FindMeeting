@@ -7,14 +7,13 @@ import java.io.Serializable;
 /**
  * Created by Kellen on 3/14/2015.
  */
-public class ScheduleObject implements Serializable {
+public class ScheduleObject extends Range implements Serializable {
 //----------------------------------------------------
 //
 //	Fields
 //
 //----------------------------------------------------
-	private boolean obligation;
-	private Range range;
+	protected boolean obligation;
 
 //----------------------------------------------------
 //
@@ -22,9 +21,11 @@ public class ScheduleObject implements Serializable {
 //
 //----------------------------------------------------
 
+
 	public ScheduleObject(boolean obligation, Range range) {
+		super(range.getInterval(), range.getDay());
 		this.obligation = obligation;
-		this.range = range;
+
 	}
 
 
@@ -44,15 +45,11 @@ public class ScheduleObject implements Serializable {
 		return obligation;
 	}
 
-	public Range getRange() {
-		return range;
-	}
-
 	public String toString(Context c) {
 		if(obligation) {
-			return c.getString(R.string.obligation) + " " + range.toString(c);
+			return c.getString(R.string.obligation) + " " + super.toString(c);
 		} else {
-			return c.getString(R.string.availability) + " " + range.toString(c);
+			return c.getString(R.string.availability) + " " + super.toString(c);
 		}
 	}
 
@@ -63,9 +60,5 @@ public class ScheduleObject implements Serializable {
 //----------------------------------------------------
 	public void setObligation(boolean obligation) {
 		this.obligation = obligation;
-	}
-
-	public void setRange(Range range) {
-		this.range = range;
 	}
 }

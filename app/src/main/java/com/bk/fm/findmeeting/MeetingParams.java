@@ -93,11 +93,10 @@ public class MeetingParams extends ActionBarActivity {
 								map.put(Day.getDay(i), new Range(inter, Day.getDay(i)));
 							}
 						}
+					} //End If
 
-					}
 
-
-					if (!map.isEmpty()) {
+					if (!map.isEmpty()) { //if the user has selected a day
 						//Parse the meeting duration, and turn it into a dummy interval
 						Time srt = new Time(0, 0);
 						Time stp = new Time(meetingDuration.getText());
@@ -106,20 +105,21 @@ public class MeetingParams extends ActionBarActivity {
 						//Make the meeting object with the day information and meeting length
 						Meeting meeting = new Meeting(map, meetingLength);
 
-						//Send the Meeting Object along to the Summary Activity (Make an intent)
+				//Send the Meeting Object along to the Summary Activity (Make an intent)
 						Intent i = new Intent(getBaseContext(), Summary.class);
 						i.putExtra("meeting", (Parcelable) meeting);
 						startActivity(i);
 					} else {
 						throw new Exception("No days selected.");
-					}
+					} //End if-else
 
 				} catch (Exception e) {
 					Toast.makeText(getApplicationContext(), "Invalid Meeting Configuration", Toast.LENGTH_SHORT).show();
-				}
+				} //End Try-Catch
 
-			}
+			} //End public void onClick(View)
 		});
+
 	} //End public void setButtonActionHandler()
 
 
@@ -212,7 +212,7 @@ public class MeetingParams extends ActionBarActivity {
 	//For each selected checkbox, add the day to the comboBox
 	public void updateComboBox() {
 		boolean[] days = getSelectedDays();
-		ArrayList<String> selectedDays = new ArrayList<>(); //This'll be the list we hand the box.
+		ArrayList<String> selectedDays = new ArrayList<>(); //This will be the list we hand the comboBox.
 
 		//Update the internal map to reflect the checkBoxes
 		updateMap();
@@ -237,7 +237,7 @@ public class MeetingParams extends ActionBarActivity {
 	}//End public void updateComboBox()
 
 
-	//Update the time fields to reflect the selected day in the combobox
+	//Update the time fields to reflect the selected day in the comboBox
 	public void updateTimeFields() {
 		String day = (String) dayComboBox.getSelectedItem();
 

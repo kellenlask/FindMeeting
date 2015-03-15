@@ -13,8 +13,8 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 //	Fields
 //
 //----------------------------------------------------
-	private Day day;
-	private Interval interval;
+	protected Day day;
+	protected Interval interval;
 
 //----------------------------------------------------
 //

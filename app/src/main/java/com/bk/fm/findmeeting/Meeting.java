@@ -106,6 +106,21 @@ public class Meeting implements Parcelable, Serializable {
 	}
 
 	public TreeMap<Integer, TreeSet<Range>> calcTotalAvailability(ArrayList<Person> people) {
+		initializeAverages(people);
+
+
+
+
+
+
+
+		pruneMap();
+
+		return totalAvailability;
+	}
+
+
+	public void initializeAverages(ArrayList<Person> people) {
 		totalAvailability = new TreeMap<>();
 
 		//For each possible level of availability, create a TreeSet<Range> to store the matching time ranges
@@ -113,14 +128,39 @@ public class Meeting implements Parcelable, Serializable {
 			totalAvailability.put(i, new TreeSet<Range>());
 		}
 
+		//Throw the meeting params into the 100% available time range
+		totalAvailability.get(people.size()).addAll(possibleDays.values());
 
-		//ToDo: Add the logic (I'm too tired right now, I'll fuck it up)
+	}//End public void initializeAverages(ArrayList<Person>)
 
 
-		pruneMap();
+	public void fixOverlap(ScheduleObject o, Range r, int index) {
+		if() { //We need to make two ranges
 
-		return totalAvailability;
-	}
+
+		} else if() { //The Range is trash
+
+
+		} else { //We can safely truncate and move the Range
+
+
+		}
+
+
+	} //End public void fixOverlap(ScheduleObject, Range, int)
+
+
+	public void moveRange(Range r, boolean obligation, int index) {
+		if(obligation) {
+			totalAvailability.get(index - 1).add(r);
+
+		} else if(totalAvailability.containsKey(index + 1)) {
+			totalAvailability.get(index + 1).add(r);
+		}
+
+	} //End public void moveRange(Range, boolean, int)
+
+
 
 	//Remove all Ranges from the map that are shorter than the meeting time
 	//After this, the Map will only contain valid meeting time Ranges
