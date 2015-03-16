@@ -125,7 +125,7 @@ public class Meeting implements Parcelable, Serializable {
 
 					}
 				} //End for-each integer in totalAvailability
-			} //End While LinkedList is Loop 
+			} //End While LinkedList is Loop
 		} //End for-each person in people
 
 		pruneMap();
