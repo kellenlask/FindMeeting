@@ -7,6 +7,9 @@ package com.bk.fm.findmeeting;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.LinkedList;
 
@@ -18,6 +21,7 @@ public class Person implements Parcelable, Serializable {
 //
 //----------------------------------------------------
 	private String name;
+	private int primaryKey;
 	private LinkedList<ScheduleObject> availability;
 
 //----------------------------------------------------
@@ -76,6 +80,25 @@ public class Person implements Parcelable, Serializable {
 
 	public String getName() {
 		return name;
+	}
+
+	public byte[] getSerializedAvial() throws IOException {
+
+		try {
+			ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+			ObjectOutputStream outStream = new ObjectOutputStream(byteOut);
+			outStream.writeObject(availability);
+
+			return byteOut.toByteArray();
+
+		} catch (IOException e) {
+			throw new IOException("Invalid Byte Array");
+		}
+
+	}
+
+	public int getPrimaryKey() {
+		return primaryKey;
 	}
 
 
