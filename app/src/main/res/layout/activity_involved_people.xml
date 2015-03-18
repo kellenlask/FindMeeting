@@ -34,7 +34,7 @@
                 android:textStyle="bold"/>
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/addPersonButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -44,14 +44,14 @@
         </LinearLayout>
 
         <ListView
-            android:id="@+id/listView3"
+            android:id="@+id/peopleList"
             android:layout_width="match_parent"
             android:layout_height="144dp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.96"/>
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/findTimesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/calcAvailability_3"

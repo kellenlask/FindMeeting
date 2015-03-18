@@ -74,6 +74,10 @@ public class Person implements Parcelable, Serializable {
 		return availability;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 
 //----------------------------------------------------
 //
