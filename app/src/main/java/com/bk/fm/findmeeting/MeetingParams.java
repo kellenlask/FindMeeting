@@ -107,7 +107,7 @@ public class MeetingParams extends ActionBarActivity {
 
 				//Send the Meeting Object along to the Summary Activity (Make an intent)
 						Intent i = new Intent(getBaseContext(), Summary.class);
-						i.putExtra("meeting", (Parcelable) meeting);
+						i.putExtra("MEETING", (Parcelable) meeting);
 						startActivity(i);
 					} else {
 						throw new Exception("No days selected.");

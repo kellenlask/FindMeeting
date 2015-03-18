@@ -23,6 +23,7 @@ public class Meeting implements Parcelable, Serializable {
 	private TreeMap<Day, Range> possibleDays;
 	private Interval meetingDuration;
 	private TreeMap<Integer, TreeSet<Range>> totalAvailability;
+    //private static final long serialVersionUID = 1L;     //For making the meeting serializable in the intent (may not be needed)
 
 //----------------------------------------------------
 //
