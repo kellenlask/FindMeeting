@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -107,7 +106,7 @@ public class InvolvedPeople extends ActionBarActivity {
 			@Override
 			public void onClick(View v) { //Show the SavedPeople Activity on AddPerson Button-Click
 				Intent i = new Intent(getBaseContext(), SavedPeople.class);
-				i.putExtra("meeting", (Parcelable) meeting);
+				//i.putExtra("meeting", (Parcelable) meeting);
 				startActivity(i);
 			}
 		});
