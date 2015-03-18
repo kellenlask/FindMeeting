@@ -7,8 +7,10 @@ package com.bk.fm.findmeeting;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -29,6 +31,10 @@ public class Person implements Parcelable, Serializable {
 //	Constructors
 //
 //----------------------------------------------------
+	public Person() {
+
+	}
+
 	public Person(String name) {
 		this.name = name;
 
@@ -111,5 +117,34 @@ public class Person implements Parcelable, Serializable {
 		availability.addFirst(o);
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
 
+	public void setPrimaryKey(int primaryKey) {
+		this.primaryKey = primaryKey;
+	}
+
+	public void setAvailability(LinkedList<ScheduleObject> availability) {
+		this.availability = availability;
+	}
+
+	public void setAvailability(String serializedObj) {
+		LinkedList<ScheduleObject> avail = null;
+		try {
+			byte[] bts = serializedObj.getBytes(); //If this doesn't work, here is where it's messing up
+
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(bts);
+			ObjectInputStream si = new ObjectInputStream(inputStream);
+
+			avail = (LinkedList<ScheduleObject>) si.readObject();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		setAvailability(avail);
+	}
 } //End public class Person

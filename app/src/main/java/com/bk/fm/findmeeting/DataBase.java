@@ -25,7 +25,7 @@ public class DataBase extends SQLiteOpenHelper {
 	private static final String NAME_KEY = "name";
 	private static final String AVAIL_KEY = "availability";
 
-
+//TODO: Improve DataBase class's comments
 //----------------------------------------------------
 //
 //	SQLiteOpenHelper
@@ -68,20 +68,49 @@ public class DataBase extends SQLiteOpenHelper {
 //----------------------------------------------------
 	public ArrayList<Person> getAllPeople() {
 		ArrayList<Person> people = new ArrayList<>();
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_PEOPLE, null);
 
+		if(cursor.moveToFirst()) { //If we got stuff
+			do { //Make people from the stuff
+				Person p = new Person();
+
+				p.setPrimaryKey(Integer.parseInt(cursor.getString(0)));
+				p.setName(cursor.getString(1));
+				p.setAvailability(cursor.getString(2));
+
+				people.add(p);
+
+			} while(cursor.moveToNext()); //Is there more stuff?
+		}
 
 		return people;
 	}
 
 	public Person getPerson(int id) {
 		Person p = null;
-
+		//ToDo: add code to get person from database
 		return p;
 	}
 
 	public ArrayList<Person> getPerson(String name) {
 		ArrayList<Person> people = new ArrayList<>();
+		SQLiteDatabase db = this.getWritableDatabase();
+		String query = "SELECT * FROM " + TABLE_PEOPLE + " WHERE " + NAME_KEY + " = " + name;
+		Cursor cursor = db.rawQuery(query, null);
 
+		if(cursor.moveToFirst()) { //If we got stuff
+			do { //Make people from the stuff
+				Person p = new Person();
+
+				p.setPrimaryKey(Integer.parseInt(cursor.getString(0)));
+				p.setName(cursor.getString(1));
+				p.setAvailability(cursor.getString(2));
+
+				people.add(p);
+
+			} while(cursor.moveToNext()); //Is there more stuff?
+		}
 
 		return people;
 	}
@@ -113,7 +142,6 @@ public class DataBase extends SQLiteOpenHelper {
 
 		db.close();
 
-
 	}
 
 	public boolean addPerson(Person p) {
@@ -135,6 +163,23 @@ public class DataBase extends SQLiteOpenHelper {
 		}
 	}
 
+	public int updatePerson(Person p) {
+		try {
+			SQLiteDatabase db = this.getWritableDatabase();
 
+			ContentValues values = new ContentValues();
+			values.put(NAME_KEY, p.getName());
+			values.put(AVAIL_KEY, p.getSerializedAvial());
 
+			// Updating Row
+			int updates = db.update(TABLE_PEOPLE, values, PRIMARY_KEY + " = ?",
+					new String[] {String.valueOf(p.getPrimaryKey())});
+			db.close(); // Closing database connection
+
+			return updates;
+
+		} catch(IOException e) {
+			return 0;
+		}
+	}
 }

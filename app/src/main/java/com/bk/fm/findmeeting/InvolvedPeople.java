@@ -123,7 +123,7 @@ public class InvolvedPeople extends ActionBarActivity {
 
 	public void addListActionHandler() {
 	//On Long-Press
-
+	//TODO: set InvolvedPeople List's action handlers
 
 	//On Short Press
 
