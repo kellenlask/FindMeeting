@@ -1,8 +1,10 @@
 package com.bk.fm.findmeeting;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 //
 //Maintain an ArrayList<Person> of involved people
 //On long press, deletion menu
+//On press, availability page
 //On plus button press, go to add person screen
 //
 public class InvolvedPeople extends ActionBarActivity {
@@ -33,6 +36,7 @@ public class InvolvedPeople extends ActionBarActivity {
 	private ListView peopleList;
 	private Button addPersonButton;
 	private Button findTimesButton;
+	private Meeting meeting;
 
 //----------------------------------------------------
 //
@@ -101,8 +105,10 @@ public class InvolvedPeople extends ActionBarActivity {
 	public void addAddPersonActionHandler() {
 		addPersonButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
-
+			public void onClick(View v) { //Show the SavedPeople Activity on AddPerson Button-Click
+				Intent i = new Intent(getBaseContext(), SavedPeople.class);
+				i.putExtra("meeting", (Parcelable) meeting);
+				startActivity(i);
 			}
 		});
 	}
@@ -117,6 +123,11 @@ public class InvolvedPeople extends ActionBarActivity {
 	}
 
 	public void addListActionHandler() {
+	//On Long-Press
+
+
+	//On Short Press
+
 
 	}
 
