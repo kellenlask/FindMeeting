@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -19,10 +20,14 @@ public class Summary extends ActionBarActivity {
 //
 //----------------------------------------------------
 	private Meeting meeting; //ToDo: figure out how to de-parselize this into an instantiated field.
-    private ListView dayListView;
 
+    private ListView dayListView;
     private ArrayList<String> days;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> daysAdapter;
+
+    private ListView timeListView;
+    private ArrayList<String> times;
+    private ArrayAdapter<String> timesAdapter;
 //----------------------------------------------------
 //
 //	onCreate
@@ -39,13 +44,23 @@ public class Summary extends ActionBarActivity {
 
         days = new ArrayList<String>();
         dayListView = (ListView)findViewById(R.id.dayListView);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, days);
+        daysAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, days);
+
+        times = new ArrayList<String>();
+        timeListView = (ListView)findViewById(R.id.timeListView);
+        timesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, times);
 
         for(Day d: meeting.getPossibleDays().keySet()) {
             days.add(d.toString());
         }
 
-        dayListView.setAdapter(adapter);
+        for(Range r: meeting.getPossibleDays().values()) {
+            times.add(r.toString()); // This toString appears to show the location in memory rather than than the toString method in Range.java
+        }
+
+        dayListView.setAdapter(daysAdapter);
+        timeListView.setAdapter(timesAdapter);
+
 	}
 
 //----------------------------------------------------
