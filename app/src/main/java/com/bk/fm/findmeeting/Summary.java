@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class Summary extends ActionBarActivity {
 //
 //----------------------------------------------------
 	private Meeting meeting; //ToDo: figure out how to de-parselize this into an instantiated field.
+    private TextView meetingLengthTextView;
 
     private ListView dayListView;
     private ArrayList<String> days;
@@ -42,6 +44,9 @@ public class Summary extends ActionBarActivity {
         meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
         Interval newInterval = meeting.getMeetingDuration();
 
+        meetingLengthTextView = (TextView)findViewById(R.id.meetingLengthLabel);
+        meetingLengthTextView.setText(newInterval.toString("Single"));
+
         days = new ArrayList<String>();
         dayListView = (ListView)findViewById(R.id.dayListView);
         daysAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, days);
@@ -55,7 +60,7 @@ public class Summary extends ActionBarActivity {
         }
 
         for(Range r: meeting.getPossibleDays().values()) {
-            times.add(r.toString(getBaseContext())); // This toString appears to show the location in memory rather than than the toString method in Range.java
+            times.add(r.toString(getBaseContext()));
         }
 
         dayListView.setAdapter(daysAdapter);

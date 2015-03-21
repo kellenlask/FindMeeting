@@ -55,8 +55,14 @@ public class Interval implements Comparable<Interval>, Cloneable, Serializable {
 //
 //----------------------------------------------------
 
-	public String toString() {
-		return startTime.toString() + " - " + stopTime.toString();
+	public String toString(String intervalOrSingle) {
+        String returnString = "see method";   // Just in case we use this incorrectly in the future.
+        if (intervalOrSingle.equals("Interval")) {
+            returnString =  startTime.toString() + " - " + stopTime.toString();
+        } else if (intervalOrSingle.equals("Single")) {
+            returnString =  stopTime.toString();
+        }
+        return returnString;
 	}
 
 	public boolean contains(Time t) {
