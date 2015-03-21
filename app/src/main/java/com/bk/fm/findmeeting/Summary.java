@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,8 +19,10 @@ public class Summary extends ActionBarActivity {
 //
 //----------------------------------------------------
 	private Meeting meeting; //ToDo: figure out how to de-parselize this into an instantiated field.
+    private ListView dayListView;
 
-
+    private ArrayList<String> days;
+    private ArrayAdapter<String> adapter;
 //----------------------------------------------------
 //
 //	onCreate
@@ -31,22 +35,17 @@ public class Summary extends ActionBarActivity {
 		setContentView(R.layout.activity_summary);
 
         meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
-        TreeMap newMap = meeting.getPossibleDays();
         Interval newInterval = meeting.getMeetingDuration();
 
-        ArrayList<String> days = new ArrayList<String>();
-        for (Map.Entry<Day, Range> entry : newMap.entrySet()) {
+        days = new ArrayList<String>();
+        dayListView = (ListView)findViewById(R.id.dayListView);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, days);
 
+        for(Day d: meeting.getPossibleDays().keySet()) {
+            days.add(d.toString());
         }
 
-        /*
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage(newMap.toString());
-        builder1.setCancelable(true);
-
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
-        */
+        dayListView.setAdapter(adapter);
 	}
 
 //----------------------------------------------------
