@@ -55,7 +55,7 @@ public class Summary extends ActionBarActivity {
         }
 
         for(Range r: meeting.getPossibleDays().values()) {
-            times.add(r.toString()); // This toString appears to show the location in memory rather than than the toString method in Range.java
+            times.add(r.toString(getBaseContext())); // This toString appears to show the location in memory rather than than the toString method in Range.java
         }
 
         dayListView.setAdapter(daysAdapter);
