@@ -65,6 +65,10 @@ public class Interval implements Comparable<Interval>, Cloneable, Serializable {
         return returnString;
 	}
 
+	public String toString() {
+		return startTime.toString() + " - " + stopTime.toString();
+	}
+
 	public boolean contains(Time t) {
 		int time = t.getTimeInMinutes();
 

@@ -89,7 +89,8 @@
                 android:layout_column="0"
                 android:layout_span="2"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <ListView
                     android:id="@+id/dayListView"
@@ -101,7 +102,9 @@
                     android:id="@+id/timeListView"
                     android:layout_width="wrap_content"
                     android:layout_height="410dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:textFilterEnabled="false"/>
             </LinearLayout>
         </TableRow>
 
@@ -110,15 +113,12 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/nextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="false"
-                android:layout_alignParentEnd="false"
-                android:layout_below="@+id/tableLayout"
-                android:layout_centerHorizontal="true"
                 android:layout_weight="1"
-                android:text="@string/nextLabel"/>
+                android:text="@string/nextLabel"
+                android:layout_span="2"/>
         </TableRow>
     </TableLayout>
 </RelativeLayout>

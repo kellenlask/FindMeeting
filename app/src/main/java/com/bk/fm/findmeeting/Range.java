@@ -86,7 +86,7 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 	}
 
 	public String toString(Context c) {
-		return interval.toString();
+		return day.toString(c) + ": " + interval.toString();
 	}
 
 	public boolean contains(Range r) { //Is the passed range completely contained within this one?
