@@ -23,7 +23,7 @@ public class Person implements Parcelable, Serializable {
 //
 //----------------------------------------------------
 	private String name;
-	private int primaryKey;
+	private long primaryKey;
 	private LinkedList<ScheduleObject> availability;
 
 //----------------------------------------------------
@@ -103,7 +103,7 @@ public class Person implements Parcelable, Serializable {
 
 	}
 
-	public int getPrimaryKey() {
+	public long getPrimaryKey() {
 		return primaryKey;
 	}
 
@@ -121,7 +121,7 @@ public class Person implements Parcelable, Serializable {
 		this.name = name;
 	}
 
-	public void setPrimaryKey(int primaryKey) {
+	public void setPrimaryKey(long primaryKey) {
 		this.primaryKey = primaryKey;
 	}
 

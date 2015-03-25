@@ -75,7 +75,7 @@ public class DataBase extends SQLiteOpenHelper {
 			do { //Make people from the stuff
 				Person p = new Person();
 
-				p.setPrimaryKey(Integer.parseInt(cursor.getString(0)));
+				p.setPrimaryKey(Long.parseLong(cursor.getString(0)));
 				p.setName(cursor.getString(1));
 				p.setAvailability(cursor.getString(2));
 
@@ -87,23 +87,34 @@ public class DataBase extends SQLiteOpenHelper {
 		return people;
 	}
 
-	public Person getPerson(int id) {
+	public Person getPerson(long id) {
 		Person p = null;
-		//ToDo: add code to get person from database
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		String query = "SELECT * FROM " + TABLE_PEOPLE + " WHERE " + PRIMARY_KEY + " = '" + id + "'";
+		Cursor cursor = db.rawQuery(query, null);
+
+		if(cursor.moveToFirst()) { //If we got stuff
+			p.setPrimaryKey(Long.parseLong(cursor.getString(0)));
+			p.setName(cursor.getString(1));
+			p.setAvailability(cursor.getString(2));
+		}
+
 		return p;
 	}
 
+	//Returns a list because multiple entries might have the same name.
 	public ArrayList<Person> getPerson(String name) {
 		ArrayList<Person> people = new ArrayList<>();
 		SQLiteDatabase db = this.getWritableDatabase();
-		String query = "SELECT * FROM " + TABLE_PEOPLE + " WHERE " + NAME_KEY + " = " + name;
+		String query = "SELECT * FROM " + TABLE_PEOPLE + " WHERE " + NAME_KEY + " = '" + name + "'";
 		Cursor cursor = db.rawQuery(query, null);
 
 		if(cursor.moveToFirst()) { //If we got stuff
 			do { //Make people from the stuff
 				Person p = new Person();
 
-				p.setPrimaryKey(Integer.parseInt(cursor.getString(0)));
+				p.setPrimaryKey(Long.parseLong(cursor.getString(0)));
 				p.setName(cursor.getString(1));
 				p.setAvailability(cursor.getString(2));
 
@@ -153,7 +164,7 @@ public class DataBase extends SQLiteOpenHelper {
 			values.put(AVAIL_KEY, p.getSerializedAvial());
 
 			// Inserting Row
-			db.insert(TABLE_PEOPLE, null, values);
+			p.setPrimaryKey(db.insert(TABLE_PEOPLE, null, values));
 			db.close(); // Closing database connection
 
 			return true;

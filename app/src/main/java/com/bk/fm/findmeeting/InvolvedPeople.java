@@ -32,10 +32,12 @@ public class InvolvedPeople extends ActionBarActivity {
 //
 //----------------------------------------------------
 	private ArrayList<Person> people;
+	private Meeting meeting;
+
 	private ListView peopleList;
 	private Button addPersonButton;
 	private Button findTimesButton;
-	private Meeting meeting;
+
 
 //----------------------------------------------------
 //
@@ -46,6 +48,9 @@ public class InvolvedPeople extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_involved_people);
+
+		//Pull Meeting object out
+		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
 
 		initializeFields();
 
@@ -73,7 +78,7 @@ public class InvolvedPeople extends ActionBarActivity {
 	} //End protected void onPause()
 
 	@Override
-	protected void onResume() { //When the user returns to the activity
+	protected void onResume() { //When the user returns to the activity, update the people list
 		SharedPreferences prefs = getSharedPreferences("peopleStorage", Context.MODE_PRIVATE);
 		//SharedPreferences.Editor edit = prefs.edit();
 
@@ -116,16 +121,16 @@ public class InvolvedPeople extends ActionBarActivity {
 		findTimesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+			//TODO: Set
 			}
 		});
 	}
 
 	public void addListActionHandler() {
-	//On Long-Press
+	//On Long-Press: bring up delete menu
 	//TODO: set InvolvedPeople List's action handlers
 
-	//On Short Press
+	//On Short Press: bring up AvailabilitySummary Activity
 
 
 	}
