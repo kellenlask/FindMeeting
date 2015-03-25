@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class MeetingParams extends ActionBarActivity {
-//----------------------------------------------------
+	//----------------------------------------------------
 //
 //	Fields
 //
@@ -77,47 +77,47 @@ public class MeetingParams extends ActionBarActivity {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				try {
+			try {
 				//Make Meeting Object
-					updateMap();
+				updateMap();
 
-					//If a time is set for all available days, make a usable map to reflect that
-					String day = (String) dayComboBox.getSelectedItem();
-					if(day.equals(getString(R.string.all_selected_days))) {
-						boolean[] days = getSelectedDays();
+				//If a time is set for all available days, make a usable map to reflect that
+				String day = (String) dayComboBox.getSelectedItem();
+				if (day.equals(getString(R.string.all_selected_days))) {
+					boolean[] days = getSelectedDays();
 
-						Interval inter = getInterval();
+					Interval inter = getInterval();
 
-						for(int i = 0; i < days.length; i++) {
-							if(days[i]) {
-								map.put(Day.getDay(i), new Range(inter, Day.getDay(i)));
-							}
+					for (int i = 0; i < days.length; i++) {
+						if (days[i]) {
+							map.put(Day.getDay(i), new Range(inter, Day.getDay(i)));
 						}
-					} //End If
+					}
+				} //End If
 
 
-					if (!map.isEmpty()) { //if the user has selected a day
-						//Parse the meeting duration, and turn it into a dummy interval
-						Time srt = new Time(0, 0);
-						Time stp = new Time(meetingDuration.getText());
-						Interval meetingLength = new Interval(srt, stp);
+				if (!map.isEmpty()) { //if the user has selected a day
+					//Parse the meeting duration, and turn it into a dummy interval
+					Time srt = new Time(0, 0);
+					Time stp = new Time(meetingDuration.getText());
+					Interval meetingLength = new Interval(srt, stp);
 
-						//Make the meeting object with the day information and meeting length
-						Meeting meeting = new Meeting(map, meetingLength);
+					//Make the meeting object with the day information and meeting length
+					Meeting meeting = new Meeting(map, meetingLength);
 
-				//Send the Meeting Object along to the Summary Activity (Make an intent)
-						Intent i = new Intent(getBaseContext(), Summary.class);
-						i.putExtra("MEETING", (Parcelable) meeting);
-						startActivity(i);
-					} else {
-						throw new Exception("No days selected.");
-					} //End if-else
+					//Send the Meeting Object along to the Summary Activity (Make an intent)
+					Intent i = new Intent(getBaseContext(), Summary.class);
+					i.putExtra("MEETING", (Parcelable) meeting);
+					startActivity(i);
+				} else {
+					throw new Exception("No days selected.");
+				} //End if-else
 
-				} catch (Exception e) {
-					Toast.makeText(getApplicationContext(), "Invalid Meeting Configuration", Toast.LENGTH_SHORT).show();
-				} //End Try-Catch
+			} catch (Exception e) {
+				Toast.makeText(getApplicationContext(), "Invalid Meeting Configuration", Toast.LENGTH_SHORT).show();
+			} //End Try-Catch
 
-			} //End public void onClick(View)
+		} //End public void onClick(View)
 		});
 
 	} //End public void setButtonActionHandler()
@@ -218,13 +218,13 @@ public class MeetingParams extends ActionBarActivity {
 		updateMap();
 
 		//If we don't have times for any particular day, they can set one for all days.
-		if(map.isEmpty()) {
+		if (map.isEmpty()) {
 			selectedDays.add(getString(R.string.all_selected_days));
 		}
 
 		//For each day, if selected, add it to the list
-		for(int i = 0; i < days.length; i++) {
-			if(days[i]) {
+		for (int i = 0; i < days.length; i++) {
+			if (days[i]) {
 				selectedDays.add(Day.getDay(i).toString(this)); //You've got to pass the context to toString() in order to access the strings.xml resources.
 			}
 		}
@@ -241,31 +241,31 @@ public class MeetingParams extends ActionBarActivity {
 	public void updateTimeFields() {
 		String day = (String) dayComboBox.getSelectedItem();
 
-		if(day.equals(getString(R.string.sunday)) && map.containsKey(Day.SUNDAY)) {
+		if (day.equals(getString(R.string.sunday)) && map.containsKey(Day.SUNDAY)) {
 			startTime.setText(map.get(Day.SUNDAY).getStartTime().toString());
 			endTime.setText(map.get(Day.SUNDAY).getStopTime().toString());
 
-		} else if(day.equals(getString(R.string.monday)) && map.containsKey(Day.MONDAY)) {
+		} else if (day.equals(getString(R.string.monday)) && map.containsKey(Day.MONDAY)) {
 			startTime.setText(map.get(Day.MONDAY).getStartTime().toString());
 			endTime.setText(map.get(Day.MONDAY).getStopTime().toString());
 
-		} else if(day.equals(getString(R.string.tuesday)) && map.containsKey(Day.TUESDAY)) {
+		} else if (day.equals(getString(R.string.tuesday)) && map.containsKey(Day.TUESDAY)) {
 			startTime.setText(map.get(Day.TUESDAY).getStartTime().toString());
 			endTime.setText(map.get(Day.TUESDAY).getStopTime().toString());
 
-		} else if(day.equals(getString(R.string.wednesday)) && map.containsKey(Day.WEDNESDAY)) {
+		} else if (day.equals(getString(R.string.wednesday)) && map.containsKey(Day.WEDNESDAY)) {
 			startTime.setText(map.get(Day.WEDNESDAY).getStartTime().toString());
 			endTime.setText(map.get(Day.WEDNESDAY).getStopTime().toString());
 
-		} else if(day.equals(getString(R.string.thursday)) && map.containsKey(Day.THURSDAY)) {
+		} else if (day.equals(getString(R.string.thursday)) && map.containsKey(Day.THURSDAY)) {
 			startTime.setText(map.get(Day.THURSDAY).getStartTime().toString());
 			endTime.setText(map.get(Day.THURSDAY).getStopTime().toString());
 
-		} else if(day.equals(getString(R.string.friday)) && map.containsKey(Day.FRIDAY)) {
+		} else if (day.equals(getString(R.string.friday)) && map.containsKey(Day.FRIDAY)) {
 			startTime.setText(map.get(Day.FRIDAY).getStartTime().toString());
 			endTime.setText(map.get(Day.FRIDAY).getStopTime().toString());
 
-		} else if(day.equals(getString(R.string.saturday)) && map.containsKey(Day.SATURDAY)) {
+		} else if (day.equals(getString(R.string.saturday)) && map.containsKey(Day.SATURDAY)) {
 			startTime.setText(map.get(Day.SATURDAY).getStartTime().toString());
 			endTime.setText(map.get(Day.SATURDAY).getStopTime().toString());
 
@@ -287,12 +287,12 @@ public class MeetingParams extends ActionBarActivity {
 				String m = "" + minute;
 
 				//Ensure the output hour is two digits.
-				if(h.length() == 1) {
+				if (h.length() == 1) {
 					h = "0" + h;
 				}
 
 				//Ensure the output minutes are two digits.
-				if(m.length() == 1) {
+				if (m.length() == 1) {
 					m = "0" + m;
 				}
 
@@ -312,31 +312,31 @@ public class MeetingParams extends ActionBarActivity {
 //----------------------------------------------------
 
 
-//Store the current GUI config to a Time Range
+	//Store the current GUI config to a Time Range
 	public void storeDay() {
 		try {
 			//Grab selection from comboBox
 			String day = (String) dayComboBox.getSelectedItem();
 
-			if(day.equals(getString(R.string.sunday))) {
+			if (day.equals(getString(R.string.sunday))) {
 				addDay(Day.SUNDAY, startTime.getText(), endTime.getText());
 
-			} else if(day.equals(getString(R.string.monday))) {
+			} else if (day.equals(getString(R.string.monday))) {
 				addDay(Day.MONDAY, startTime.getText(), endTime.getText());
 
-			} else if(day.equals(getString(R.string.tuesday))) {
+			} else if (day.equals(getString(R.string.tuesday))) {
 				addDay(Day.TUESDAY, startTime.getText(), endTime.getText());
 
-			} else if(day.equals(getString(R.string.wednesday))) {
+			} else if (day.equals(getString(R.string.wednesday))) {
 				addDay(Day.WEDNESDAY, startTime.getText(), endTime.getText());
 
-			} else if(day.equals(getString(R.string.thursday))) {
+			} else if (day.equals(getString(R.string.thursday))) {
 				addDay(Day.THURSDAY, startTime.getText(), endTime.getText());
 
-			} else if(day.equals(getString(R.string.friday))) {
+			} else if (day.equals(getString(R.string.friday))) {
 				addDay(Day.FRIDAY, startTime.getText(), endTime.getText());
 
-			} else if(day.equals(getString(R.string.saturday))) {
+			} else if (day.equals(getString(R.string.saturday))) {
 				addDay(Day.SATURDAY, startTime.getText(), endTime.getText());
 
 			}
@@ -356,20 +356,15 @@ public class MeetingParams extends ActionBarActivity {
 		Time start = new Time(startTime);
 		Time end = new Time(endTime);
 
-		if(map.containsKey(d)) {
-			Range r = map.get(d);
-			r.setStartTime(start);
-			r.setStopTime(end);
+		if (map.containsKey(d)) {
+			map.remove(d);
+			map.put(d, new Range(start, end, d));
 
 		} else {
 			map.put(d, new Range(start, end, d));
 		}
 
-		if(map.size() > n) {
-			Toast.makeText(getApplicationContext(), getString(R.string.stored_1) + ": " + map.get(d).toString(this), Toast.LENGTH_SHORT).show();
-		}
-
-	}
+	}//End public void addDay(Day, CharSequence, CharSequence)
 
 	public Interval getInterval() throws Exception {
 
@@ -377,22 +372,23 @@ public class MeetingParams extends ActionBarActivity {
 		Time end = new Time(endTime.getText());
 
 		return new Interval(start, end);
-	}
+
+	} //End public Interval getInterval()
 
 	//Update the map to reflect the check boxes
 	public void updateMap() {
 		boolean[] days = getSelectedDays();
 
 		//Update the internal map to reflect the checkBoxes
-		for(int i = 0; i < days.length; i++) {
-			if(!days[i] && map.containsKey(Day.getDay(i))) {
+		for (int i = 0; i < days.length; i++) {
+			if (!days[i] && map.containsKey(Day.getDay(i))) {
 				map.remove(Day.getDay(i));
 			}
 		}
 	}
 
-//Make a boolean array representing the available days as selected by the user via checkboxes.
-	public boolean[] getSelectedDays(){
+	//Make a boolean array representing the available days as selected by the user via checkboxes.
+	public boolean[] getSelectedDays() {
 		boolean[] days = new boolean[7];
 
 		days[0] = sunday.isChecked();
