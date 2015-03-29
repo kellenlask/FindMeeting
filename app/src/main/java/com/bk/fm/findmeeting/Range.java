@@ -1,3 +1,9 @@
+/*
+This file contains the Java code for the class definition of a Range object. Range objects are
+similar to Intervals, except they include a day, and are compared differently. They also add a few
+extra methods. In the future, this class may extend the Interval class.
+ */
+
 package com.bk.fm.findmeeting;
 
 import android.content.Context;

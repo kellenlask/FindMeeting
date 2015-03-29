@@ -1,3 +1,10 @@
+/*
+This file contains the Java code to describe the behavior of the Involved People view
+The Activity's layout information is contained in the xml file under /res/layout/
+The intent is to maintain a list of people who are involved in a meeting event that can be
+interacted with.
+ */
+
 package com.bk.fm.findmeeting;
 
 import android.content.Context;

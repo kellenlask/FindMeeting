@@ -1,3 +1,9 @@
+/*
+This file contains the Java code to describe the behavior of the Availability Summary view
+The Activity's layout information is contained in the xml file under /res/layout/
+This view is meant to summarize the availability of one Person.
+ */
+
 package com.bk.fm.findmeeting;
 
 import android.os.Bundle;

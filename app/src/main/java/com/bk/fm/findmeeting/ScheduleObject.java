@@ -1,3 +1,9 @@
+/*
+This file contains the Java code for a Schedule Object class definition. This is the super class for
+Availability, and Obligation. Other than that, this class's primary purpose is to allow for
+polymorphism between Availability and Obligation objects.
+ */
+
 package com.bk.fm.findmeeting;
 
 import android.content.Context;
@@ -27,13 +33,6 @@ public class ScheduleObject extends Range implements Serializable {
 		this.obligation = obligation;
 
 	}
-
-
-//----------------------------------------------------
-//
-//	Interfaces
-//
-//----------------------------------------------------
 
 //----------------------------------------------------
 //

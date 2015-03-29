@@ -1,3 +1,10 @@
+/*
+This file contains the Java code to describe the behavior of the Saved People view
+The Activity's layout information is contained in the xml file under /res/layout/
+The intent is to present a list of people currently in the database, and allow for the creation
+and editing of people.
+ */
+
 package com.bk.fm.findmeeting;
 
 import android.app.AlertDialog;
@@ -15,7 +22,7 @@ import java.util.LinkedList;
 
 
 public class SavedPeople extends ActionBarActivity {
-	//----------------------------------------------------
+//----------------------------------------------------
 //
 //	Fields
 //
@@ -25,7 +32,7 @@ public class SavedPeople extends ActionBarActivity {
 	private ArrayList<Person> savedPeople;
 	private String name;
 
-	//----------------------------------------------------
+//----------------------------------------------------
 //
 //	onCreate
 //

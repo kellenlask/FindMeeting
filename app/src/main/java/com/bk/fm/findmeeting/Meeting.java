@@ -1,8 +1,14 @@
-/**
- * Created by Kellen on 3/4/2015.
+/*
+This file contains the class definition for a Meeting object which would represent a prospective
+meeting's desired parameters. EX: We're willing to meet either Tuesday from 12am - 3pm or Thursday
+from 8am to 6pm; the meeting should last about a half-hour.
  */
 
 package com.bk.fm.findmeeting;
+
+/**
+ * Created by Kellen on 3/4/2015.
+ */
 
 import android.os.Parcel;
 import android.os.Parcelable;

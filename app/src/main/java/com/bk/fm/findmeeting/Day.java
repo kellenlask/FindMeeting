@@ -1,14 +1,18 @@
-/**
- * Created by Kellen on 3/4/2015.
+/*
+This file contains the Java code to describe the days of the week (an enumeration)
  */
 
 package com.bk.fm.findmeeting;
 
-import android.content.Context;
+/**
+ * Created by Kellen on 3/4/2015.
+ */
 
-import java.io.Serializable;
+import android.content.Context;
+import java.io.Serializable;	//Serializable in order to fully serialize objects that use Day.
 
 public enum Day implements Serializable {
+	//Each day has an index for convenient mapping between arrays and Days
 	SUNDAY (0),
 	MONDAY (1),
 	TUESDAY (2),
@@ -27,6 +31,8 @@ public enum Day implements Serializable {
 		return index;
 	} //End public int getIndex()
 
+	//Return the appropriate String resource from /res/values/strings.xml which requires the
+	//application's context (for language purposes)
 	public String toString(Context c) {
 		switch(index) {
 			case 0:
@@ -46,6 +52,7 @@ public enum Day implements Serializable {
 		}
 	} //End public String toString()
 
+	//Return the appropriate Day given its index.
 	public static Day getDay(int index) {
 		switch(index) {
 			case 0:

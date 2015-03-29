@@ -1,3 +1,9 @@
+/*
+This file contains the class definition for a DataBase object which is intended to interface
+between the client code and the SQLite database containing saved People objects. The code below
+describes the database interactions.
+ */
+
 package com.bk.fm.findmeeting;
 
 import android.content.ContentValues;

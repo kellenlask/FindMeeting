@@ -1,3 +1,8 @@
+/*
+This file contains the Java code to describe a class representing a definite interval of time
+(defined by a start time and stop time). EX: 09:00 - 14:00
+ */
+
 package com.bk.fm.findmeeting;
 
 import java.io.Serializable;

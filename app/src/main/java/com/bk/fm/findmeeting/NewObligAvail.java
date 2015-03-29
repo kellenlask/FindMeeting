@@ -1,3 +1,10 @@
+/*
+This file contains the Java code to describe the behavior of the Obligation/Availability view
+The Activity's layout information is contained in the xml file under /res/layout/
+The intent is to accept the parameters for a new Obligation or Availability (the view should change
+its type based on the button pressed in the Availability Summary Activity)
+ */
+
 package com.bk.fm.findmeeting;
 
 import android.os.Bundle;

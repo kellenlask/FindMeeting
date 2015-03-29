@@ -1,3 +1,10 @@
+/*
+This file contains the Java code to describe the behavior of the Meeting Summary view
+The Activity's layout information is contained in the xml file under /res/layout/
+The intent is to summarize the Meeting parameters to the user before he/she moves on to add people
+to the meeting.
+ */
+
 package com.bk.fm.findmeeting;
 
 import android.os.Bundle;

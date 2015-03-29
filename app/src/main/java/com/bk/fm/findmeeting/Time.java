@@ -1,3 +1,8 @@
+/*
+This file contains the Java code for a Time object class definition. This object is supposed to
+represent a slice of time, such as 8:46am. It is capable of accepting both 24h and 12h time.
+ */
+
 package com.bk.fm.findmeeting;
 
 import java.io.Serializable;
@@ -16,7 +21,7 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 
 //----------------------------------------------------
 //
-//	"Constructor"
+//	Constructors
 //
 //----------------------------------------------------
 	public Time(int hours, int minutes) throws IllegalArgumentException {
@@ -67,7 +72,7 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 		return new Time(hours, minutes);
 	}
 
-	//Compares by earlier/later
+	//Compares by earlier before later
 	public int compareTo(Time t) {
 		return getTimeInMinutes() - t.getTimeInMinutes();
 	}
@@ -79,6 +84,18 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 //----------------------------------------------------
 	public int getHours() {
 		return hours;
+	}
+
+	public int getMinutes() {
+		return minutes;
+	}
+
+	public char getAMPM(){
+		if(hours < 12) {
+			return 'p';
+		} else {
+			return 'a';
+		}
 	}
 
 	public int getAMPMHours() {
@@ -94,10 +111,6 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 		}
 	}
 
-	public int getMinutes() {
-		return minutes;
-	}
-
 	public int getTimeInMinutes() {
 		return (hours * 60) + minutes;
 	}
@@ -105,7 +118,6 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 	public boolean equals(Time t) {
 		return getTimeInMinutes() == t.getTimeInMinutes();
 	}
-
 
 	public String toString() {
 		String h = hours + "";
@@ -136,16 +148,6 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 
 		return h + ":" + m + getAMPM();
 	}
-
-	public char getAMPM(){
-		if(hours < 12) {
-			return 'p';
-		} else {
-			return 'a';
-		}
-	}
-
-
 
 //----------------------------------------------------
 //
@@ -226,6 +228,8 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 //	Static Methods
 //
 //----------------------------------------------------
+
+//Tests whether or not a given combination of hours and minutes is a valid time
 	public static boolean isValidTime(int hours, int minutes) {
 		boolean valid = true;
 
@@ -254,7 +258,7 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 		return valid;
 	}
 
-//Parse hours or minutes
+//Parse hours or minutes from a String/CharSequence
 	public static int parseHours(String s) {
 		try {
 			return Integer.parseInt(s.substring(0, 2));
@@ -267,7 +271,6 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 
 	public static int parseMinutes(String s) {
 		try {
-
 			return Integer.parseInt(s.substring(3));
 
 		} catch(Exception e) {
@@ -276,13 +279,9 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 
 	} //End public int parseMinutes(String)
 
-
-
 	public static int parseHours(CharSequence seq) {
 		try {
-
 			StringBuilder str = new StringBuilder(seq);
-
 			String s = str.toString();
 
 			return Integer.parseInt(s.substring(0, 2));
@@ -295,9 +294,7 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 
 	public static int parseMinutes(CharSequence seq) {
 		try {
-
 			StringBuilder str = new StringBuilder(seq);
-
 			String s = str.toString();
 
 			return Integer.parseInt(s.substring(3));

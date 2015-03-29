@@ -1,8 +1,13 @@
-/**
- * Created by Kellen on 3/4/2015.
+/*
+This file contains the Java code for the class definition of a Person Object. This object should
+store the information of a person, i.e. Name, Database Primary Key, and Availabilities/Obligations.
  */
 
 package com.bk.fm.findmeeting;
+
+/**
+ * Created by Kellen on 3/4/2015.
+ */
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,3 +1,9 @@
+/*
+This file contains the Java code to describe the behavior of the Meeting Parameters view
+The Activity's layout information is contained in the xml file under /res/layout/
+The intent is to take in the Meeting's parameters and construct a Meeting object from them.
+ */
+
 package com.bk.fm.findmeeting;
 
 import android.app.TimePickerDialog;
@@ -19,7 +25,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class MeetingParams extends ActionBarActivity {
-	//----------------------------------------------------
+//----------------------------------------------------
 //
 //	Fields
 //
@@ -34,27 +40,27 @@ public class MeetingParams extends ActionBarActivity {
 	private CheckBox friday;
 	private CheckBox saturday;
 
-	private Button nextButton;
+	private Spinner dayComboBox;
 
 	private Button startTime;
 	private Button endTime;
+
 	private Button meetingDuration;
 
-	private Spinner dayComboBox;
+	private Button nextButton;
 
 //----------------------------------------------------
 //
-//	"Constructor"
+//	onCreate
 //
 //----------------------------------------------------
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_meeting_params);
 
-		//Give the View variables a value
+		//Setup the view references
 		initializeFields();
 
 		//Add our event handlers
@@ -65,20 +71,19 @@ public class MeetingParams extends ActionBarActivity {
 
 	} //End protected void onCreate(Bundle)
 
-
 //----------------------------------------------------
 //
 //	Action Handlers
 //
 //----------------------------------------------------
 
-
+	//When the Next Button is clicked...
 	public void setButtonActionHandler() {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 			try {
-				//Make Meeting Object
+				//Ensure that our internal storage matches the User's inputs
 				updateMap();
 
 				//If a time is set for all available days, make a usable map to reflect that
@@ -95,14 +100,14 @@ public class MeetingParams extends ActionBarActivity {
 					}
 				} //End If
 
-
-				if (!map.isEmpty()) { //if the user has selected a day
-					//Parse the meeting duration, and turn it into a dummy interval
+				//If the user has selected a day...
+				if (!map.isEmpty()) {
+					//Get the meeting duration, and turn it into a hacky indefinite interval
 					Time srt = new Time(0, 0);
 					Time stp = new Time(meetingDuration.getText());
 					Interval meetingLength = new Interval(srt, stp);
 
-					//Make the meeting object with the day information and meeting length
+					//Make the meeting object
 					Meeting meeting = new Meeting(map, meetingLength);
 
 					//Send the Meeting Object along to the Summary Activity (Make an intent)
@@ -119,7 +124,6 @@ public class MeetingParams extends ActionBarActivity {
 
 		} //End public void onClick(View)
 		});
-
 	} //End public void setButtonActionHandler()
 
 
@@ -237,7 +241,7 @@ public class MeetingParams extends ActionBarActivity {
 	}//End public void updateComboBox()
 
 
-	//Update the time fields to reflect the selected day in the comboBox
+	//Make sure the time fields are showing the time associated with the selected day
 	public void updateTimeFields() {
 		String day = (String) dayComboBox.getSelectedItem();
 
@@ -270,15 +274,16 @@ public class MeetingParams extends ActionBarActivity {
 			endTime.setText(map.get(Day.SATURDAY).getStopTime().toString());
 
 		}
-	}
+	} //End public void updateTimeFields()
 
 
-	//Get the time for a time input
+	//Display a Time Picker, and change the Button argument's text to match the selected time.
 	public void showTimePicker(final Button txtTime) {
-
+		//Grab the current selected time
 		int hours = Time.parseHours(txtTime.getText());
 		int minutes = Time.parseMinutes(txtTime.getText());
 
+		//Make the Time Picker with the current selected time
 		TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
 
 			@Override
@@ -296,7 +301,7 @@ public class MeetingParams extends ActionBarActivity {
 					m = "0" + m;
 				}
 
-				// Display Selected time in textbox
+				// Display Selected time in button
 				txtTime.setText(h + ":" + m);
 				storeDay();
 			}
@@ -312,32 +317,32 @@ public class MeetingParams extends ActionBarActivity {
 //----------------------------------------------------
 
 
-	//Store the current GUI config to a Time Range
+	//Store the current times to a time Range
 	public void storeDay() {
 		try {
 			//Grab selection from comboBox
 			String day = (String) dayComboBox.getSelectedItem();
 
 			if (day.equals(getString(R.string.sunday))) {
-				addDay(Day.SUNDAY, startTime.getText(), endTime.getText());
+				addDay(Day.SUNDAY);
 
 			} else if (day.equals(getString(R.string.monday))) {
-				addDay(Day.MONDAY, startTime.getText(), endTime.getText());
+				addDay(Day.MONDAY);
 
 			} else if (day.equals(getString(R.string.tuesday))) {
-				addDay(Day.TUESDAY, startTime.getText(), endTime.getText());
+				addDay(Day.TUESDAY);
 
 			} else if (day.equals(getString(R.string.wednesday))) {
-				addDay(Day.WEDNESDAY, startTime.getText(), endTime.getText());
+				addDay(Day.WEDNESDAY);
 
 			} else if (day.equals(getString(R.string.thursday))) {
-				addDay(Day.THURSDAY, startTime.getText(), endTime.getText());
+				addDay(Day.THURSDAY);
 
 			} else if (day.equals(getString(R.string.friday))) {
-				addDay(Day.FRIDAY, startTime.getText(), endTime.getText());
+				addDay(Day.FRIDAY);
 
 			} else if (day.equals(getString(R.string.saturday))) {
-				addDay(Day.SATURDAY, startTime.getText(), endTime.getText());
+				addDay(Day.SATURDAY);
 
 			}
 
@@ -345,29 +350,23 @@ public class MeetingParams extends ActionBarActivity {
 			//R.string.invalidInterval_1 +
 			Toast.makeText(getApplicationContext(), "Invalid Time Range", Toast.LENGTH_SHORT).show();
 		}
-	}
+	} //End public void storeDay()
 
 
-	//Update an existing day in the TreeMap<Day, Range>
-	public void addDay(Day d, CharSequence startTime, CharSequence endTime) throws Exception {
-
-		int n = map.size();
-
-		Time start = new Time(startTime);
-		Time end = new Time(endTime);
-
+	//Update/add a day in the TreeMap<Day, Range>
+	public void addDay(Day d) throws Exception {
 		if (map.containsKey(d)) {
 			map.remove(d);
-			map.put(d, new Range(start, end, d));
+			map.put(d, new Range(getInterval(), d));
 
 		} else {
-			map.put(d, new Range(start, end, d));
+			map.put(d, new Range(getInterval(), d));
 		}
 
 	}//End public void addDay(Day, CharSequence, CharSequence)
 
+	//Get an interval of the start and end times
 	public Interval getInterval() throws Exception {
-
 		Time start = new Time(startTime.getText());
 		Time end = new Time(endTime.getText());
 
