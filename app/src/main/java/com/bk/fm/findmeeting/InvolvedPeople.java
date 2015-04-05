@@ -65,6 +65,7 @@ public class InvolvedPeople extends ActionBarActivity {
 
 	@Override
 	protected void onPause() { //When the user leaves the activity save ArrayList to sharedPrefs
+		super.onPause();
 		//Store the ArrayList to the SharedPrefs
 		SharedPreferences prefs = getSharedPreferences("peopleStorage", Context.MODE_PRIVATE);
 		SharedPreferences.Editor edit = prefs.edit();
@@ -86,6 +87,7 @@ public class InvolvedPeople extends ActionBarActivity {
 
 	@Override
 	protected void onResume() { //When the user returns to the activity, update the people list
+		super.onResume();
 		SharedPreferences prefs = getSharedPreferences("peopleStorage", Context.MODE_PRIVATE);
 		//SharedPreferences.Editor edit = prefs.edit();
 

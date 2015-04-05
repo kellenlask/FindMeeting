@@ -7,8 +7,11 @@ to the meeting.
 
 package com.bk.fm.findmeeting;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -55,6 +58,8 @@ public class Summary extends ActionBarActivity {
 		setDays();
 		setTimes();
 		setMeetingDuration();
+
+		addEventHandlers();
 	}
 
 //----------------------------------------------------
@@ -62,7 +67,16 @@ public class Summary extends ActionBarActivity {
 //	Event Handlers
 //
 //----------------------------------------------------
-
+	public void addEventHandlers() {
+		nextButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
+				i.putExtra("MEETING", (Parcelable) meeting);
+				startActivity(i);
+			}
+		});
+	}
 
 //----------------------------------------------------
 //
