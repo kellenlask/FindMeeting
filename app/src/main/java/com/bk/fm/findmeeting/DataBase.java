@@ -42,7 +42,7 @@ public class DataBase extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		//This creates the Database when the app is run for the first time
 
-		String CREATE_PEOPLE_TABLE = "CREATE TABLE IF NOT EXISTS"
+		String CREATE_PEOPLE_TABLE = "CREATE TABLE IF NOT EXISTS "
 				+ TABLE_PEOPLE + "("
 				+ PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT," //Arbitrary primary key
 				+ NAME_KEY + " TEXT NOT NULL," //The person's name

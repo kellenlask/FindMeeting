@@ -62,8 +62,8 @@ public class SavedPeople extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 
-			//Show a dialog allowing for text input
-				AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+			    //Show a dialog allowing for text input
+				AlertDialog.Builder builder = new AlertDialog.Builder(SavedPeople.this);
 				builder.setTitle("Name");
 
 				// Set up the input
@@ -71,18 +71,21 @@ public class SavedPeople extends ActionBarActivity {
 				builder.setView(input);
 
 				// Set up the buttons
+
 				builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						name = input.getText().toString();
 					}
 				});
+
 				builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.cancel();
 					}
 				});
+
 
 				//Show the dialog
 				builder.show();
@@ -116,19 +119,19 @@ public class SavedPeople extends ActionBarActivity {
 	}
 
 	public void populateSavedPeople() {
-        /*
-		ArrayList<String> people = new ArrayList<>();
-		DataBase db = new DataBase(getBaseContext());
-		savedPeople = db.getAllPeople();
+        if (savedPeople != null) {
+            ArrayList<String> people = new ArrayList<>();
+            DataBase db = new DataBase(getBaseContext());
+            savedPeople = db.getAllPeople();
 
-		for (Person p : savedPeople) {
-			people.add(p.toString());
+            for (Person p : savedPeople) {
+                people.add(p.toString());
+            }
 
-		}
+            ArrayAdapter<String> data = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, people);
+            savedPeopleList.setAdapter(data);
+        }
 
-		ArrayAdapter<String> data = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, people);
-		savedPeopleList.setAdapter(data);
-        */
 	} //End public void populateSavedPeople()
 
 }
