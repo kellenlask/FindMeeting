@@ -167,6 +167,7 @@ public class InvolvedPeople extends ActionBarActivity {
 		findTimesButton = (Button) findViewById(R.id.findTimesButton);
 		peopleList = (ListView) findViewById(R.id.peopleList);
 
+        addAddPersonActionHandler();
 		updateList();
 	}
 }

@@ -116,6 +116,7 @@ public class SavedPeople extends ActionBarActivity {
 	}
 
 	public void populateSavedPeople() {
+        /*
 		ArrayList<String> people = new ArrayList<>();
 		DataBase db = new DataBase(getBaseContext());
 		savedPeople = db.getAllPeople();
@@ -127,7 +128,7 @@ public class SavedPeople extends ActionBarActivity {
 
 		ArrayAdapter<String> data = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, people);
 		savedPeopleList.setAdapter(data);
-
+        */
 	} //End public void populateSavedPeople()
 
 }

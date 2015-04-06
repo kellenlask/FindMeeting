@@ -103,18 +103,6 @@ public class Summary extends ActionBarActivity {
 		daysTimesListView.setAdapter(daysTimesAdapter);
 	}
 
-    /*
-    public void setTimes() {
-		times = new ArrayList<String>();
-
-		for(Range r: meeting.getPossibleDays().values()) {
-			times.add(r.getInterval().toString("Interval"));
-		}
-
-		timesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, times);
-		timeListView.setAdapter(timesAdapter);
-	}
-    */
 	public void setMeetingDuration() {
 
 		meetingLengthTextView.setText(" " + meeting.getMeetingDuration().toString("Single"));
