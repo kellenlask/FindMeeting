@@ -23,7 +23,7 @@
     <string name="title_activity_summary_pane">SummaryPane</string>
     <string name="summaryTitle_2">Meeting Summary</string>
     <string name="lengthLabel_2">Meeting Length:</string>
-    <string name="dayLabel_2">Day</string>
+    <string name="dayLabel_2">Day(s) / Time(s)</string>
     <string name="timeLabel_2">Time</string>
     <string name="title_activity_people_pane">people_pane</string>
     <string name="peopleTitle_3">People</string>
