@@ -83,7 +83,7 @@ public class DataBase extends SQLiteOpenHelper {
 
 				p.setPrimaryKey(Long.parseLong(cursor.getString(0)));
 				p.setName(cursor.getString(1));
-				p.setAvailability(cursor.getString(2));
+				//p.setAvailability(cursor.getString(2));     //Im sure this needs to be fixed (gives blob cannot be converted to string exception when called)
 
 				people.add(p);
 

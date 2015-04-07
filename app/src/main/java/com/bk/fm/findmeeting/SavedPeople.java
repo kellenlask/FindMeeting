@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,8 +30,9 @@ public class SavedPeople extends ActionBarActivity {
 //----------------------------------------------------
 	private Button addPersonButton;
 	private ListView savedPeopleList;
-	private ArrayList<Person> savedPeople;
+    private ArrayAdapter listAdapter;
 	private String name;
+    private DataBase db;
 
 //----------------------------------------------------
 //
@@ -76,6 +78,21 @@ public class SavedPeople extends ActionBarActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						name = input.getText().toString();
+
+                        //Make a new person from the text from the dialog
+                        Person p = new Person();
+                        p.setName(name);
+                        p.setAvailability(new LinkedList<ScheduleObject>());
+
+                        //Toast.makeText(getApplicationContext(), p.getName(), Toast.LENGTH_SHORT).show();
+
+                        //Store the person to the database
+                        db = new DataBase(getBaseContext());
+                        db.addPerson(p);
+
+                        //Reset the name & refresh the list
+                        name = "";
+                        populateSavedPeople();
 					}
 				});
 
@@ -86,23 +103,8 @@ public class SavedPeople extends ActionBarActivity {
 					}
 				});
 
-
 				//Show the dialog
 				builder.show();
-
-			//Make a new person from the text from the dialog
-				Person p = new Person();
-				p.setName(name);
-				p.setAvailability(new LinkedList<ScheduleObject>());
-
-			//Store the person to the database
-				DataBase db = new DataBase(getBaseContext());
-				db.addPerson(p);
-
-			//Reset the name & refresh the list
-				name = "";
-				populateSavedPeople();
-
 			}
 		});
 	}
@@ -119,19 +121,17 @@ public class SavedPeople extends ActionBarActivity {
 	}
 
 	public void populateSavedPeople() {
-        if (savedPeople != null) {
+        //if (savedPeople != null) {
             ArrayList<String> people = new ArrayList<>();
             DataBase db = new DataBase(getBaseContext());
-            savedPeople = db.getAllPeople();
 
-            for (Person p : savedPeople) {
-                people.add(p.toString());
+            for (Person p : db.getAllPeople()) {
+                people.add(p.getName());
             }
 
             ArrayAdapter<String> data = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, people);
             savedPeopleList.setAdapter(data);
-        }
+        //}
 
 	} //End public void populateSavedPeople()
-
 }
