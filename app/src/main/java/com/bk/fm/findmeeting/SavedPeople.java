@@ -13,17 +13,15 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemLongClickListener;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -36,9 +34,9 @@ public class SavedPeople extends ActionBarActivity {
 //----------------------------------------------------
 	private Button addPersonButton;
 	private ListView savedPeopleList;
-    private ArrayAdapter listAdapter;
 	private String name;
     private DataBase db;
+    ArrayList<String> people;
 
 //----------------------------------------------------
 //
@@ -53,7 +51,7 @@ public class SavedPeople extends ActionBarActivity {
 		initializeFields();
 		populateSavedPeople();
 
-        savedPeopleList.setOnItemLongClickListener(deletePersonClickListener);
+        //savedPeopleList.setOnItemLongClickListener(deletePersonClickListener);
 
 		addButtonEventHandler();
 
@@ -66,7 +64,7 @@ public class SavedPeople extends ActionBarActivity {
 //----------------------------------------------------
 
 	//TODO: Add on short/long click events for the savedPeopleList
-
+    /*
     private OnItemLongClickListener deletePersonClickListener = new OnItemLongClickListener()
     {
         @Override
@@ -79,6 +77,45 @@ public class SavedPeople extends ActionBarActivity {
             return true;
         }
     };
+    */
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        StringBuilder sb = new StringBuilder(item.getTitle());
+        String selectedItem = sb.toString();
+
+        if(selectedItem.equals("Edit"))
+        {
+           
+
+        }
+        else if(selectedItem.equals("Delete"))
+        {
+            db = new DataBase(getBaseContext());
+            db.deletePerson(people.get(info.position));
+
+            people.remove(info.position);
+            updateListView();
+        }
+
+        return false;
+    }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
+        //if(view.getId() == R.id.linksList) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        menu.setHeaderTitle("Person");
+
+        menu.add("Edit");
+        menu.add("Delete");
+        //}
+    }
 
 	public void addButtonEventHandler() {
 		addPersonButton.setOnClickListener(new View.OnClickListener() {
@@ -137,20 +174,27 @@ public class SavedPeople extends ActionBarActivity {
 	public void initializeFields() {
 		addPersonButton = (Button) findViewById(R.id.addPersonButton);
 		savedPeopleList = (ListView) findViewById(R.id.savedPeopleList);
+        registerForContextMenu(savedPeopleList);
 	}
 
 	public void populateSavedPeople() {
         //if (savedPeople != null) {
-            ArrayList<String> people = new ArrayList<>();
+
             DataBase db = new DataBase(getBaseContext());
+
+            people = new ArrayList<>();
 
             for (Person p : db.getAllPeople()) {
                 people.add(p.getName());
             }
 
-            ArrayAdapter<String> data = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, people);
-            savedPeopleList.setAdapter(data);
+            updateListView();
         //}
 
 	} //End public void populateSavedPeople()
+
+    public void updateListView() {
+        ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, people);
+        savedPeopleList.setAdapter(data);
+    }
 }
