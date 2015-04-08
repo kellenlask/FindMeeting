@@ -8,16 +8,22 @@ and editing of people.
 package com.bk.fm.findmeeting;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.AdapterView.OnItemLongClickListener;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -47,6 +53,8 @@ public class SavedPeople extends ActionBarActivity {
 		initializeFields();
 		populateSavedPeople();
 
+        savedPeopleList.setOnItemLongClickListener(deletePersonClickListener);
+
 		addButtonEventHandler();
 
 	}
@@ -58,6 +66,19 @@ public class SavedPeople extends ActionBarActivity {
 //----------------------------------------------------
 
 	//TODO: Add on short/long click events for the savedPeopleList
+
+    private OnItemLongClickListener deletePersonClickListener = new OnItemLongClickListener()
+    {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int index, long arg3) {
+            db = new DataBase(getBaseContext());
+            db.deletePerson(savedPeopleList.getItemAtPosition(index).toString());
+
+            populateSavedPeople();
+
+            return true;
+        }
+    };
 
 	public void addButtonEventHandler() {
 		addPersonButton.setOnClickListener(new View.OnClickListener() {
@@ -83,8 +104,6 @@ public class SavedPeople extends ActionBarActivity {
                         Person p = new Person();
                         p.setName(name);
                         p.setAvailability(new LinkedList<ScheduleObject>());
-
-                        //Toast.makeText(getApplicationContext(), p.getName(), Toast.LENGTH_SHORT).show();
 
                         //Store the person to the database
                         db = new DataBase(getBaseContext());

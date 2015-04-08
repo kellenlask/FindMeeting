@@ -83,7 +83,7 @@ public class DataBase extends SQLiteOpenHelper {
 
 				p.setPrimaryKey(Long.parseLong(cursor.getString(0)));
 				p.setName(cursor.getString(1));
-				//p.setAvailability(cursor.getString(2));     //Im sure this needs to be fixed (gives blob cannot be converted to string exception when called)
+				//p.setAvailability(cursor.getString(2)); //TODO: Im sure this needs to be fixed (gives blob cannot be converted to string exception when called)
 
 				people.add(p);
 
@@ -152,10 +152,10 @@ public class DataBase extends SQLiteOpenHelper {
 //	Mutators
 //
 //----------------------------------------------------
-	public void deletePerson(Person p) {
+	public void deletePerson(String name) {
 
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete(TABLE_PEOPLE, PRIMARY_KEY + " = ?", new String[] { String.valueOf(p.getPrimaryKey()) });
+		db.delete(TABLE_PEOPLE, (NAME_KEY + " = '" + name + "'"), null);
 
 		db.close();
 
@@ -199,4 +199,6 @@ public class DataBase extends SQLiteOpenHelper {
 			return 0;
 		}
 	}
+
+    // TODO: Add a remove all people method
 }
