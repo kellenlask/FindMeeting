@@ -162,7 +162,6 @@ public class DataBase extends SQLiteOpenHelper {
 		db.delete(TABLE_PEOPLE, (NAME_KEY + " = '" + name + "'"), null);
 
 		db.close();
-
 	}
 
 	public boolean addPerson(Person p) {
@@ -204,5 +203,15 @@ public class DataBase extends SQLiteOpenHelper {
 		}
 	}
 
-    // TODO: Add a remove all people method
+    public void updatePersonName(String oldName, String newName) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(NAME_KEY, newName);
+
+        db.update(TABLE_PEOPLE, values, NAME_KEY + " = '" + oldName + "'", null);
+
+        db.close();
+    }
+
 }

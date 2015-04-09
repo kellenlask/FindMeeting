@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 
@@ -88,8 +89,15 @@ public class SavedPeople extends ActionBarActivity {
 
         if(selectedItem.equals("Edit"))
         {
-           
+            // Need to set the textbox text to the name selected
 
+            db = new DataBase(getBaseContext());
+            db.updatePersonName(people.get(info.position), "Bob"); //TODO: Remove the hardcoded "Bob" here and three lines below. Replace with the text from a textfield popup.
+
+            people.remove(info.position);
+            people.add("Bob");
+
+            updateListView();
         }
         else if(selectedItem.equals("Delete"))
         {
@@ -187,13 +195,14 @@ public class SavedPeople extends ActionBarActivity {
             for (Person p : db.getAllPeople()) {
                 people.add(p.getName());
             }
-
+            
             updateListView();
         //}
 
 	} //End public void populateSavedPeople()
 
     public void updateListView() {
+        Collections.sort(people);
         ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, people);
         savedPeopleList.setAdapter(data);
     }
