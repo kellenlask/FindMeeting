@@ -64,40 +64,46 @@ public class SavedPeople extends ActionBarActivity {
 //
 //----------------------------------------------------
 
-	//TODO: Add on short/long click events for the savedPeopleList
-    /*
-    private OnItemLongClickListener deletePersonClickListener = new OnItemLongClickListener()
-    {
-        @Override
-        public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int index, long arg3) {
-            db = new DataBase(getBaseContext());
-            db.deletePerson(savedPeopleList.getItemAtPosition(index).toString());
-
-            populateSavedPeople();
-
-            return true;
-        }
-    };
-    */
-
-
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         StringBuilder sb = new StringBuilder(item.getTitle());
         String selectedItem = sb.toString();
 
         if(selectedItem.equals("Edit"))
         {
-            // Need to set the textbox text to the name selected
+            //Show a dialog allowing for text input
+            AlertDialog.Builder builder = new AlertDialog.Builder(SavedPeople.this);
+            builder.setTitle("Edit Name");
 
-            db = new DataBase(getBaseContext());
-            db.updatePersonName(people.get(info.position), "Bob"); //TODO: Remove the hardcoded "Bob" here and three lines below. Replace with the text from a textfield popup.
+            // Set up the input
+            final EditText input = new EditText(getBaseContext());
+            input.setText(people.get(info.position));
+            builder.setView(input);
 
-            people.remove(info.position);
-            people.add("Bob");
+            // Set up the buttons
+            builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    db = new DataBase(getBaseContext());
+                    db.updatePersonName(people.get(info.position), input.getText().toString());
 
-            updateListView();
+                    people.remove(info.position);
+                    people.add(input.getText().toString());
+
+                    updateListView();
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            //Show the dialog
+            builder.show();
         }
         else if(selectedItem.equals("Delete"))
         {
@@ -139,7 +145,6 @@ public class SavedPeople extends ActionBarActivity {
 				builder.setView(input);
 
 				// Set up the buttons
-
 				builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -195,7 +200,7 @@ public class SavedPeople extends ActionBarActivity {
             for (Person p : db.getAllPeople()) {
                 people.add(p.getName());
             }
-            
+
             updateListView();
         //}
 
