@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.Contacts;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -21,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +39,8 @@ public class SavedPeople extends ActionBarActivity {
 	private ListView savedPeopleList;
 	private String name;
     private DataBase db;
-    ArrayList<String> people;
+    ArrayList<String> peopleNames;
+    ArrayList<Person> allSavedPeople;
 
 //----------------------------------------------------
 //
@@ -49,13 +52,12 @@ public class SavedPeople extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_saved_people);
 
+        //savedPeopleList.setOnItemClickListener(listItemClicked);
+
 		initializeFields();
 		populateSavedPeople();
 
-        //savedPeopleList.setOnItemLongClickListener(deletePersonClickListener);
-
 		addButtonEventHandler();
-
 	}
 
 //----------------------------------------------------
@@ -63,6 +65,23 @@ public class SavedPeople extends ActionBarActivity {
 //	Event Handlers
 //
 //----------------------------------------------------
+
+    private OnItemClickListener listItemClicked = new OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            InvolvedPeople.addedPeople.add(parent.getItemAtPosition(position).toString());
+        }
+    };
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, view, menuInfo);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        menu.setHeaderTitle("Person");
+
+        menu.add("Edit");
+        menu.add("Delete");
+    }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -78,7 +97,7 @@ public class SavedPeople extends ActionBarActivity {
 
             // Set up the input
             final EditText input = new EditText(getBaseContext());
-            input.setText(people.get(info.position));
+            input.setText(peopleNames.get(info.position));
             builder.setView(input);
 
             // Set up the buttons
@@ -86,10 +105,18 @@ public class SavedPeople extends ActionBarActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     db = new DataBase(getBaseContext());
-                    db.updatePersonName(people.get(info.position), input.getText().toString());
+                    // Use a foreach loop to go over the saved people array
+                    for (Person p: allSavedPeople)
+                    {
+                        if (p.getName() == peopleNames.get(info.position))
+                        {
+                            p.setName(input.getText().toString());
+                            db.updatePerson(p);
 
-                    people.remove(info.position);
-                    people.add(input.getText().toString());
+                            peopleNames.remove(info.position);  // Wrong
+                            peopleNames.add(input.getText().toString());
+                        }
+                    }
 
                     updateListView();
                 }
@@ -108,27 +135,13 @@ public class SavedPeople extends ActionBarActivity {
         else if(selectedItem.equals("Delete"))
         {
             db = new DataBase(getBaseContext());
-            db.deletePerson(people.get(info.position));
+            db.deletePerson(peopleNames.get(info.position));
 
-            people.remove(info.position);
+            peopleNames.remove(info.position);
             updateListView();
         }
 
         return false;
-    }
-
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
-        //if(view.getId() == R.id.linksList) {
-        super.onCreateContextMenu(menu, view, menuInfo);
-
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
-        menu.setHeaderTitle("Person");
-
-        menu.add("Edit");
-        menu.add("Delete");
-        //}
     }
 
 	public void addButtonEventHandler() {
@@ -151,13 +164,13 @@ public class SavedPeople extends ActionBarActivity {
 						name = input.getText().toString();
 
                         //Make a new person from the text from the dialog
-                        Person p = new Person();
-                        p.setName(name);
+                        Person p = new Person(name);
                         p.setAvailability(new LinkedList<ScheduleObject>());
 
                         //Store the person to the database
                         db = new DataBase(getBaseContext());
                         db.addPerson(p);
+
 
                         //Reset the name & refresh the list
                         name = "";
@@ -191,24 +204,30 @@ public class SavedPeople extends ActionBarActivity {
 	}
 
 	public void populateSavedPeople() {
-        //if (savedPeople != null) {
 
             DataBase db = new DataBase(getBaseContext());
 
-            people = new ArrayList<>();
+            allSavedPeople = new ArrayList<>();
+            peopleNames = new ArrayList<>();
 
             for (Person p : db.getAllPeople()) {
-                people.add(p.getName());
+                allSavedPeople.add(p);
             }
 
             updateListView();
-        //}
 
 	} //End public void populateSavedPeople()
 
     public void updateListView() {
-        Collections.sort(people);
-        ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, people);
+
+        peopleNames.clear();
+
+        for (Person p : allSavedPeople) {
+            peopleNames.add(p.getName());
+        }
+
+        Collections.sort(peopleNames);
+        ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, peopleNames);
         savedPeopleList.setAdapter(data);
     }
 }

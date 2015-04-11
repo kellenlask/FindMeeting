@@ -44,6 +44,7 @@ public class InvolvedPeople extends ActionBarActivity {
 	private ListView peopleList;
 	private Button addPersonButton;
 	private Button findTimesButton;
+    public static ArrayList<String> addedPeople; //TODO: Use this array list to populate people that have been selected (clicked) on the saved people page
 
 
 //----------------------------------------------------
