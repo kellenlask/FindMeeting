@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -64,10 +65,18 @@ public class InvolvedPeople extends ActionBarActivity {
 		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
         addedPeople = (ArrayList<Person>)getIntent().getSerializableExtra("ADDED_PEOPLE");
 
-
 		initializeFields();
 
 	} //End protected void onCreate()
+
+    private AdapterView.OnItemClickListener listItemClicked = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+            startActivity(i);
+
+        }
+    };
 
 	@Override
 	protected void onPause() { //When the user leaves the activity save ArrayList to sharedPrefs
@@ -109,10 +118,8 @@ public class InvolvedPeople extends ActionBarActivity {
 
 		} catch(IOException e) {
 			e.printStackTrace();
-			Toast.makeText(getApplicationContext(), "Failed To Get List", Toast.LENGTH_SHORT).show();
 		} catch(ClassNotFoundException e) {
 			e.printStackTrace();
-			Toast.makeText(getApplicationContext(), "Failed To Get List", Toast.LENGTH_SHORT).show();
 		}
 	} //End protected void onResume()
 
@@ -177,6 +184,7 @@ public class InvolvedPeople extends ActionBarActivity {
 		addPersonButton = (Button) findViewById(R.id.addPersonButton);
 		findTimesButton = (Button) findViewById(R.id.findTimesButton);
 		peopleList = (ListView) findViewById(R.id.peopleList);
+        peopleList.setOnItemClickListener(listItemClicked);
 
         addAddPersonActionHandler();
 		updateList();
