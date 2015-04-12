@@ -10,7 +10,9 @@ package com.bk.fm.findmeeting;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.Contacts;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -41,6 +43,7 @@ public class SavedPeople extends ActionBarActivity {
     private DataBase db;
     ArrayList<String> peopleNames;
     ArrayList<Person> allSavedPeople;
+    ArrayList<Person> addedPeople;
 
 //----------------------------------------------------
 //
@@ -52,10 +55,11 @@ public class SavedPeople extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_saved_people);
 
-        //savedPeopleList.setOnItemClickListener(listItemClicked);
 
 		initializeFields();
 		populateSavedPeople();
+
+        savedPeopleList.setOnItemClickListener(listItemClicked);
 
 		addButtonEventHandler();
 	}
@@ -68,7 +72,14 @@ public class SavedPeople extends ActionBarActivity {
 
     private OnItemClickListener listItemClicked = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            InvolvedPeople.addedPeople.add(parent.getItemAtPosition(position).toString());
+
+            for (Person p: allSavedPeople)
+            {
+                if (p.getName() == peopleNames.get(position))
+                {
+                    addedPeople.add(p);
+                }
+            }
         }
     };
 
@@ -201,6 +212,7 @@ public class SavedPeople extends ActionBarActivity {
 		addPersonButton = (Button) findViewById(R.id.addPersonButton);
 		savedPeopleList = (ListView) findViewById(R.id.savedPeopleList);
         registerForContextMenu(savedPeopleList);
+        addedPeople = new ArrayList<>();
 	}
 
 	public void populateSavedPeople() {
@@ -218,7 +230,8 @@ public class SavedPeople extends ActionBarActivity {
 
 	} //End public void populateSavedPeople()
 
-    public void updateListView() {
+    public void updateListView()
+    {
 
         peopleNames.clear();
 
@@ -229,5 +242,12 @@ public class SavedPeople extends ActionBarActivity {
         Collections.sort(peopleNames);
         ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, peopleNames);
         savedPeopleList.setAdapter(data);
+    }
+
+    public void onBackPressed()
+    {
+        Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
+        i.putExtra("ADDED_PEOPLE", addedPeople);
+        startActivity(i);
     }
 }

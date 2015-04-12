@@ -23,7 +23,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 
 //Basic Logic:
 //
@@ -44,7 +46,8 @@ public class InvolvedPeople extends ActionBarActivity {
 	private ListView peopleList;
 	private Button addPersonButton;
 	private Button findTimesButton;
-    public static ArrayList<String> addedPeople; //TODO: Use this array list to populate people that have been selected (clicked) on the saved people page
+    ArrayList<String> peopleNames;
+    ArrayList<Person> addedPeople;
 
 
 //----------------------------------------------------
@@ -59,6 +62,8 @@ public class InvolvedPeople extends ActionBarActivity {
 
 		//Pull Meeting object out
 		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
+        addedPeople = (ArrayList<Person>)getIntent().getSerializableExtra("ADDED_PEOPLE");
+
 
 		initializeFields();
 
@@ -151,18 +156,23 @@ public class InvolvedPeople extends ActionBarActivity {
 //
 //----------------------------------------------------
 	public void updateList() {
-		ArrayList<String> persons = new ArrayList<>();
+        if (addedPeople != null)
+        {
+            peopleNames.clear();
 
-		for(Person p : people) {
-			persons.add(p.getName());
-		}
+            for (Person p : addedPeople) {
+                peopleNames.add(p.getName());
+            }
 
-		ArrayAdapter<String> data = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, persons);
-		peopleList.setAdapter(data);
+            Collections.sort(peopleNames);
+            ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, peopleNames);
+            peopleList.setAdapter(data);
+        }
 	}
 
 	public void initializeFields() {
 		people = new ArrayList<>();
+        peopleNames = new ArrayList<>();
 
 		addPersonButton = (Button) findViewById(R.id.addPersonButton);
 		findTimesButton = (Button) findViewById(R.id.findTimesButton);
