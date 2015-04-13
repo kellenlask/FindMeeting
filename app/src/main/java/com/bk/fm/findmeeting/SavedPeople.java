@@ -8,19 +8,23 @@ and editing of people.
 package com.bk.fm.findmeeting;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.Contacts;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,6 +55,7 @@ public class SavedPeople extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_saved_people);
 
+
 		initializeFields();
 		populateSavedPeople();
 
@@ -75,9 +80,6 @@ public class SavedPeople extends ActionBarActivity {
                     addedPeople.add(p);
                 }
             }
-
-			//TODO: Either remove selected person from the list, or start a new intent back to invloved people
-
         }
     };
 
