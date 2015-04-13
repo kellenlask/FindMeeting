@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,37 +33,37 @@ import java.util.LinkedList;
 
 
 public class SavedPeople extends ActionBarActivity {
-//----------------------------------------------------
+    //----------------------------------------------------
 //
 //	Fields
 //
 //----------------------------------------------------
-	private Button addPersonButton;
-	private ListView savedPeopleList;
-	private String name;
+    private Button addPersonButton;
+    private ListView savedPeopleList;
+    private String name;
     private DataBase db;
     ArrayList<String> peopleNames;
-    ArrayList<Person> allSavedPeople;
+    ArrayList<Person> savedPeople;
     ArrayList<Person> addedPeople;
 
-//----------------------------------------------------
+    //----------------------------------------------------
 //
 //	onCreate
 //
 //----------------------------------------------------
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_saved_people);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_saved_people);
 
 
-		initializeFields();
-		populateSavedPeople();
+        initializeFields();
+        populateSavedPeople();
 
         savedPeopleList.setOnItemClickListener(listItemClicked);
 
-		addButtonEventHandler();
-	}
+        addButtonEventHandler();
+    }
 
 //----------------------------------------------------
 //
@@ -72,14 +73,14 @@ public class SavedPeople extends ActionBarActivity {
 
     private OnItemClickListener listItemClicked = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            for (Person p: allSavedPeople)
+            for (Person p: savedPeople)
             {
                 if (p.getName() == peopleNames.get(position))
                 {
                     addedPeople.add(p);
                 }
             }
+            Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_LONG).show();
         }
     };
 
@@ -89,6 +90,7 @@ public class SavedPeople extends ActionBarActivity {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
         menu.setHeaderTitle("Person");
+        name = (String) savedPeopleList.getItemAtPosition(info.position);
 
         menu.add("Edit");
         menu.add("Delete");
@@ -117,14 +119,14 @@ public class SavedPeople extends ActionBarActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     db = new DataBase(getBaseContext());
                     // Use a foreach loop to go over the saved people array
-                    for (Person p: allSavedPeople)
+                    for (Person p: savedPeople)
                     {
-                        if (p.getName() == peopleNames.get(info.position))
+                        if (p.getName() == name)
                         {
                             p.setName(input.getText().toString());
                             db.updatePerson(p);
 
-                            peopleNames.remove(info.position);  // Wrong
+                            peopleNames.remove(name);
                             peopleNames.add(input.getText().toString());
                         }
                     }
@@ -155,27 +157,26 @@ public class SavedPeople extends ActionBarActivity {
         return false;
     }
 
-	public void addButtonEventHandler() {
-		addPersonButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+    public void addButtonEventHandler() {
+        addPersonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-			    //Show a dialog allowing for text input
-				AlertDialog.Builder builder = new AlertDialog.Builder(SavedPeople.this);
-				builder.setTitle("Name");
+                //Show a dialog allowing for text input
+                AlertDialog.Builder builder = new AlertDialog.Builder(SavedPeople.this);
+                builder.setTitle("Name");
 
-				// Set up the input
-				final EditText input = new EditText(getBaseContext());
-				builder.setView(input);
+                // Set up the input
+                final EditText input = new EditText(getBaseContext());
+                builder.setView(input);
 
-				// Set up the buttons
-				builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						name = input.getText().toString();
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
                         //Make a new person from the text from the dialog
-                        Person p = new Person(name);
+                        Person p = new Person(input.getText().toString());
                         p.setAvailability(new LinkedList<ScheduleObject>());
 
                         //Store the person to the database
@@ -184,61 +185,54 @@ public class SavedPeople extends ActionBarActivity {
 
 
                         //Reset the name & refresh the list
-                        name = "";
                         populateSavedPeople();
-					}
-				});
+                    }
+                });
 
-				builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
-				//Show the dialog
-				builder.show();
-			}
-		});
-	}
+                //Show the dialog
+                builder.show();
+            }
+        });
+    }
 
 
-//----------------------------------------------------
+    //----------------------------------------------------
 //
 //	GUI Methods
 //
 //----------------------------------------------------
-	public void initializeFields() {
-		addPersonButton = (Button) findViewById(R.id.addPersonButton);
-		savedPeopleList = (ListView) findViewById(R.id.savedPeopleList);
+    public void initializeFields() {
+        addPersonButton = (Button) findViewById(R.id.addPersonButton);
+        savedPeopleList = (ListView) findViewById(R.id.savedPeopleList);
         registerForContextMenu(savedPeopleList);
         addedPeople = new ArrayList<>();
-	}
+    }
 
-	public void populateSavedPeople() {
+    public void populateSavedPeople() {
 
-            DataBase db = new DataBase(getBaseContext());
+        DataBase db = new DataBase(getBaseContext());
 
-            allSavedPeople = new ArrayList<>();
-            peopleNames = new ArrayList<>();
+        savedPeople = new ArrayList<>();
+        peopleNames = new ArrayList<>();
 
-            for (Person p : db.getAllPeople()) {
-                allSavedPeople.add(p);
-            }
-
-            updateListView();
-
-	} //End public void populateSavedPeople()
-
-    public void updateListView()
-    {
-
-        peopleNames.clear();
-
-        for (Person p : allSavedPeople) {
+        for (Person p : db.getAllPeople()) {
+            savedPeople.add(p);
             peopleNames.add(p.getName());
         }
 
+        updateListView();
+
+    } //End public void populateSavedPeople()
+
+    public void updateListView()
+    {
         Collections.sort(peopleNames);
         ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, peopleNames);
         savedPeopleList.setAdapter(data);
