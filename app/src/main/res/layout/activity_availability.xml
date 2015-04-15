@@ -31,20 +31,21 @@
                 android:id="@+id/button6"
                 android:layout_width="128dp"
                 android:layout_height="match_parent"
-                android:background="#ff66a13b"
+                android:background="#ff00f000"
                 android:text="@string/availButtonText_5"/>
 
             <Button
                 android:id="@+id/button7"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/saveText_5"/>
+                android:text="@string/saveText_5"
+                android:background="#2ad2c9"/>
 
             <Button
                 android:id="@+id/button8"
                 android:layout_width="128dp"
                 android:layout_height="match_parent"
-                android:background="#ff8d362d"
+                android:background="#f00000"
                 android:text="@string/newObligation_5"/>
         </LinearLayout>
 
