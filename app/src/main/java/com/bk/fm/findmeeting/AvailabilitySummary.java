@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 
 
 public class AvailabilitySummary extends ActionBarActivity {
@@ -18,6 +19,7 @@ public class AvailabilitySummary extends ActionBarActivity {
     Button newAvailabilityButton;
     Button saveButton;
     Button newObligationButton;
+    ListView AvailObligListView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,9 @@ public class AvailabilitySummary extends ActionBarActivity {
 	}
 
     private void initializeFields() {
+        // Initialize list view
+        AvailObligListView = (ListView) findViewById(R.id.AvailObligListView);
+
         // Initialize buttons
         newAvailabilityButton = (Button) findViewById(R.id.newAvailabilityButton);
         saveButton = (Button) findViewById(R.id.saveButton);
@@ -35,7 +40,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 
         // Initialize button listeners
         newAvailabilityButton.setOnClickListener(addAvailObligClickListener);
-        //saveButton.setOnClickListener();
+        saveButton.setOnClickListener(saveClickListener);
         newObligationButton.setOnClickListener(addAvailObligClickListener);
     }
 
@@ -54,4 +59,12 @@ public class AvailabilitySummary extends ActionBarActivity {
             }
         }
     };
+
+    private View.OnClickListener saveClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
+
 }
