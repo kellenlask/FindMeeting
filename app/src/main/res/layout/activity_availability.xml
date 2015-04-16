@@ -28,21 +28,21 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/newAvailabilityButton"
                 android:layout_width="128dp"
                 android:layout_height="match_parent"
                 android:background="#ff00f000"
                 android:text="@string/availButtonText_5"/>
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/saveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/saveText_5"
                 android:background="#2ad2c9"/>
 
             <Button
-                android:id="@+id/button8"
+                android:id="@+id/newObligationButton"
                 android:layout_width="128dp"
                 android:layout_height="match_parent"
                 android:background="#f00000"

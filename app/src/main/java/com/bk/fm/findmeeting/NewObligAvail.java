@@ -18,4 +18,6 @@ public class NewObligAvail extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_oblig_avail);
 	}
+
+
 }
