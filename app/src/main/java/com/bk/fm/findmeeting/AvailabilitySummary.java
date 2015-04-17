@@ -10,16 +10,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 public class AvailabilitySummary extends ActionBarActivity {
 
+    ArrayList<String> schedule;
     Button newAvailabilityButton;
     Button saveButton;
     Button newObligationButton;
     ListView AvailObligListView;
+    private Map<Day, Interval> availabilitiesObligations;
+    private ArrayAdapter<String> scheduleAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +51,9 @@ public class AvailabilitySummary extends ActionBarActivity {
         newAvailabilityButton.setOnClickListener(addAvailObligClickListener);
         saveButton.setOnClickListener(saveClickListener);
         newObligationButton.setOnClickListener(addAvailObligClickListener);
+
+        availabilitiesObligations = (Map<Day, Interval>)getIntent().getSerializableExtra("AVAILABILITY_OBLIGATION");
+        updateAvailability();
     }
 
     private View.OnClickListener addAvailObligClickListener = new View.OnClickListener() {
@@ -66,5 +78,22 @@ public class AvailabilitySummary extends ActionBarActivity {
 
         }
     };
+
+    private void updateAvailability()
+    {
+        if (availabilitiesObligations != null)
+        {
+            schedule = new ArrayList<>();
+
+            for (Map.Entry<Day, Interval> obligation : availabilitiesObligations.entrySet()) {
+                String day = obligation.getKey().toString(this);
+                String timeInterval = obligation.getValue().toString();
+                schedule.add(day + ": " + timeInterval);
+            }
+
+            scheduleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, schedule);
+            AvailObligListView.setAdapter(scheduleAdapter);
+        }
+    }
 
 }
