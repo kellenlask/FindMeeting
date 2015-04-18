@@ -21,12 +21,17 @@ import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.TreeMap;
 
 
 public class NewObligAvail extends ActionBarActivity {
 
     private TreeMap<Day, Interval> map;
+    private String scheduleType;
+    private ArrayList<Map> availabilityArray;
 
     private CheckBox sunday;
     private CheckBox monday;
@@ -69,6 +74,9 @@ public class NewObligAvail extends ActionBarActivity {
         startTime = (Button) findViewById(R.id.startTime);
         endTime = (Button) findViewById(R.id.endTime);
 
+        // Schedule type and schedule array
+        scheduleType = (String)getIntent().getSerializableExtra("SCHEDULE_TYPE");
+        availabilityArray = (ArrayList<Map>)getIntent().getSerializableExtra("AVAILABILITY_ARRAY");
     }
 
     private View.OnClickListener saveButtonListener = new View.OnClickListener() {
@@ -77,7 +85,7 @@ public class NewObligAvail extends ActionBarActivity {
             updateMap();
 
             Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
-            i.putExtra("AVAILABILITY_OBLIGATION", map);
+            i.putExtra("AVAILABILITY_ARRAY", availabilityArray);
             startActivity(i);
         }
     };
@@ -138,6 +146,7 @@ public class NewObligAvail extends ActionBarActivity {
 
     //Update the map to reflect the check boxes
     public void updateMap() {
+
         try
         {
             Interval inter = getInterval();
@@ -148,6 +157,21 @@ public class NewObligAvail extends ActionBarActivity {
                 if (days[i]) {
                     map.put(Day.getDay(i), inter);
                 }
+            }
+
+            if (scheduleType.equals("Availability"))
+            {
+                if (availabilityArray.size() == 1 || availabilityArray.size() == 2) {
+                    availabilityArray.get(0).clear();
+                }
+                availabilityArray.add(0, map);
+            }
+            else if (scheduleType.equals("Obligation"))
+            {
+                if (availabilityArray.size() == 2) {
+                    availabilityArray.get(1).clear();
+                }
+                availabilityArray.add(1, map);
             }
         }
         catch (Exception e)
@@ -179,7 +203,4 @@ public class NewObligAvail extends ActionBarActivity {
         return new Interval(start, end);
 
     } //End public Interval getInterval()
-
-    // TODO: Create onclick listener for save button. There call the adapted storeDay method to save the day and time interval
-
 }

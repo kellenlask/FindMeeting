@@ -80,7 +80,7 @@ public class SavedPeople extends ActionBarActivity {
                     addedPeople.add(p);
                 }
             }
-            Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
         }
     };
 
