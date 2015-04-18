@@ -152,4 +152,21 @@ public class Person implements Parcelable, Serializable {
 
 		setAvailability(avail);
 	}
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Person other = (Person) obj;
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+
+        return true;
+    }
+
 } //End public class Person

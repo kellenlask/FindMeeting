@@ -75,12 +75,15 @@ public class SavedPeople extends ActionBarActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             for (Person p: savedPeople)
             {
-                if (p.getName() == peopleNames.get(position))
-                {
-                    addedPeople.add(p);
+                if (p.getName() == peopleNames.get(position)) {
+                    if (addedPeople.contains(p)) {
+                        Toast.makeText(getApplicationContext(), "This person has already been added to meeting.",Toast.LENGTH_SHORT).show();
+                    } else {
+                        addedPeople.add(p);
+                        Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
-            Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -123,11 +126,15 @@ public class SavedPeople extends ActionBarActivity {
                     {
                         if (p.getName() == name)
                         {
-                            p.setName(input.getText().toString());
-                            db.updatePerson(p);
+                            if (peopleNames.contains(input.getText().toString())) { // Check for a duplicate (editing a person's name to match another person's name)
+                                Toast.makeText(getApplicationContext(), "This person already exists.",Toast.LENGTH_SHORT).show();
+                            } else {
+                                p.setName(input.getText().toString());
+                                db.updatePerson(p);
 
-                            peopleNames.remove(name);
-                            peopleNames.add(input.getText().toString());
+                                peopleNames.remove(name);
+                                peopleNames.add(input.getText().toString());
+                            }
                         }
                     }
 
@@ -175,17 +182,23 @@ public class SavedPeople extends ActionBarActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+
                         //Make a new person from the text from the dialog
                         Person p = new Person(input.getText().toString());
-                        p.setAvailability(new LinkedList<ScheduleObject>());
 
-                        //Store the person to the database
-                        db = new DataBase(getBaseContext());
-                        db.addPerson(p);
+                        if (peopleNames.contains(p.getName())) { // Make sure there are no duplicate people in the db
+                            Toast.makeText(getApplicationContext(), "This person already exists.",Toast.LENGTH_SHORT).show();
+                        } else {
+                            p.setAvailability(new LinkedList<ScheduleObject>());
+
+                            //Store the person to the database
+                            db = new DataBase(getBaseContext());
+                            db.addPerson(p);
 
 
-                        //Reset the name & refresh the list
-                        populateSavedPeople();
+                            //Reset the name & refresh the list
+                            populateSavedPeople();
+                        }
                     }
                 });
 
@@ -203,7 +216,7 @@ public class SavedPeople extends ActionBarActivity {
     }
 
 
-    //----------------------------------------------------
+//----------------------------------------------------
 //
 //	GUI Methods
 //
