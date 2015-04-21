@@ -42,7 +42,7 @@ public class Person implements Parcelable, Serializable {
 
 	public Person(String name) {
 		this.name = name;
-
+        this.availability = new LinkedList<>();
 	}
 
 	public Person(Parcel in) {

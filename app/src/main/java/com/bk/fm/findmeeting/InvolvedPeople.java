@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -72,7 +73,11 @@ public class InvolvedPeople extends ActionBarActivity {
     private AdapterView.OnItemClickListener listItemClicked = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+            String personName = peopleList.getItemAtPosition(position).toString();
+            Person p = addedPeople.get(peopleNames.indexOf(personName));
+
             Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+            i.putExtra("PERSON", (Parcelable) p);
             startActivity(i);
 
         }

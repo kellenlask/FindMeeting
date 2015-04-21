@@ -73,17 +73,17 @@ public class SavedPeople extends ActionBarActivity {
 
     private OnItemClickListener listItemClicked = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            for (Person p: savedPeople)
-            {
-                if (p.getName() == peopleNames.get(position)) {
-                    if (addedPeople.contains(p)) {
-                        Toast.makeText(getApplicationContext(), "This person has already been added to meeting.",Toast.LENGTH_SHORT).show();
-                    } else {
-                        addedPeople.add(p);
-                        Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
-                    }
+        for (Person p: savedPeople)
+        {
+            if (p.getName() == peopleNames.get(position)) {
+                if (addedPeople.contains(p)) {
+                    Toast.makeText(getApplicationContext(), "This person has already been added to meeting.",Toast.LENGTH_SHORT).show();
+                } else {
+                    addedPeople.add(p);
+                    Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
                 }
             }
+        }
         }
     };
 

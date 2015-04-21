@@ -7,19 +7,19 @@ This view is meant to summarize the availability of one Person.
 package com.bk.fm.findmeeting;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.TreeMap;
-
 
 public class AvailabilitySummary extends ActionBarActivity {
 
@@ -28,9 +28,9 @@ public class AvailabilitySummary extends ActionBarActivity {
     private Button saveButton;
     private Button newObligationButton;
     private ListView AvailObligListView;
-    //private Map<Day, Interval> availabilitiesObligations;
-    private ArrayList<Map> availabilitiesObligationsArray;
     private ArrayAdapter<String> scheduleAdapter;
+
+    private Person person;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,31 +54,29 @@ public class AvailabilitySummary extends ActionBarActivity {
         saveButton.setOnClickListener(saveClickListener);
         newObligationButton.setOnClickListener(addAvailObligClickListener);
 
-        availabilitiesObligationsArray = (ArrayList)getIntent().getSerializableExtra("AVAILABILITY_ARRAY");
+        //Pull the person object out
+        person = (Person)getIntent().getSerializableExtra("PERSON");
+
         updateAvailability();
+
+        registerForContextMenu(AvailObligListView);
     }
 
     private View.OnClickListener addAvailObligClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (availabilitiesObligationsArray == null)
-            {
-                availabilitiesObligationsArray = new ArrayList<>();
-                //availabilitiesObligationsArray.add(new TreeMap<Day, Interval>());
-                //availabilitiesObligationsArray.add(new TreeMap<Day, Interval>());
-            }
 
             if (v.getId() == R.id.newAvailabilityButton)
             {
                 Intent i = new Intent(getBaseContext(), NewObligAvail.class);
+                i.putExtra("PERSON", (Parcelable) person);
                 i.putExtra("SCHEDULE_TYPE", "Availability");
-                i.putExtra("AVAILABILITY_ARRAY", availabilitiesObligationsArray);
                 startActivity(i);
             }
             else if (v.getId() == R.id.newObligationButton)
             {
                 Intent i = new Intent(getBaseContext(), NewObligAvail.class);
-                i.putExtra("AVAILABILITY_ARRAY", availabilitiesObligationsArray);
+                i.putExtra("PERSON", (Parcelable) person);
                 i.putExtra("SCHEDULE_TYPE", "Obligation");
                 startActivity(i);
             }
@@ -94,33 +92,50 @@ public class AvailabilitySummary extends ActionBarActivity {
 
     private void updateAvailability()
     {
-        if (availabilitiesObligationsArray != null)
-        {
+        if (person.getAvailability() != null) {
             schedule = new ArrayList<>();
 
-            int i = 1;
-            for (Map<Day, Interval> m: availabilitiesObligationsArray) {
-                for (Map.Entry<Day, Interval> obligation : m.entrySet()) {
-
-                    String day = obligation.getKey().toString(this);
-                    String timeInterval = obligation.getValue().toString();
-                    if (i == 1)
-                    {
-                        schedule.add("Avail " + day + ": " + timeInterval);
-                    }
-                    else
-                    {
-                        schedule.add("Oblig " + day + ": " + timeInterval);
-                    }
-                }
-                i++;
+            //TODO: loop through all items in the person availability linked list and get the days and times for the textview
+            for (ScheduleObject s : person.getAvailability()) {
+                schedule.add(s.toString(this));
             }
-
-            // TODO: add availabilities first, then call the adapter, then color them in a loop, then repeat for the obligations
-            //scheduleAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, schedule);
             scheduleAdapter = new AvailabilityArrayAdapter(this, schedule);
 
             AvailObligListView.setAdapter(scheduleAdapter);
         }
+
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, view, menuInfo);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        menu.setHeaderTitle("Availability / Obligation");
+
+        menu.add("Edit");
+        menu.add("Delete");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        StringBuilder sb = new StringBuilder(item.getTitle());
+        String selectedItem = sb.toString();
+
+        if(selectedItem.equals("Edit"))
+        {
+
+        }
+        else if(selectedItem.equals("Delete"))
+        {
+            // Delete that availability / obligation from the availability array
+            // TODO: Implement this method
+
+            updateAvailability();
+        }
+
+        return false;
+    }
+
 }

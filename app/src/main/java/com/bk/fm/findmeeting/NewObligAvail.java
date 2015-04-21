@@ -23,15 +23,12 @@ import android.widget.ArrayAdapter;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 
 
 public class NewObligAvail extends ActionBarActivity {
-
-    private TreeMap<Day, Interval> map;
-    private String scheduleType;
-    private ArrayList<Map> availabilityArray;
 
     private CheckBox sunday;
     private CheckBox monday;
@@ -45,6 +42,9 @@ public class NewObligAvail extends ActionBarActivity {
     private Button startTime;
     private Button endTime;
 
+    private Person person;
+    private String scheduleType;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,7 +55,6 @@ public class NewObligAvail extends ActionBarActivity {
 	}
 
     private void initializeFields() {
-        map = new TreeMap<>(); //To store the selected days and their time ranges
 
         // Initialize text boxes
         sunday = (CheckBox) findViewById(R.id.sunday);
@@ -70,22 +69,23 @@ public class NewObligAvail extends ActionBarActivity {
         saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(saveButtonListener);
 
-        //Time Inputs
+        // Time Inputs
         startTime = (Button) findViewById(R.id.startTime);
         endTime = (Button) findViewById(R.id.endTime);
 
         // Schedule type and schedule array
         scheduleType = (String)getIntent().getSerializableExtra("SCHEDULE_TYPE");
-        availabilityArray = (ArrayList<Map>)getIntent().getSerializableExtra("AVAILABILITY_ARRAY");
+        person = (Person)getIntent().getSerializableExtra("PERSON");
     }
 
     private View.OnClickListener saveButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            updateMap();
+
+            updateScheduleObject();
 
             Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
-            i.putExtra("AVAILABILITY_ARRAY", availabilityArray);
+            i.putExtra("PERSON", (Parcelable) person);
             startActivity(i);
         }
     };
@@ -103,6 +103,107 @@ public class NewObligAvail extends ActionBarActivity {
         endTime.setOnClickListener(getTime);
 
     } //End public void setTimeInputActionHandlers()
+
+
+//----------------------------------------------------
+//
+//	Logical Methods
+//
+//----------------------------------------------------
+
+
+    //Update the map to reflect the check boxes
+    public void updateScheduleObject() {
+
+        boolean[] days = getSelectedDays();
+        Range range = null;
+        Interval interval = null;
+
+        try
+        {
+            interval = getInterval();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(), "Invalid Interval", Toast.LENGTH_SHORT).show();
+        }
+
+        for (int i = 0; i < days.length; i++) {
+
+            if (days[i] == true) {
+                switch (i) {
+                    case 0: range = new Range(interval, Day.SUNDAY);
+                            break;
+                    case 1: range = new Range(interval, Day.MONDAY);
+                            break;
+                    case 2: range = new Range(interval, Day.TUESDAY);
+                            break;
+                    case 3: range = new Range(interval, Day.WEDNESDAY);
+                            break;
+                    case 4: range = new Range(interval, Day.THURSDAY);
+                            break;
+                    case 5: range = new Range(interval, Day.FRIDAY);
+                            break;
+                    case 6: range = new Range(interval, Day.SATURDAY);
+                            break;
+                }
+
+                if (scheduleType.equals("Availability"))
+                {
+                    if (person.getAvailability() == null)
+                    {
+                        ScheduleObject schedOb = new ScheduleObject(false, range);
+                        person.setAvailability(new LinkedList<ScheduleObject>());
+                        person.addScheduleObject(schedOb);
+                    }
+                    else
+                    {
+                        ScheduleObject schedOb = new ScheduleObject(false, range);
+                        person.addScheduleObject(schedOb);
+                    }
+                }
+                else if (scheduleType.equals("Obligation"))
+                {
+                    if (person.getAvailability() == null)
+                    {
+                        ScheduleObject schedOb = new ScheduleObject(true, range);
+                        person.setAvailability(new LinkedList<ScheduleObject>());
+                        person.addScheduleObject(schedOb);
+                    }
+                    else
+                    {
+                        ScheduleObject schedOb = new ScheduleObject(true, range);
+                        person.addScheduleObject(schedOb);
+                    }
+                }
+            }
+        }
+
+    }
+
+    //Make a boolean array representing the available days as selected by the user via checkboxes.
+    public boolean[] getSelectedDays() {
+        boolean[] days = new boolean[7];
+
+        days[0] = sunday.isChecked();
+        days[1] = monday.isChecked();
+        days[2] = tuesday.isChecked();
+        days[3] = wednesday.isChecked();
+        days[4] = thursday.isChecked();
+        days[5] = friday.isChecked();
+        days[6] = saturday.isChecked();
+
+        return days;
+    }
+
+    //Get an interval of the start and end times
+    public Interval getInterval() throws Exception {
+        Time start = new Time(startTime.getText());
+        Time end = new Time(endTime.getText());
+
+        return new Interval(start, end);
+
+    } //End public Interval getInterval()
 
     //Display a Time Picker, and change the Button argument's text to match the selected time.
     public void showTimePicker(final Button txtTime) {
@@ -134,73 +235,4 @@ public class NewObligAvail extends ActionBarActivity {
         }, hours, minutes, true);
         tpd.show();
     } //End public void showTimePicker(final TextView)
-
-
-
-
-//----------------------------------------------------
-//
-//	Logical Methods
-//
-//----------------------------------------------------
-
-    //Update the map to reflect the check boxes
-    public void updateMap() {
-
-        try
-        {
-            Interval inter = getInterval();
-            boolean[] days = getSelectedDays();
-
-            //Update the internal map to reflect the checkBoxes
-            for (int i = 0; i < days.length; i++) {
-                if (days[i]) {
-                    map.put(Day.getDay(i), inter);
-                }
-            }
-
-            if (scheduleType.equals("Availability"))
-            {
-                if (availabilityArray.size() == 1 || availabilityArray.size() == 2) {
-                    availabilityArray.get(0).clear();
-                }
-                availabilityArray.add(0, map);
-            }
-            else if (scheduleType.equals("Obligation"))
-            {
-                if (availabilityArray.size() == 2) {
-                    availabilityArray.get(1).clear();
-                }
-                availabilityArray.add(1, map);
-            }
-        }
-        catch (Exception e)
-        {
-            Toast.makeText(getApplicationContext(), "Invalid Interval", Toast.LENGTH_SHORT).show();
-        } //End Try-Catch
-    }
-
-    //Make a boolean array representing the available days as selected by the user via checkboxes.
-    public boolean[] getSelectedDays() {
-        boolean[] days = new boolean[7];
-
-        days[0] = sunday.isChecked();
-        days[1] = monday.isChecked();
-        days[2] = tuesday.isChecked();
-        days[3] = wednesday.isChecked();
-        days[4] = thursday.isChecked();
-        days[5] = friday.isChecked();
-        days[6] = saturday.isChecked();
-
-        return days;
-    }
-
-    //Get an interval of the start and end times
-    public Interval getInterval() throws Exception {
-        Time start = new Time(startTime.getText());
-        Time end = new Time(endTime.getText());
-
-        return new Interval(start, end);
-
-    } //End public Interval getInterval()
 }

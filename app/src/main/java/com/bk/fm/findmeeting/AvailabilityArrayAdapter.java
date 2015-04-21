@@ -35,11 +35,11 @@ public class AvailabilityArrayAdapter extends ArrayAdapter {
 
         TextView text = (TextView) view;
 
-        if (getItem(position).toString().contains("Avail"))
+        if (getItem(position).toString().contains("availability"))
         {
             view.setBackgroundColor(Color.GREEN);
         }
-        else if (getItem(position).toString().contains("Oblig"))
+        else if (getItem(position).toString().contains("obligation"))
         {
             view.setBackgroundColor(Color.RED);
         }
