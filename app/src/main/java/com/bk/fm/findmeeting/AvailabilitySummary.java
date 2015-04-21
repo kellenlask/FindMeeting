@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -42,8 +43,16 @@ public class AvailabilitySummary extends ActionBarActivity {
 	}
 
     private void initializeFields() {
+		//Pull the person object out
+		person = (Person)getIntent().getSerializableExtra("PERSON");
+
         // Initialize list view
         AvailObligListView = (ListView) findViewById(R.id.AvailObligListView);
+		updateAvailability();
+
+		//Initialize Title Text
+		TextView title = (TextView) findViewById(R.id.titleText);
+		title.setText(title.getText().toString() + " " + person.getName());
 
         // Initialize buttons
         newAvailabilityButton = (Button) findViewById(R.id.newAvailabilityButton);
@@ -55,10 +64,7 @@ public class AvailabilitySummary extends ActionBarActivity {
         saveButton.setOnClickListener(saveClickListener);
         newObligationButton.setOnClickListener(addAvailObligClickListener);
 
-        //Pull the person object out
-        person = (Person)getIntent().getSerializableExtra("PERSON");
 
-        updateAvailability();
 
         registerForContextMenu(AvailObligListView);
     }
