@@ -19,16 +19,17 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class AvailabilitySummary extends ActionBarActivity {
 
-    private ArrayList<String> schedule;
+    private ListView AvailObligListView;
+    private ArrayAdapter<String> scheduleAdapter;
+
     private Button newAvailabilityButton;
     private Button saveButton;
     private Button newObligationButton;
-    private ListView AvailObligListView;
-    private ArrayAdapter<String> scheduleAdapter;
+
+    private ArrayList<String> schedule;
 
     private Person person;
 
@@ -86,7 +87,7 @@ public class AvailabilitySummary extends ActionBarActivity {
     private View.OnClickListener saveClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            // TODO: Implement this method
         }
     };
 
@@ -95,7 +96,6 @@ public class AvailabilitySummary extends ActionBarActivity {
         if (person.getAvailability() != null) {
             schedule = new ArrayList<>();
 
-            //TODO: loop through all items in the person availability linked list and get the days and times for the textview
             for (ScheduleObject s : person.getAvailability()) {
                 schedule.add(s.toString(this));
             }
@@ -125,12 +125,25 @@ public class AvailabilitySummary extends ActionBarActivity {
 
         if(selectedItem.equals("Edit"))
         {
+            // TODO: Implement this method
 
+            updateAvailability();
         }
         else if(selectedItem.equals("Delete"))
         {
-            // Delete that availability / obligation from the availability array
             // TODO: Implement this method
+            int deletePosition = -1;
+            int index = 0;
+
+            for (ScheduleObject s : person.getAvailability()) {
+                if (scheduleAdapter.getItem(info.position).equals(s.toString(this)))
+                {
+                    deletePosition = index;
+                }
+                index++;
+            }
+
+            person.getAvailability().remove(deletePosition);
 
             updateAvailability();
         }
