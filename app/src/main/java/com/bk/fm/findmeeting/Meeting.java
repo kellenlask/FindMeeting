@@ -29,6 +29,7 @@ public class Meeting implements Parcelable, Serializable {
 	private TreeMap<Day, Range> possibleDays;
 	private Interval meetingDuration;
 	private TreeMap<Integer, TreeSet<Range>> totalAvailability;
+	private ArrayList<Person> involvedPeople;
     //private static final long serialVersionUID = 1L;     //For making the meeting serializable in the intent (may not be needed)
 
 //----------------------------------------------------
@@ -39,6 +40,7 @@ public class Meeting implements Parcelable, Serializable {
 	public Meeting(TreeMap<Day, Range> days, Interval meetingDuration) {
 		this.setPossibleDays(days);
 		this.setMeetingDuration(meetingDuration);
+		involvedPeople = new ArrayList<>();
 	} //End constructor
 
 
@@ -99,12 +101,20 @@ public class Meeting implements Parcelable, Serializable {
 		return meetingDuration;
 	}
 
+	public ArrayList<Person> getInvolvedPeople() {
+		return involvedPeople;
+	}
+
 
 //----------------------------------------------------
 //
 //	Mutators
 //
 //----------------------------------------------------
+	public void setInvolvedPeople(ArrayList<Person> people) {
+		involvedPeople = people;
+	}
+
 	public void setPossibleDays(TreeMap<Day, Range> possibleDays) {
 		this.possibleDays = possibleDays;
 	}
@@ -113,10 +123,10 @@ public class Meeting implements Parcelable, Serializable {
 		this.meetingDuration = meetingDuration;
 	}
 
-	public TreeMap<Integer, TreeSet<Range>> calcTotalAvailability(ArrayList<Person> people) {
-		initializeAverages(people);
+	public TreeMap<Integer, TreeSet<Range>> calcTotalAvailability() {
+		initializeAverages();
 
-		for(Person p : people) {
+		for(Person p : involvedPeople) {
 			LinkedList<ScheduleObject> list = p.getAvailability();
 
 			while(list.size() > 0) {
@@ -141,16 +151,16 @@ public class Meeting implements Parcelable, Serializable {
 	}
 
 
-	public void initializeAverages(ArrayList<Person> people) {
+	public void initializeAverages() {
 		totalAvailability = new TreeMap<>();
 
 		//For each possible level of availability, create a TreeSet<Range> to store the matching time ranges
-		for(int i = 0; i <= people.size(); i++) {
+		for(int i = 0; i <= involvedPeople.size(); i++) {
 			totalAvailability.put(i, new TreeSet<Range>());
 		}
 
 		//Throw the meeting params into the 100% available time range
-		totalAvailability.get(people.size()).addAll(possibleDays.values());
+		totalAvailability.get(involvedPeople.size()).addAll(possibleDays.values());
 
 	}//End public void initializeAverages(ArrayList<Person>)
 

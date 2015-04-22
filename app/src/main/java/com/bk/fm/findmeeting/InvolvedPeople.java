@@ -25,7 +25,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -42,9 +41,7 @@ public class InvolvedPeople extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
-	private ArrayList<Person> people;
 	private Meeting meeting;
-
 	private ListView peopleList;
 	private Button addPersonButton;
 	private Button findTimesButton;
@@ -64,24 +61,15 @@ public class InvolvedPeople extends ActionBarActivity {
 
 		//Pull Meeting object out
 		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
-        addedPeople = (ArrayList<Person>)getIntent().getSerializableExtra("ADDED_PEOPLE");
+
+       	// addedPeople = (ArrayList<Person>)getIntent().getSerializableExtra("ADDED_PEOPLE");
+		//meeting.setInvolvedPeople(addedPeople);
 
 		initializeFields();
 
+		addEventHandlers();
+
 	} //End protected void onCreate()
-
-    private AdapterView.OnItemClickListener listItemClicked = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            String personName = peopleList.getItemAtPosition(position).toString();
-            Person p = addedPeople.get(peopleNames.indexOf(personName));
-
-            Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
-            i.putExtra("PERSON", (Parcelable) p);
-            startActivity(i);
-
-        }
-    };
 
 	@Override
 	protected void onPause() { //When the user leaves the activity save ArrayList to sharedPrefs
@@ -93,7 +81,7 @@ public class InvolvedPeople extends ActionBarActivity {
 		try {
 			ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 			ObjectOutputStream outStream = new ObjectOutputStream(byteOut);
-			outStream.writeObject(people);
+			outStream.writeObject(meeting.getInvolvedPeople());
 			outStream.flush();
 			edit.putString("people", outStream.toString());
 
@@ -118,7 +106,7 @@ public class InvolvedPeople extends ActionBarActivity {
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
 			ObjectInputStream si = new ObjectInputStream(inputStream);
 
-			people = (ArrayList<Person>) si.readObject();
+			meeting.setInvolvedPeople((ArrayList<Person>) si.readObject());
 			updateList();
 
 		} catch(IOException e) {
@@ -133,40 +121,60 @@ public class InvolvedPeople extends ActionBarActivity {
 //	Event Handlers
 //
 //----------------------------------------------------
-	public void addAddPersonActionHandler() {
+	public void addEventHandlers() {
+		//Go to SavedPeople
 		addPersonButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) { //Show the SavedPeople Activity on AddPerson Button-Click
 				Intent i = new Intent(getBaseContext(), SavedPeople.class);
-				//i.putExtra("meeting", (Parcelable) meeting);
+				i.putExtra("MEETING", (Parcelable) meeting);
 				startActivity(i);
 			}
 		});
-	}
 
-	public void addFindTimesActionHandler() {
+		//Go to final Activity
 		findTimesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-			//TODO: Set
+				//TODO: Set
 			}
 		});
-	}
 
-	public void addListActionHandler() {
-	//On Long-Press: bring up delete menu
-	//TODO: set InvolvedPeople List's action handlers
+		//On Long-Press: bring up delete menu
+		//TODO: set InvolvedPeople List's action handlers
 
-	//On Short Press: bring up AvailabilitySummary Activity
+		//On Short Press: bring up AvailabilitySummary Activity
 
+		//Go to AvailabilitySummary for a given person
+		peopleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-	}
+				String personName = peopleList.getItemAtPosition(position).toString();
+				Person p = meeting.getInvolvedPeople().get(peopleNames.indexOf(personName));
+
+				Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+				i.putExtra("PERSON", (Parcelable) p);
+				startActivity(i);
+
+			}
+		});
+	} //End addEventHandlers()
 
 //----------------------------------------------------
 //
 //	Other Methods
 //
 //----------------------------------------------------
+	public void initializeFields() {
+		peopleNames = new ArrayList<>();
+
+		addPersonButton = (Button) findViewById(R.id.addPersonButton);
+		findTimesButton = (Button) findViewById(R.id.findTimesButton);
+		peopleList = (ListView) findViewById(R.id.peopleList);
+
+		updateList();
+	} //End initializeFields()
+
 	public void updateList() {
         if (addedPeople != null)
         {
@@ -180,18 +188,5 @@ public class InvolvedPeople extends ActionBarActivity {
             ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, peopleNames);
             peopleList.setAdapter(data);
         }
-	}
-
-	public void initializeFields() {
-		people = new ArrayList<>();
-        peopleNames = new ArrayList<>();
-
-		addPersonButton = (Button) findViewById(R.id.addPersonButton);
-		findTimesButton = (Button) findViewById(R.id.findTimesButton);
-		peopleList = (ListView) findViewById(R.id.peopleList);
-        peopleList.setOnItemClickListener(listItemClicked);
-
-        addAddPersonActionHandler();
-		updateList();
-	}
-}
+	} //End updateList()
+} //End Class

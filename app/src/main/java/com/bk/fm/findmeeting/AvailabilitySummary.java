@@ -69,6 +69,17 @@ public class AvailabilitySummary extends ActionBarActivity {
         registerForContextMenu(AvailObligListView);
     }
 
+	public void addSaveButtonActionHandler() {
+		saveButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
+				startActivity(i);
+			}
+		});
+
+	}
+
     private View.OnClickListener addAvailObligClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
