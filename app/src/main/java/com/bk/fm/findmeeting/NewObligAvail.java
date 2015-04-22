@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.AdapterView;
@@ -43,7 +44,8 @@ public class NewObligAvail extends ActionBarActivity {
     private Button endTime;
 
     private Person person;
-    private String scheduleType;
+    private String activityType;
+    private int scheduleObjectIndex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +75,29 @@ public class NewObligAvail extends ActionBarActivity {
         startTime = (Button) findViewById(R.id.startTime);
         endTime = (Button) findViewById(R.id.endTime);
 
-        // Schedule type and schedule array
-        scheduleType = (String)getIntent().getSerializableExtra("SCHEDULE_TYPE");
+        // Initialize activity type and person object
+        activityType = (String)getIntent().getSerializableExtra("ACTIVITY_TYPE");
         person = (Person)getIntent().getSerializableExtra("PERSON");
+
+        // Set title
+        TextView title = (TextView) findViewById(R.id.titleTextView);
+        title.setText(activityType);
+
+        // Check if this activity is an edit. If so, preload the checkboxes and time buttons
+        if (activityType.contains("Edit"))
+        {
+            // Pull the index of the schedule object in the linked list
+            scheduleObjectIndex = (int)getIntent().getSerializableExtra("SCHEDULE_OBJECT_INDEX");
+
+            loadEditActivity();
+        }
     }
 
     private View.OnClickListener saveButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
-            updateScheduleObject();
+            addScheduleObject();
 
             Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
             i.putExtra("PERSON", (Parcelable) person);
@@ -113,7 +128,7 @@ public class NewObligAvail extends ActionBarActivity {
 
 
     //Update the map to reflect the check boxes
-    public void updateScheduleObject() {
+    public void addScheduleObject() {
 
         boolean[] days = getSelectedDays();
         Range range = null;
@@ -148,7 +163,7 @@ public class NewObligAvail extends ActionBarActivity {
                             break;
                 }
 
-                if (scheduleType.equals("Availability"))
+                if (activityType.contains("Availability"))
                 {
                     if (person.getAvailability() == null)
                     {
@@ -162,7 +177,7 @@ public class NewObligAvail extends ActionBarActivity {
                         person.addScheduleObject(schedOb);
                     }
                 }
-                else if (scheduleType.equals("Obligation"))
+                else if (activityType.contains("Obligation"))
                 {
                     if (person.getAvailability() == null)
                     {
@@ -179,6 +194,53 @@ public class NewObligAvail extends ActionBarActivity {
             }
         }
 
+    }
+
+    public void loadEditActivity() {
+
+        ScheduleObject schedObj = person.getAvailability().get(scheduleObjectIndex);
+
+        // Set the checkbox
+        String day = schedObj.getDay().toString(this);
+
+        if (day.equals("Sunday"))
+        {
+            sunday.setChecked(true);
+        }
+        else if (day.equals("Monday"))
+        {
+            monday.setChecked(true);
+        }
+        else if (day.equals("Tuesday"))
+        {
+            tuesday.setChecked(true);
+        }
+        else if (day.equals("Wednesday"))
+        {
+            wednesday.setChecked(true);
+        }
+        else if (day.equals("Thursday"))
+        {
+            thursday.setChecked(true);
+        }
+        else if (day.equals("Friday"))
+        {
+            friday.setChecked(true);
+        }
+        else if (day.equals("Saturday"))
+        {
+            saturday.setChecked(true);
+        }
+
+        // Set time interval buttons
+        String start = schedObj.getStartTime().toString();
+        String end = schedObj.getStopTime().toString();
+
+        startTime.setText(start);
+        endTime.setText(end);
+
+        // Delete the schedule object
+        person.getAvailability().remove(scheduleObjectIndex);
     }
 
     //Make a boolean array representing the available days as selected by the user via checkboxes.

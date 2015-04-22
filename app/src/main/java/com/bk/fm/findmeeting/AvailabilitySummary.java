@@ -73,20 +73,20 @@ public class AvailabilitySummary extends ActionBarActivity {
         @Override
         public void onClick(View v) {
 
-            if (v.getId() == R.id.newAvailabilityButton)
-            {
-                Intent i = new Intent(getBaseContext(), NewObligAvail.class);
-                i.putExtra("PERSON", (Parcelable) person);
-                i.putExtra("SCHEDULE_TYPE", "Availability");
-                startActivity(i);
-            }
-            else if (v.getId() == R.id.newObligationButton)
-            {
-                Intent i = new Intent(getBaseContext(), NewObligAvail.class);
-                i.putExtra("PERSON", (Parcelable) person);
-                i.putExtra("SCHEDULE_TYPE", "Obligation");
-                startActivity(i);
-            }
+        if (v.getId() == R.id.newAvailabilityButton)
+        {
+            Intent i = new Intent(getBaseContext(), NewObligAvail.class);
+            i.putExtra("PERSON", (Parcelable) person);
+            i.putExtra("ACTIVITY_TYPE", "New Availability");
+            startActivity(i);
+        }
+        else if (v.getId() == R.id.newObligationButton)
+        {
+            Intent i = new Intent(getBaseContext(), NewObligAvail.class);
+            i.putExtra("PERSON", (Parcelable) person);
+            i.putExtra("ACTIVITY_TYPE", "New Obligation");
+            startActivity(i);
+        }
         }
     };
 
@@ -132,12 +132,30 @@ public class AvailabilitySummary extends ActionBarActivity {
         if(selectedItem.equals("Edit"))
         {
             // TODO: Implement this method
+            int j = 0;
+            for (ScheduleObject s : person.getAvailability()) {
+                if (scheduleAdapter.getItem(info.position).equals(s.toString(this)))
+                {
+                    Intent i = new Intent(getBaseContext(), NewObligAvail.class);
+                    i.putExtra("PERSON", (Parcelable) person);
+                    i.putExtra("SCHEDULE_OBJECT_INDEX", j);
 
-            updateAvailability();
+                    if (s.isObligation())
+                    {
+                        i.putExtra("ACTIVITY_TYPE", "Edit Obligation");
+                    }
+                    else
+                    {
+                        i.putExtra("ACTIVITY_TYPE", "Edit Availability");
+                    }
+
+                    startActivity(i);
+                }
+                j++;
+            }
         }
         else if(selectedItem.equals("Delete"))
         {
-            // TODO: Implement this method
             int deletePosition = -1;
             int index = 0;
 
