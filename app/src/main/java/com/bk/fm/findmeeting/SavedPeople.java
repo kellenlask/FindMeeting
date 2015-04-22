@@ -10,8 +10,8 @@ package com.bk.fm.findmeeting;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -53,7 +54,9 @@ public class SavedPeople extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_people);
 
-		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
+		SharedPreferences sp = getSharedPreferences("MEETING", getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("Meeting", ""));
+		//meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
 
         initializeFields();
         populateSavedPeople();
@@ -69,17 +72,25 @@ public class SavedPeople extends ActionBarActivity {
 //
 //----------------------------------------------------
 
+
     private OnItemClickListener listItemClicked = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			for (Person p: savedPeople)
 			{
 				if (p.getName() == peopleNames.get(position)) {
-					if (meeting.getInvolvedPeople().contains(p)) {
+					if(meeting.getInvolvedPeople() == null) {
+						meeting.setInvolvedPeople(new ArrayList<Person>());
+						meeting.getInvolvedPeople().add(p);
+						Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
+
+					} else if (meeting.getInvolvedPeople().contains(p)) {
 						Toast.makeText(getApplicationContext(), "This person has already been added to meeting.",Toast.LENGTH_SHORT).show();
 					} else {
 						meeting.getInvolvedPeople().add(p);
 						Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
 					}
+
+					putMeeting();
 				}
 			}
         }
@@ -251,7 +262,14 @@ public class SavedPeople extends ActionBarActivity {
     public void onBackPressed()
     {
         Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
-		i.putExtra("MEETING", (Parcelable) meeting);
+		i.putExtra("MEETING", (Serializable) meeting);
         startActivity(i);
     }
+
+	public void putMeeting() {
+		SharedPreferences sp = getSharedPreferences("your_prefs", getBaseContext().MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putString("MEETING", Meeting.serializeMeeting(meeting));
+		editor.commit();
+	}
 } //End Class

@@ -15,18 +15,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeMap;
 
 
 public class NewObligAvail extends ActionBarActivity {
@@ -43,6 +36,7 @@ public class NewObligAvail extends ActionBarActivity {
     private Button startTime;
     private Button endTime;
 
+	private Meeting meeting;
     private Person person;
     private String activityType;
     private int scheduleObjectIndex;
@@ -78,6 +72,7 @@ public class NewObligAvail extends ActionBarActivity {
         // Initialize activity type and person object
         activityType = (String)getIntent().getSerializableExtra("ACTIVITY_TYPE");
         person = (Person)getIntent().getSerializableExtra("PERSON");
+		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
 
         // Set title
         TextView title = (TextView) findViewById(R.id.titleTextView);
@@ -101,6 +96,7 @@ public class NewObligAvail extends ActionBarActivity {
 
             Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
             i.putExtra("PERSON", (Parcelable) person);
+			i.putExtra("MEETING", (Parcelable) meeting);
             startActivity(i);
         }
     };

@@ -7,7 +7,6 @@ interacted with.
 
 package com.bk.fm.findmeeting;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,11 +19,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -45,9 +39,7 @@ public class InvolvedPeople extends ActionBarActivity {
 	private ListView peopleList;
 	private Button addPersonButton;
 	private Button findTimesButton;
-    ArrayList<String> peopleNames;
-    ArrayList<Person> addedPeople;
-
+    private ArrayList<String> peopleNames;
 
 //----------------------------------------------------
 //
@@ -60,9 +52,12 @@ public class InvolvedPeople extends ActionBarActivity {
 		setContentView(R.layout.activity_involved_people);
 
 		//Pull Meeting object out
-		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
+		SharedPreferences sp = getSharedPreferences("MEETING", getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("Meeting", ""));
 
-       	// addedPeople = (ArrayList<Person>)getIntent().getSerializableExtra("ADDED_PEOPLE");
+		//meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
+
+       	//addedPeople = (ArrayList<Person>)getIntent().getSerializableExtra("ADDED_PEOPLE");
 		//meeting.setInvolvedPeople(addedPeople);
 
 		initializeFields();
@@ -71,7 +66,7 @@ public class InvolvedPeople extends ActionBarActivity {
 
 	} //End protected void onCreate()
 
-	@Override
+	/*@Override
 	protected void onPause() { //When the user leaves the activity save ArrayList to sharedPrefs
 		super.onPause();
 		//Store the ArrayList to the SharedPrefs
@@ -99,22 +94,8 @@ public class InvolvedPeople extends ActionBarActivity {
 		SharedPreferences prefs = getSharedPreferences("peopleStorage", Context.MODE_PRIVATE);
 		//SharedPreferences.Editor edit = prefs.edit();
 
-		try {
-			String s = prefs.getString("people", "");
-			byte[] bytes = s.getBytes();
 
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-			ObjectInputStream si = new ObjectInputStream(inputStream);
-
-			meeting.setInvolvedPeople((ArrayList<Person>) si.readObject());
-			updateList();
-
-		} catch(IOException e) {
-			e.printStackTrace();
-		} catch(ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	} //End protected void onResume()
+	} //End protected void onResume()*/
 
 //----------------------------------------------------
 //
@@ -127,7 +108,8 @@ public class InvolvedPeople extends ActionBarActivity {
 			@Override
 			public void onClick(View v) { //Show the SavedPeople Activity on AddPerson Button-Click
 				Intent i = new Intent(getBaseContext(), SavedPeople.class);
-				i.putExtra("MEETING", (Parcelable) meeting);
+				putMeeting();
+				//i.putExtra("MEETING", (Serializable) meeting);
 				startActivity(i);
 			}
 		});
@@ -136,7 +118,15 @@ public class InvolvedPeople extends ActionBarActivity {
 		findTimesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//TODO: Set
+				if(meeting.getInvolvedPeople().size() != 0) {
+					Intent i = new Intent(getBaseContext(), Results.class);
+					putMeeting();
+					//i.putExtra("MEETING", (Serializable) meeting);
+					startActivity(i);
+				} else {
+					Toast.makeText(getApplicationContext(), "Please add some people.", Toast.LENGTH_SHORT).show();
+				}
+
 			}
 		});
 
@@ -176,11 +166,11 @@ public class InvolvedPeople extends ActionBarActivity {
 	} //End initializeFields()
 
 	public void updateList() {
-        if (addedPeople != null)
+        if (meeting.getInvolvedPeople() != null)
         {
             peopleNames.clear();
 
-            for (Person p : addedPeople) {
+            for (Person p : meeting.getInvolvedPeople()) {
                 peopleNames.add(p.getName());
             }
 
@@ -189,4 +179,11 @@ public class InvolvedPeople extends ActionBarActivity {
             peopleList.setAdapter(data);
         }
 	} //End updateList()
+
+	public void putMeeting() {
+		SharedPreferences sp = getSharedPreferences("your_prefs", getBaseContext().MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putString("MEETING", Meeting.serializeMeeting(meeting));
+		editor.commit();
+	}
 } //End Class

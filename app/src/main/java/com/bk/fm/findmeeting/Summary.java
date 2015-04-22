@@ -8,8 +8,8 @@ to the meeting.
 package com.bk.fm.findmeeting;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -74,8 +74,13 @@ public class Summary extends ActionBarActivity {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				SharedPreferences sp = getSharedPreferences("your_prefs", getBaseContext().MODE_PRIVATE);
+				SharedPreferences.Editor editor = sp.edit();
+				editor.putString("MEETING", Meeting.serializeMeeting(meeting));
+				editor.commit();
+
 				Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
-				i.putExtra("MEETING", (Parcelable) meeting);
+				//i.putExtra("MEETING", (Parcelable) meeting);
 				startActivity(i);
 			}
 		});

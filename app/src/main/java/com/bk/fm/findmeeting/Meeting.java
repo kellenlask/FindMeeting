@@ -13,6 +13,12 @@ package com.bk.fm.findmeeting;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,7 +46,6 @@ public class Meeting implements Parcelable, Serializable {
 	public Meeting(TreeMap<Day, Range> days, Interval meetingDuration) {
 		this.setPossibleDays(days);
 		this.setMeetingDuration(meetingDuration);
-		involvedPeople = new ArrayList<>();
 	} //End constructor
 
 
@@ -226,5 +231,39 @@ public class Meeting implements Parcelable, Serializable {
 
 	} //End private void pruneMap()
 
+//----------------------------------------------------
+//
+//	Serialization
+//
+//----------------------------------------------------
+
+	public static String serializeMeeting(Meeting m) {
+		try {
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+			objectOutputStream.writeObject(m);
+			objectOutputStream.close();
+			return new String(byteArrayOutputStream.toByteArray());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static Meeting deserializeMeeting(String s) {
+		byte[] bytes = s.getBytes();
+
+		try {
+			InputStream in = new InputStream();
+			ObjectInputStream objectInputStream = new ObjectInputStream( new ByteArrayInputStream(bytes) );
+			Meeting m = (Meeting) objectInputStream.readObject();
+
+			return m;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 
 } //End public class Meeting
