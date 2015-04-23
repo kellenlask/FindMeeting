@@ -7,6 +7,7 @@ This view is meant to summarize the availability of one Person.
 package com.bk.fm.findmeeting;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
@@ -30,6 +31,7 @@ public class AvailabilitySummary extends ActionBarActivity {
     private Button doneButton;
     private Button newObligationButton;
 
+	private Meeting meeting;
     private ArrayList<String> schedule;
     private Person person;
 
@@ -37,6 +39,9 @@ public class AvailabilitySummary extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_availability);
+
+		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
 
         initializeFields();
 	}
@@ -92,6 +97,13 @@ public class AvailabilitySummary extends ActionBarActivity {
     private View.OnClickListener doneClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+			addPersonToMeeting();
+
+			SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+			SharedPreferences.Editor editor = sp.edit();
+			editor.putString("MEETING", Meeting.serializeMeeting(meeting));
+			editor.commit();
+
             Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
             startActivity(i);
         }
@@ -175,4 +187,13 @@ public class AvailabilitySummary extends ActionBarActivity {
         return false;
     }
 
-}
+	public void addPersonToMeeting() {
+		for(Person p : meeting.getInvolvedPeople()) {
+			if(person.equals(p)) {
+				p.setAvailability(person.getAvailability());
+			}
+		}
+
+	}
+
+} //End Class

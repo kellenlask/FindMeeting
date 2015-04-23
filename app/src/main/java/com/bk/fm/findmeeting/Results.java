@@ -33,10 +33,10 @@ public class Results extends ActionBarActivity {
 	}
 
 	public void initializeFields() {
-		listView = (ListView) findViewById(R.id.resultsList);
 		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
-		//meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
+
+		listView = (ListView) findViewById(R.id.resultsList);
 		stringList = new ArrayList<>();
 
 		makeList();

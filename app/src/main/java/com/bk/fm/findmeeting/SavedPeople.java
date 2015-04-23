@@ -56,7 +56,6 @@ public class SavedPeople extends ActionBarActivity {
 
 		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
-		//meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
 
         initializeFields();
         populateSavedPeople();
