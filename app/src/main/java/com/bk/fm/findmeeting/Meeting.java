@@ -33,9 +33,10 @@ public class Meeting implements Parcelable, Serializable {
 //----------------------------------------------------
 	private TreeMap<Day, Range> possibleDays;
 	private Interval meetingDuration;
+
+	//Populated post-construction
 	private TreeMap<Integer, TreeSet<Range>> totalAvailability;
 	private ArrayList<Person> involvedPeople;
-    //private static final long serialVersionUID = 1L;     //For making the meeting serializable in the intent (may not be needed)
 
 //----------------------------------------------------
 //
@@ -46,7 +47,6 @@ public class Meeting implements Parcelable, Serializable {
 		this.setPossibleDays(days);
 		this.setMeetingDuration(meetingDuration);
 	} //End constructor
-
 
 //----------------------------------------------------
 //
@@ -127,7 +127,9 @@ public class Meeting implements Parcelable, Serializable {
 		this.meetingDuration = meetingDuration;
 	}
 
+	//Calculates the overlaps in all of the people's availabilities and obligations
 	public TreeMap<Integer, TreeSet<Range>> calcTotalAvailability() {
+		//Setup the treemap
 		initializeAverages();
 
 		for(Person p : involvedPeople) {
@@ -217,14 +219,20 @@ public class Meeting implements Parcelable, Serializable {
 			//Iterate over the TreeSet<Range>
 			Iterator itr = tmp.iterator();
 
+			ArrayList<Range> removeThese = new ArrayList<>();
+
 			while(itr.hasNext()) {
 				Range r = (Range) itr.next();
 
 				//Remove the small Range objects
 				if(r.smallerThan(meetingDuration)) {
-					tmp.remove(r);
+					removeThese.add(r);
 				}
 			} //End While
+
+			for(Range r : removeThese) {
+				tmp.remove(r);
+			}
 
 		} //End For-Each Loop
 

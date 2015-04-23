@@ -139,10 +139,14 @@ public class InvolvedPeople extends ActionBarActivity {
 
             Collections.sort(peopleNames);
 
-            ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, peopleNames);
-            peopleList.setAdapter(data);
+            updateListView();
         }
 	} //End updateList()
+
+	public void updateListView() {
+		ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, peopleNames);
+		peopleList.setAdapter(data);
+	}
 
 	//Put the meeting object into sharedpreferences
 	public void putMeeting() {

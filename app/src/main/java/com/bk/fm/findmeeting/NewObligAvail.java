@@ -23,7 +23,11 @@ import java.util.LinkedList;
 
 
 public class NewObligAvail extends ActionBarActivity {
-
+//----------------------------------------------------
+//
+//	Fields
+//
+//----------------------------------------------------
     private CheckBox sunday;
     private CheckBox monday;
     private CheckBox tuesday;
@@ -40,6 +44,12 @@ public class NewObligAvail extends ActionBarActivity {
     private String activityType;
     private int scheduleObjectIndex;
 
+//----------------------------------------------------
+//
+//	onCreate()
+//
+//----------------------------------------------------
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,7 +59,81 @@ public class NewObligAvail extends ActionBarActivity {
         setTimeInputActionHandlers();
 	}
 
-    private void initializeFields() {
+//----------------------------------------------------
+//
+//	Action Handlers
+//
+//----------------------------------------------------
+	private View.OnClickListener saveButtonListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+
+			addScheduleObject();
+
+			Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+			i.putExtra("PERSON", (Parcelable) person);
+			startActivity(i);
+		}
+	};
+
+	public void setTimeInputActionHandlers() {
+		//Show the time picker when the field is clicked.
+		View.OnClickListener getTime = new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showTimePicker((Button) v);
+			}
+		};
+
+		startTime.setOnClickListener(getTime);
+		endTime.setOnClickListener(getTime);
+
+	} //End public void setTimeInputActionHandlers()
+
+//----------------------------------------------------
+//
+//	GUI Methods
+//
+//----------------------------------------------------
+
+	//Display a Time Picker, and change the Button argument's text to match the selected time.
+	public void showTimePicker(final Button txtTime) {
+		//Grab the current selected time
+		int hours = Time.parseHours(txtTime.getText());
+		int minutes = Time.parseMinutes(txtTime.getText());
+
+		//Make the Time Picker with the current selected time
+		TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+
+			@Override
+			public void onTimeSet(TimePicker view, int hour, int minute) {
+				String h = "" + hour;
+				String m = "" + minute;
+
+				//Ensure the output hour is two digits.
+				if (h.length() == 1) {
+					h = "0" + h;
+				}
+
+				//Ensure the output minutes are two digits.
+				if (m.length() == 1) {
+					m = "0" + m;
+				}
+
+				// Display Selected time in button
+				txtTime.setText(h + ":" + m);
+			}
+		}, hours, minutes, true);
+		tpd.show();
+	} //End public void showTimePicker(final TextView)
+
+//----------------------------------------------------
+//
+//	Logical Methods
+//
+//----------------------------------------------------
+
+    public void initializeFields() {
 
         // Initialize text boxes
         sunday = (CheckBox) findViewById(R.id.sunday);
@@ -84,41 +168,7 @@ public class NewObligAvail extends ActionBarActivity {
 
             loadEditActivity();
         }
-    }
-
-    private View.OnClickListener saveButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            addScheduleObject();
-
-            Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
-            i.putExtra("PERSON", (Parcelable) person);
-            startActivity(i);
-        }
-    };
-
-    public void setTimeInputActionHandlers() {
-        //Show the time picker when the field is clicked.
-        View.OnClickListener getTime = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimePicker((Button) v);
-            }
-        };
-
-        startTime.setOnClickListener(getTime);
-        endTime.setOnClickListener(getTime);
-
-    } //End public void setTimeInputActionHandlers()
-
-
-//----------------------------------------------------
-//
-//	Logical Methods
-//
-//----------------------------------------------------
-
+    } //End  private void initializeFields()
 
     //Update the map to reflect the check boxes
     public void addScheduleObject() {
@@ -187,7 +237,7 @@ public class NewObligAvail extends ActionBarActivity {
             }
         }
 
-    }
+    } //End public void addScheduleObject()
 
     public void loadEditActivity() {
 
@@ -249,7 +299,8 @@ public class NewObligAvail extends ActionBarActivity {
         days[6] = saturday.isChecked();
 
         return days;
-    }
+
+    } //End public boolean[] getSelectedDays()
 
     //Get an interval of the start and end times
     public Interval getInterval() throws Exception {
@@ -260,34 +311,5 @@ public class NewObligAvail extends ActionBarActivity {
 
     } //End public Interval getInterval()
 
-    //Display a Time Picker, and change the Button argument's text to match the selected time.
-    public void showTimePicker(final Button txtTime) {
-        //Grab the current selected time
-        int hours = Time.parseHours(txtTime.getText());
-        int minutes = Time.parseMinutes(txtTime.getText());
 
-        //Make the Time Picker with the current selected time
-        TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-
-            @Override
-            public void onTimeSet(TimePicker view, int hour, int minute) {
-                String h = "" + hour;
-                String m = "" + minute;
-
-                //Ensure the output hour is two digits.
-                if (h.length() == 1) {
-                    h = "0" + h;
-                }
-
-                //Ensure the output minutes are two digits.
-                if (m.length() == 1) {
-                    m = "0" + m;
-                }
-
-                // Display Selected time in button
-                txtTime.setText(h + ":" + m);
-            }
-        }, hours, minutes, true);
-        tpd.show();
-    } //End public void showTimePicker(final TextView)
 }

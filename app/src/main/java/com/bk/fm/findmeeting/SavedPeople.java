@@ -57,7 +57,6 @@ public class SavedPeople extends ActionBarActivity {
         setContentView(R.layout.activity_saved_people);
 
         initializeFields();
-
 		addActionHandlers();
 
     }
@@ -88,10 +87,12 @@ public class SavedPeople extends ActionBarActivity {
 							Toast.makeText(getApplicationContext(), getString(R.string.person_added),Toast.LENGTH_SHORT).show();
 						}
 
-						updatePeople();
-						putMeeting();
 					}
 				}
+
+				updateListView();
+				putMeeting();
+
 			}
 		});//Add person to the meeting when shortClicked
 
@@ -266,14 +267,15 @@ public class SavedPeople extends ActionBarActivity {
     }
 
 	public void updatePeople() {
-		for(Person p : meeting.getInvolvedPeople()) {
-			if(people.contains(p)) {
-				people.remove(p);
-				peopleNames.remove(p.getName());
+		if(meeting.getInvolvedPeople() != null) {
+			for (Person p : meeting.getInvolvedPeople()) {
+				if (people.contains(p)) {
+					people.remove(p);
+					peopleNames.remove(p.getName());
+				}
 			}
 		}
-
-		Collections.sort(peopleNames);
+			Collections.sort(peopleNames);
 	}
 
     public void onBackPressed()
