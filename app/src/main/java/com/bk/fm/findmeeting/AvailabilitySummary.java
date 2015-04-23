@@ -27,7 +27,7 @@ public class AvailabilitySummary extends ActionBarActivity {
     private ArrayAdapter<String> scheduleAdapter;
 
     private Button newAvailabilityButton;
-    private Button saveButton;
+    private Button doneButton;
     private Button newObligationButton;
 
     private ArrayList<String> schedule;
@@ -57,29 +57,18 @@ public class AvailabilitySummary extends ActionBarActivity {
 
         // Initialize buttons
         newAvailabilityButton = (Button) findViewById(R.id.newAvailabilityButton);
-        saveButton = (Button) findViewById(R.id.saveButton);
+        doneButton = (Button) findViewById(R.id.saveButton);
         newObligationButton = (Button) findViewById(R.id.newObligationButton);
 
         // Initialize button listeners
         newAvailabilityButton.setOnClickListener(addAvailObligClickListener);
-        saveButton.setOnClickListener(saveClickListener);
+        doneButton.setOnClickListener(doneClickListener);
         newObligationButton.setOnClickListener(addAvailObligClickListener);
 
 
 
         registerForContextMenu(AvailObligListView);
     }
-
-	public void addSaveButtonActionHandler() {
-		saveButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
-				startActivity(i);
-			}
-		});
-
-	}
 
     private View.OnClickListener addAvailObligClickListener = new View.OnClickListener() {
         @Override
@@ -104,10 +93,11 @@ public class AvailabilitySummary extends ActionBarActivity {
         }
     };
 
-    private View.OnClickListener saveClickListener = new View.OnClickListener() {
+    private View.OnClickListener doneClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            // TODO: Implement this method
+            Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
+            startActivity(i);
         }
     };
 
