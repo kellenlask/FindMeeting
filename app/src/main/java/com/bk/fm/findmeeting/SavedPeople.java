@@ -54,8 +54,8 @@ public class SavedPeople extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_people);
 
-		SharedPreferences sp = getSharedPreferences("MEETING", getBaseContext().MODE_PRIVATE);
-		meeting = Meeting.deserializeMeeting(sp.getString("Meeting", ""));
+		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
 		//meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
 
         initializeFields();
@@ -267,7 +267,7 @@ public class SavedPeople extends ActionBarActivity {
     }
 
 	public void putMeeting() {
-		SharedPreferences sp = getSharedPreferences("your_prefs", getBaseContext().MODE_PRIVATE);
+		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString("MEETING", Meeting.serializeMeeting(meeting));
 		editor.commit();

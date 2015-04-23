@@ -52,8 +52,8 @@ public class InvolvedPeople extends ActionBarActivity {
 		setContentView(R.layout.activity_involved_people);
 
 		//Pull Meeting object out
-		SharedPreferences sp = getSharedPreferences("MEETING", getBaseContext().MODE_PRIVATE);
-		meeting = Meeting.deserializeMeeting(sp.getString("Meeting", ""));
+		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
 
 		//meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
 
@@ -66,36 +66,6 @@ public class InvolvedPeople extends ActionBarActivity {
 
 	} //End protected void onCreate()
 
-	/*@Override
-	protected void onPause() { //When the user leaves the activity save ArrayList to sharedPrefs
-		super.onPause();
-		//Store the ArrayList to the SharedPrefs
-		SharedPreferences prefs = getSharedPreferences("peopleStorage", Context.MODE_PRIVATE);
-		SharedPreferences.Editor edit = prefs.edit();
-
-		try {
-			ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-			ObjectOutputStream outStream = new ObjectOutputStream(byteOut);
-			outStream.writeObject(meeting.getInvolvedPeople());
-			outStream.flush();
-			edit.putString("people", outStream.toString());
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			Toast.makeText(getApplicationContext(), "Failed To Store List", Toast.LENGTH_SHORT).show();
-		}
-
-		edit.commit();
-	} //End protected void onPause()
-
-	@Override
-	protected void onResume() { //When the user returns to the activity, update the people list
-		super.onResume();
-		SharedPreferences prefs = getSharedPreferences("peopleStorage", Context.MODE_PRIVATE);
-		//SharedPreferences.Editor edit = prefs.edit();
-
-
-	} //End protected void onResume()*/
 
 //----------------------------------------------------
 //
@@ -181,7 +151,7 @@ public class InvolvedPeople extends ActionBarActivity {
 	} //End updateList()
 
 	public void putMeeting() {
-		SharedPreferences sp = getSharedPreferences("your_prefs", getBaseContext().MODE_PRIVATE);
+		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString("MEETING", Meeting.serializeMeeting(meeting));
 		editor.commit();

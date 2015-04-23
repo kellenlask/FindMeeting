@@ -34,8 +34,8 @@ public class Results extends ActionBarActivity {
 
 	public void initializeFields() {
 		listView = (ListView) findViewById(R.id.resultsList);
-		SharedPreferences sp = getSharedPreferences("MEETING", getBaseContext().MODE_PRIVATE);
-		meeting = Meeting.deserializeMeeting(sp.getString("Meeting", ""));
+		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
 		//meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
 		stringList = new ArrayList<>();
 

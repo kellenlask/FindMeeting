@@ -16,7 +16,6 @@ import android.os.Parcelable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -233,17 +232,19 @@ public class Meeting implements Parcelable, Serializable {
 
 //----------------------------------------------------
 //
-//	Serialization
+//	Serialization Methods
 //
 //----------------------------------------------------
 
 	public static String serializeMeeting(Meeting m) {
 		try {
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-			objectOutputStream.writeObject(m);
-			objectOutputStream.close();
-			return new String(byteArrayOutputStream.toByteArray());
+			ByteArrayOutputStream bo = new ByteArrayOutputStream();
+			ObjectOutputStream so = new ObjectOutputStream(bo);
+			so.writeObject(m);
+			so.close();
+
+			return bo.toString("ISO-8859-1");
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -251,14 +252,13 @@ public class Meeting implements Parcelable, Serializable {
 	}
 
 	public static Meeting deserializeMeeting(String s) {
-		byte[] bytes = s.getBytes();
-
 		try {
-			InputStream in = new InputStream();
-			ObjectInputStream objectInputStream = new ObjectInputStream( new ByteArrayInputStream(bytes) );
-			Meeting m = (Meeting) objectInputStream.readObject();
+			byte[] bytes = s.getBytes("ISO-8859-1");
+			ObjectInputStream io = new ObjectInputStream( new ByteArrayInputStream(bytes) );
+			Meeting m = (Meeting) io.readObject();
 
 			return m;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
