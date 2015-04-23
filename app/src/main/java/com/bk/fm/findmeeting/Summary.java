@@ -26,17 +26,8 @@ public class Summary extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
-	private Meeting meeting;
+	private static Meeting meeting;
     private TextView meetingLengthTextView;
-    /*
-    private ListView dayListView;
-    private ArrayList<String> days;
-    private ArrayAdapter<String> daysAdapter;
-
-    private ListView timeListView;
-    private ArrayList<String> times;
-    private ArrayAdapter<String> timesAdapter;
-    */
     private ListView daysTimesListView;
     private ArrayList<String> daysTimes;
     private ArrayAdapter<String> daysTimesAdapter;

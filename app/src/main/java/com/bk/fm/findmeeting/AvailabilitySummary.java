@@ -31,7 +31,6 @@ public class AvailabilitySummary extends ActionBarActivity {
     private Button newObligationButton;
 
     private ArrayList<String> schedule;
-	private Meeting meeting;
     private Person person;
 
 	@Override
@@ -45,7 +44,6 @@ public class AvailabilitySummary extends ActionBarActivity {
     private void initializeFields() {
 		//Pull the person object out
 		person = (Person)getIntent().getSerializableExtra("PERSON");
-		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
 
         // Initialize list view
         AvailObligListView = (ListView) findViewById(R.id.AvailObligListView);
@@ -79,7 +77,6 @@ public class AvailabilitySummary extends ActionBarActivity {
             Intent i = new Intent(getBaseContext(), NewObligAvail.class);
             i.putExtra("PERSON", (Parcelable) person);
             i.putExtra("ACTIVITY_TYPE", "New Availability");
-			i.putExtra("MEETING", (Parcelable) meeting);
             startActivity(i);
         }
         else if (v.getId() == R.id.newObligationButton)
@@ -87,7 +84,6 @@ public class AvailabilitySummary extends ActionBarActivity {
             Intent i = new Intent(getBaseContext(), NewObligAvail.class);
             i.putExtra("PERSON", (Parcelable) person);
             i.putExtra("ACTIVITY_TYPE", "New Obligation");
-			i.putExtra("MEETING", (Parcelable) meeting);
             startActivity(i);
         }
         }

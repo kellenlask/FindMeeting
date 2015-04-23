@@ -35,7 +35,7 @@ public class InvolvedPeople extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
-	private Meeting meeting;
+	private static Meeting meeting;
 	private ListView peopleList;
 	private Button addPersonButton;
 	private Button findTimesButton;

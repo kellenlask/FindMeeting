@@ -21,7 +21,7 @@ import java.util.TreeSet;
 public class Results extends ActionBarActivity {
 
 	private ListView listView;
-	private Meeting meeting;
+	private static Meeting meeting;
 	private ArrayList<String> stringList;
 
 	@Override

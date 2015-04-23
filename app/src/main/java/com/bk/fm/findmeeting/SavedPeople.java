@@ -42,7 +42,7 @@ public class SavedPeople extends ActionBarActivity {
     private DataBase db;
     private ArrayList<String> peopleNames;
     private ArrayList<Person> savedPeople;
-    private Meeting meeting;
+    private static Meeting meeting;
 
 //----------------------------------------------------
 //

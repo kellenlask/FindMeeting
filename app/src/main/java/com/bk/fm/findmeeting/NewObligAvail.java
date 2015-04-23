@@ -36,7 +36,6 @@ public class NewObligAvail extends ActionBarActivity {
     private Button startTime;
     private Button endTime;
 
-	private Meeting meeting;
     private Person person;
     private String activityType;
     private int scheduleObjectIndex;
@@ -72,7 +71,6 @@ public class NewObligAvail extends ActionBarActivity {
         // Initialize activity type and person object
         activityType = (String)getIntent().getSerializableExtra("ACTIVITY_TYPE");
         person = (Person)getIntent().getSerializableExtra("PERSON");
-		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
 
         // Set title
         TextView title = (TextView) findViewById(R.id.titleTextView);
@@ -96,7 +94,6 @@ public class NewObligAvail extends ActionBarActivity {
 
             Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
             i.putExtra("PERSON", (Parcelable) person);
-			i.putExtra("MEETING", (Parcelable) meeting);
             startActivity(i);
         }
     };
