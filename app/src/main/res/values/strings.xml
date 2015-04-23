@@ -56,4 +56,8 @@
     <string name="create">CREATE</string>
     <string name="cancel">CANCEL</string>
     <string name="person_exists">This person already exists.</string>
+    <string name="person_added">Person has been added to meeting.</string>
+    <string name="person_already_added">This person has already been added to meeting.</string>
+    <string name="edit">EDIT</string>
+    <string name="delete">DELETE</string>
 </resources>

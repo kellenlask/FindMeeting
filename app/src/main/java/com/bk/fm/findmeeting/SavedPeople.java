@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
+//TODO: Finish replacing the strings in this activity with string resources.
 
 public class SavedPeople extends ActionBarActivity {
 //----------------------------------------------------
@@ -39,7 +40,7 @@ public class SavedPeople extends ActionBarActivity {
     private ListView savedPeopleList;
 
     private ArrayList<String> peopleNames;
-    private ArrayList<Person> savedPeople;
+    private ArrayList<Person> people;
     private static Meeting meeting;
 	private DataBase db;
 
@@ -72,21 +73,22 @@ public class SavedPeople extends ActionBarActivity {
 		//Add person to the meeting when shortClicked
 		savedPeopleList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				for (Person p: savedPeople)
+				for (Person p: people)
 				{
 					if (p.getName() == peopleNames.get(position)) {
 						if(meeting.getInvolvedPeople() == null) {
 							meeting.setInvolvedPeople(new ArrayList<Person>());
 							meeting.getInvolvedPeople().add(p);
-							Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.person_added),Toast.LENGTH_SHORT).show();
 
 						} else if (meeting.getInvolvedPeople().contains(p)) {
-							Toast.makeText(getApplicationContext(), "This person has already been added to meeting.",Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.person_already_added),Toast.LENGTH_SHORT).show();
 						} else {
 							meeting.getInvolvedPeople().add(p);
-							Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.person_added),Toast.LENGTH_SHORT).show();
 						}
 
+						updatePeople();
 						putMeeting();
 					}
 				}
@@ -124,7 +126,6 @@ public class SavedPeople extends ActionBarActivity {
 							db = new DataBase(getBaseContext());
 							db.addPerson(p);
 
-
 							//Reset the name & refresh the list
 							populateSavedPeople();
 						}
@@ -153,8 +154,8 @@ public class SavedPeople extends ActionBarActivity {
         menu.setHeaderTitle("Person");
         name = (String) savedPeopleList.getItemAtPosition(info.position);
 
-        menu.add("Edit");
-        menu.add("Delete");
+        menu.add(getString(R.string.edit));
+        menu.add(getString(R.string.delete));
     }
 
     @Override
@@ -163,7 +164,7 @@ public class SavedPeople extends ActionBarActivity {
         StringBuilder sb = new StringBuilder(item.getTitle());
         String selectedItem = sb.toString();
 
-        if(selectedItem.equals("Edit"))
+        if(selectedItem.equals(getString(R.string.edit)))
         {
             //Show a dialog allowing for text input
             AlertDialog.Builder builder = new AlertDialog.Builder(SavedPeople.this);
@@ -180,12 +181,12 @@ public class SavedPeople extends ActionBarActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     db = new DataBase(getBaseContext());
                     // Use a foreach loop to go over the saved people array
-                    for (Person p: savedPeople)
+                    for (Person p: people)
                     {
                         if (p.getName() == name)
                         {
                             if (peopleNames.contains(input.getText().toString())) { // Check for a duplicate (editing a person's name to match another person's name)
-                                Toast.makeText(getApplicationContext(), "This person already exists.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.person_exists),Toast.LENGTH_SHORT).show();
                             } else {
                                 p.setName(input.getText().toString());
                                 db.updatePerson(p);
@@ -210,7 +211,7 @@ public class SavedPeople extends ActionBarActivity {
             //Show the dialog
             builder.show();
         }
-        else if(selectedItem.equals("Delete"))
+        else if(selectedItem.equals(getString(R.string.delete)))
         {
             db = new DataBase(getBaseContext());
             db.deletePerson(peopleNames.get(info.position));
@@ -244,11 +245,11 @@ public class SavedPeople extends ActionBarActivity {
 
         DataBase db = new DataBase(getBaseContext());
 
-        savedPeople = new ArrayList<>();
+        people = new ArrayList<>();
         peopleNames = new ArrayList<>();
 
         for (Person p : db.getAllPeople()) {
-            savedPeople.add(p);
+            people.add(p);
             peopleNames.add(p.getName());
         }
 
@@ -258,10 +259,22 @@ public class SavedPeople extends ActionBarActivity {
 
     public void updateListView()
     {
-        Collections.sort(peopleNames);
+        updatePeople();
+
         ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, peopleNames);
         savedPeopleList.setAdapter(data);
     }
+
+	public void updatePeople() {
+		for(Person p : meeting.getInvolvedPeople()) {
+			if(people.contains(p)) {
+				people.remove(p);
+				peopleNames.remove(p.getName());
+			}
+		}
+
+		Collections.sort(peopleNames);
+	}
 
     public void onBackPressed()
     {
