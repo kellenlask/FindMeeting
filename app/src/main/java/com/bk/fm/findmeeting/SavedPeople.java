@@ -108,16 +108,15 @@ public class SavedPeople extends ActionBarActivity {
 				builder.setView(input);
 
 				// Set up the buttons
-				builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				builder.setPositiveButton(getString(R.string.create), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-
 
 						//Make a new person from the text from the dialog
 						Person p = new Person(input.getText().toString());
 
 						if (peopleNames.contains(p.getName())) { // Make sure there are no duplicate people in the db
-							Toast.makeText(getApplicationContext(), "This person already exists.",Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.person_exists),Toast.LENGTH_SHORT).show();
 						} else {
 							p.setAvailability(new LinkedList<ScheduleObject>());
 
@@ -132,7 +131,7 @@ public class SavedPeople extends ActionBarActivity {
 					}
 				});
 
-				builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.cancel();
