@@ -35,11 +35,12 @@ public class InvolvedPeople extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
-	private static Meeting meeting;
 	private ListView peopleList;
 	private Button addPersonButton;
 	private Button findTimesButton;
+
     private ArrayList<String> peopleNames;
+	private Meeting meeting;
 
 //----------------------------------------------------
 //
@@ -51,21 +52,11 @@ public class InvolvedPeople extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_involved_people);
 
-		//Pull Meeting object out
-		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
-		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
-
-		//meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
-
-       	//addedPeople = (ArrayList<Person>)getIntent().getSerializableExtra("ADDED_PEOPLE");
-		//meeting.setInvolvedPeople(addedPeople);
-
 		initializeFields();
 
 		addEventHandlers();
 
 	} //End protected void onCreate()
-
 
 //----------------------------------------------------
 //
@@ -77,9 +68,9 @@ public class InvolvedPeople extends ActionBarActivity {
 		addPersonButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) { //Show the SavedPeople Activity on AddPerson Button-Click
-				Intent i = new Intent(getBaseContext(), SavedPeople.class);
 				putMeeting();
-				//i.putExtra("MEETING", (Serializable) meeting);
+
+				Intent i = new Intent(getBaseContext(), SavedPeople.class);
 				startActivity(i);
 			}
 		});
@@ -88,12 +79,13 @@ public class InvolvedPeople extends ActionBarActivity {
 		findTimesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(meeting.getInvolvedPeople().size() != 0) {
-					Intent i = new Intent(getBaseContext(), Results.class);
+				if(meeting.getInvolvedPeople().size() != 0) { //People have been added to the meeting
 					putMeeting();
-					//i.putExtra("MEETING", (Serializable) meeting);
+
+					Intent i = new Intent(getBaseContext(), Results.class);
 					startActivity(i);
-				} else {
+
+				} else { //Nobody has been added to the meeting
 					Toast.makeText(getApplicationContext(), "Please add some people.", Toast.LENGTH_SHORT).show();
 				}
 
@@ -103,13 +95,10 @@ public class InvolvedPeople extends ActionBarActivity {
 		//On Long-Press: bring up delete menu
 		//TODO: set InvolvedPeople List's action handlers
 
-		//On Short Press: bring up AvailabilitySummary Activity
-
-		//Go to AvailabilitySummary for a given person
+		//Go to AvailabilitySummary for a given person onShortPress
 		peopleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-				String personName = peopleList.getItemAtPosition(position).toString();
+				String personName = peopleList.getItemAtPosition(position).toString(); //temporary
 				Person p = meeting.getInvolvedPeople().get(peopleNames.indexOf(personName));
 
 				Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
@@ -126,7 +115,12 @@ public class InvolvedPeople extends ActionBarActivity {
 //
 //----------------------------------------------------
 	public void initializeFields() {
+		//List of people names to throw into the ListView
 		peopleNames = new ArrayList<>();
+
+		//Pull Meeting object out
+		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
 
 		addPersonButton = (Button) findViewById(R.id.addPersonButton);
 		findTimesButton = (Button) findViewById(R.id.findTimesButton);
@@ -136,8 +130,7 @@ public class InvolvedPeople extends ActionBarActivity {
 	} //End initializeFields()
 
 	public void updateList() {
-        if (meeting.getInvolvedPeople() != null)
-        {
+        if (meeting.getInvolvedPeople() != null) {
             peopleNames.clear();
 
             for (Person p : meeting.getInvolvedPeople()) {
@@ -145,11 +138,13 @@ public class InvolvedPeople extends ActionBarActivity {
             }
 
             Collections.sort(peopleNames);
+
             ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, peopleNames);
             peopleList.setAdapter(data);
         }
 	} //End updateList()
 
+	//Put the meeting object into sharedpreferences
 	public void putMeeting() {
 		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();

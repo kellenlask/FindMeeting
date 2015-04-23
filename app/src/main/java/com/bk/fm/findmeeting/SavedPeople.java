@@ -24,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -38,11 +37,13 @@ public class SavedPeople extends ActionBarActivity {
 //----------------------------------------------------
     private Button addPersonButton;
     private ListView savedPeopleList;
-    private String name;
-    private DataBase db;
+
     private ArrayList<String> peopleNames;
     private ArrayList<Person> savedPeople;
     private static Meeting meeting;
+	private DataBase db;
+
+	private String name; //For edit/new person dialog
 
 //----------------------------------------------------
 //
@@ -54,15 +55,10 @@ public class SavedPeople extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_people);
 
-		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
-		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
-
         initializeFields();
-        populateSavedPeople();
 
-        savedPeopleList.setOnItemClickListener(listItemClicked);
+		addActionHandlers();
 
-        addButtonEventHandler();
     }
 
 //----------------------------------------------------
@@ -71,29 +67,84 @@ public class SavedPeople extends ActionBarActivity {
 //
 //----------------------------------------------------
 
+	public void addActionHandlers() {
 
-    private OnItemClickListener listItemClicked = new OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			for (Person p: savedPeople)
-			{
-				if (p.getName() == peopleNames.get(position)) {
-					if(meeting.getInvolvedPeople() == null) {
-						meeting.setInvolvedPeople(new ArrayList<Person>());
-						meeting.getInvolvedPeople().add(p);
-						Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
+		//Add person to the meeting when shortClicked
+		savedPeopleList.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				for (Person p: savedPeople)
+				{
+					if (p.getName() == peopleNames.get(position)) {
+						if(meeting.getInvolvedPeople() == null) {
+							meeting.setInvolvedPeople(new ArrayList<Person>());
+							meeting.getInvolvedPeople().add(p);
+							Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
 
-					} else if (meeting.getInvolvedPeople().contains(p)) {
-						Toast.makeText(getApplicationContext(), "This person has already been added to meeting.",Toast.LENGTH_SHORT).show();
-					} else {
-						meeting.getInvolvedPeople().add(p);
-						Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
+						} else if (meeting.getInvolvedPeople().contains(p)) {
+							Toast.makeText(getApplicationContext(), "This person has already been added to meeting.",Toast.LENGTH_SHORT).show();
+						} else {
+							meeting.getInvolvedPeople().add(p);
+							Toast.makeText(getApplicationContext(), "Person has been added to meeting.",Toast.LENGTH_SHORT).show();
+						}
+
+						putMeeting();
 					}
-
-					putMeeting();
 				}
 			}
-        }
-    };
+		});//Add person to the meeting when shortClicked
+
+
+		//Show dialog to create a new person when addButton clicked
+		addPersonButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				//Show a dialog allowing for text input
+				AlertDialog.Builder builder = new AlertDialog.Builder(SavedPeople.this);
+				builder.setTitle("Name");
+
+				// Set up the input
+				final EditText input = new EditText(getBaseContext());
+				builder.setView(input);
+
+				// Set up the buttons
+				builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+
+						//Make a new person from the text from the dialog
+						Person p = new Person(input.getText().toString());
+
+						if (peopleNames.contains(p.getName())) { // Make sure there are no duplicate people in the db
+							Toast.makeText(getApplicationContext(), "This person already exists.",Toast.LENGTH_SHORT).show();
+						} else {
+							p.setAvailability(new LinkedList<ScheduleObject>());
+
+							//Store the person to the database
+							db = new DataBase(getBaseContext());
+							db.addPerson(p);
+
+
+							//Reset the name & refresh the list
+							populateSavedPeople();
+						}
+					}
+				});
+
+				builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+
+				//Show the dialog
+				builder.show();
+			}
+		});//Show dialog to create a new person when addButton clicked
+	} //End public void addActionHandlers()
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
@@ -172,57 +223,6 @@ public class SavedPeople extends ActionBarActivity {
         return false;
     }
 
-    public void addButtonEventHandler() {
-        addPersonButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //Show a dialog allowing for text input
-                AlertDialog.Builder builder = new AlertDialog.Builder(SavedPeople.this);
-                builder.setTitle("Name");
-
-                // Set up the input
-                final EditText input = new EditText(getBaseContext());
-                builder.setView(input);
-
-                // Set up the buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-
-                        //Make a new person from the text from the dialog
-                        Person p = new Person(input.getText().toString());
-
-                        if (peopleNames.contains(p.getName())) { // Make sure there are no duplicate people in the db
-                            Toast.makeText(getApplicationContext(), "This person already exists.",Toast.LENGTH_SHORT).show();
-                        } else {
-                            p.setAvailability(new LinkedList<ScheduleObject>());
-
-                            //Store the person to the database
-                            db = new DataBase(getBaseContext());
-                            db.addPerson(p);
-
-
-                            //Reset the name & refresh the list
-                            populateSavedPeople();
-                        }
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                //Show the dialog
-                builder.show();
-            }
-        });
-    }
-
 
 //----------------------------------------------------
 //
@@ -230,10 +230,16 @@ public class SavedPeople extends ActionBarActivity {
 //
 //----------------------------------------------------
     public void initializeFields() {
+		//Pull the meeting object from sharedpreferences
+		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
+
         addPersonButton = (Button) findViewById(R.id.addPersonButton);
         savedPeopleList = (ListView) findViewById(R.id.savedPeopleList);
-        registerForContextMenu(savedPeopleList);
-    }
+        registerForContextMenu(savedPeopleList); //Allow for onLongClick events
+
+		populateSavedPeople();
+    } //End  public void initializeFields()
 
     public void populateSavedPeople() {
 
@@ -260,11 +266,12 @@ public class SavedPeople extends ActionBarActivity {
 
     public void onBackPressed()
     {
+		putMeeting();
         Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
-		i.putExtra("MEETING", (Serializable) meeting);
         startActivity(i);
     }
 
+	//put the meeting into sharedpreferences
 	public void putMeeting() {
 		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();

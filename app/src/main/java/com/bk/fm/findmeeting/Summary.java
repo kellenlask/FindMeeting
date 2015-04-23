@@ -26,13 +26,14 @@ public class Summary extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
-	private static Meeting meeting;
     private TextView meetingLengthTextView;
     private ListView daysTimesListView;
+	private Button nextButton;
+
     private ArrayList<String> daysTimes;
     private ArrayAdapter<String> daysTimesAdapter;
+	private  Meeting meeting;
 
-	private Button nextButton;
 //----------------------------------------------------
 //
 //	onCreate
@@ -44,14 +45,7 @@ public class Summary extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_summary);
 
-		//Pull Meeting object out
-        meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
-
 		initializeFields();
-
-		//Populate the GUI
-		setDaysTimes();
-		setMeetingDuration();
 
 		addEventHandlers();
 	}
@@ -70,14 +64,12 @@ public class Summary extends ActionBarActivity {
 				editor.putString("MEETING", Meeting.serializeMeeting(meeting));
 				editor.commit();
 
-
 				Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
-				//i.putExtra("MEETING", (Parcelable) meeting);
 				startActivity(i);
 
 			}
 		});
-	}
+	} //End public void addEventHandlers()
 
 //----------------------------------------------------
 //
@@ -85,13 +77,24 @@ public class Summary extends ActionBarActivity {
 //
 //----------------------------------------------------
 	public void initializeFields() {
-		meetingLengthTextView = (TextView)findViewById(R.id.meetingLengthLabel);
-		daysTimesListView = (ListView)findViewById(R.id.daysTimesListView);
-		nextButton = (Button) findViewById(R.id.nextButton);
-	}
+		//Pull Meeting object out
+		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
 
+		//Set the meeting length in the GUI
+		meetingLengthTextView = (TextView)findViewById(R.id.meetingLengthLabel);
+		meetingLengthTextView.setText(" " + meeting.getMeetingDuration().toString("Single"));
+
+		//Populate the list of days and times
+		daysTimesListView = (ListView)findViewById(R.id.daysTimesListView);
+		setDaysTimes();
+
+		nextButton = (Button) findViewById(R.id.nextButton);
+	} //End public void initializeFields()
+
+
+	//Set the days and the times into the ListView
 	public void setDaysTimes() {
-		daysTimes = new ArrayList<String>();
+		daysTimes = new ArrayList<>();
 
 		for(Day d: meeting.getPossibleDays().keySet()) {
 			daysTimes.add(meeting.getPossibleDays().get(d).toString(this));
@@ -99,12 +102,6 @@ public class Summary extends ActionBarActivity {
 
 		daysTimesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, daysTimes);
 		daysTimesListView.setAdapter(daysTimesAdapter);
-	}
-
-	public void setMeetingDuration() {
-
-		meetingLengthTextView.setText(" " + meeting.getMeetingDuration().toString("Single"));
-
 	}
 
 } //End public class Summary extends ActionBarActivity

@@ -42,7 +42,7 @@ public class Results extends ActionBarActivity {
 		makeList();
 		updateList();
 
-	}
+	} //End initializeFields()
 
 	public void makeList() {
 		TreeMap<Integer, TreeSet<Range>> map = meeting.calcTotalAvailability();
@@ -54,12 +54,12 @@ public class Results extends ActionBarActivity {
 			}
 		}
 
-	}
+	} //End makeList()
 
 	public void updateList() {
 		ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, stringList);
 		listView.setAdapter(data);
 
-	}
+	} //End updateList()
 
-}
+} //End Class
