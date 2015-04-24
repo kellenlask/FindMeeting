@@ -59,17 +59,22 @@ public class Summary extends ActionBarActivity {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
-				SharedPreferences.Editor editor = sp.edit();
-				editor.putString("MEETING", Meeting.serializeMeeting(meeting));
-				editor.commit();
+            SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("MEETING", Meeting.serializeMeeting(meeting));
+            editor.commit();
 
-				Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
-				startActivity(i);
+            Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
+            startActivity(i);
 
 			}
 		});
 	} //End public void addEventHandlers()
+
+    public void onBackPressed() {
+        Intent i = new Intent(getBaseContext(), MeetingParams.class);
+        startActivity(i);
+    }
 
 //----------------------------------------------------
 //

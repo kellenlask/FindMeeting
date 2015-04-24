@@ -173,6 +173,10 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 	} //End public void addActionHandlers()
 
+    public void onBackPressed() {
+        Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
+        startActivity(i);
+    }
 //----------------------------------------------------
 //
 //	Logical Methods

@@ -146,7 +146,6 @@ public class SavedPeople extends ActionBarActivity {
 		});//Show dialog to create a new person when addButton clicked
 	} //End public void addActionHandlers()
 
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
         super.onCreateContextMenu(menu, view, menuInfo);

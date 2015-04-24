@@ -123,6 +123,12 @@ public class InvolvedPeople extends ActionBarActivity {
 		});
 	} //End addEventHandlers()
 
+    public void onBackPressed() {
+        Intent i = new Intent(getBaseContext(), Summary.class);
+        i.putExtra("MEETING", (Parcelable) meeting);
+        startActivity(i);
+    }
+
 //----------------------------------------------------
 //
 //	Other Methods

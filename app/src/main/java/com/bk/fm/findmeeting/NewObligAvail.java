@@ -90,6 +90,11 @@ public class NewObligAvail extends ActionBarActivity {
 
 	} //End public void setTimeInputActionHandlers()
 
+    public void onBackPressed() {
+        Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+        i.putExtra("PERSON", (Parcelable) person);
+        startActivity(i);
+    }
 //----------------------------------------------------
 //
 //	GUI Methods
