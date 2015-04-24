@@ -88,7 +88,7 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 
 	//Is this Range smaller than the passed Interval?
 	public boolean smallerThan(Interval i) {
-		return i.getLengthInMinutes() < interval.getLengthInMinutes();
+		return i.getLengthInMinutes() > interval.getLengthInMinutes();
 	}
 
 	public String toString(Context c) {

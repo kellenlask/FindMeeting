@@ -153,7 +153,7 @@ public class Meeting implements Parcelable, Serializable {
 		} //End for-each person in people
 
 
-		//pruneMap();
+		pruneMap();
 
 		return totalAvailability;
 	}
@@ -216,25 +216,18 @@ public class Meeting implements Parcelable, Serializable {
 
 		//For each TreeSet<Range>
 		for(Integer i : totalAvailability.keySet()) {
-			TreeSet<Range> tmp = totalAvailability.get(i);
 
 			//Iterate over the TreeSet<Range>
-			Iterator itr = tmp.iterator();
-
-			ArrayList<Range> removeThese = new ArrayList<>();
+			Iterator itr = totalAvailability.get(i).iterator();
 
 			while(itr.hasNext()) {
 				Range r = (Range) itr.next();
 
 				//Remove the small Range objects
 				if(r.smallerThan(meetingDuration)) {
-					removeThese.add(r);
+					itr.remove();
 				}
 			} //End While
-
-			for(Range r : removeThese) {
-				tmp.remove(r);
-			}
 
 		} //End For-Each Loop
 
