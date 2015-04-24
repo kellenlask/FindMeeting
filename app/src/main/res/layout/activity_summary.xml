@@ -47,7 +47,8 @@
         android:layout_below="@+id/textView15"
         android:columnOrderPreserved="false"
         android:divider="@android:color/darker_gray"
-        android:measureWithLargestChild="false">
+        android:measureWithLargestChild="false"
+        android:layout_above="@+id/nextButton">
 
         <TableRow
             android:layout_width="fill_parent"
@@ -72,34 +73,23 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_column="0"
-                android:layout_span="2"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
-
-                <ListView
-                    android:id="@+id/daysTimesListView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="306dp" />
-
-            </LinearLayout>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/nextButton"
+            <ListView
+                android:id="@+id/daysTimesListView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/nextLabel"
-                android:layout_span="2"/>
+                android:layout_height="match_parent" />
         </TableRow>
+
     </TableLayout>
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nextLabel"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="20dp"/>
 </RelativeLayout>

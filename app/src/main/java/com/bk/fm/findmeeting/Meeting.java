@@ -145,6 +145,7 @@ public class Meeting implements Parcelable, Serializable {
 
 						if(r.overlaps(o)) {
 							fixOverlap(o, r, i);
+
 						}
 
 					}
@@ -157,20 +158,6 @@ public class Meeting implements Parcelable, Serializable {
 
 		return totalAvailability;
 	}
-
-
-	public void initializeAverages() {
-		totalAvailability = new TreeMap<>();
-
-		//For each possible level of availability, create a TreeSet<Range> to store the matching time ranges
-		for(int i = 0; i <= involvedPeople.size(); i++) {
-			totalAvailability.put(i, new TreeSet<Range>());
-		}
-
-		//Throw the meeting params into the 100% available time range
-		totalAvailability.get(involvedPeople.size()).addAll(possibleDays.values());
-
-	}//End public void initializeAverages(ArrayList<Person>)
 
 
 	public void fixOverlap(ScheduleObject o, Range r, int index) {
@@ -208,6 +195,19 @@ public class Meeting implements Parcelable, Serializable {
 
 	} //End public void moveRange(Range, boolean, int)
 
+
+	public void initializeAverages() {
+		totalAvailability = new TreeMap<>();
+
+		//For each possible level of availability, create a TreeSet<Range> to store the matching time ranges
+		for(int i = 0; i <= involvedPeople.size(); i++) {
+			totalAvailability.put(i, new TreeSet<Range>());
+		}
+
+		//Throw the meeting params into the 100% available time range
+		totalAvailability.get(involvedPeople.size()).addAll(possibleDays.values());
+
+	}//End public void initializeAverages(ArrayList<Person>)
 
 
 	//Remove all Ranges from the map that are shorter than the meeting time

@@ -155,7 +155,7 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 		}
 
 		//Store the starts and stops
-		int os = r.getStartTime().getTimeInMinutes();
+		//int os = r.getStartTime().getTimeInMinutes();
 		int oe = r.getStopTime().getTimeInMinutes();
 		int s = getStartTime().getTimeInMinutes();
 		int e = getStopTime().getTimeInMinutes();

@@ -49,8 +49,7 @@ public class Results extends ActionBarActivity {
 
 		for(Integer i : map.keySet()) {
 			for(Range r : map.get(i)) {
-				stringList.add(r.toString(getBaseContext()));
-
+				stringList.add(0, (((double) i / (map.keySet().size() - 1)) * 100) + "% : " + r.toString(getBaseContext()));
 			}
 		}
 
