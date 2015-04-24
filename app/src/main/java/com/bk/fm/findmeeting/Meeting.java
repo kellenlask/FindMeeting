@@ -132,6 +132,7 @@ public class Meeting implements Parcelable, Serializable {
 		//Setup the treemap
 		initializeAverages();
 
+
 		for(Person p : involvedPeople) {
 			LinkedList<ScheduleObject> list = p.getAvailability();
 
@@ -151,7 +152,8 @@ public class Meeting implements Parcelable, Serializable {
 			} //End While LinkedList is Loop
 		} //End for-each person in people
 
-		pruneMap();
+
+		//pruneMap();
 
 		return totalAvailability;
 	}
@@ -197,7 +199,7 @@ public class Meeting implements Parcelable, Serializable {
 
 
 	public void moveRange(Range r, boolean obligation, int index) {
-		if(obligation) {
+		if(obligation && totalAvailability.containsKey(index - 1)) {
 			totalAvailability.get(index - 1).add(r);
 
 		} else if(totalAvailability.containsKey(index + 1)) {
