@@ -79,16 +79,30 @@ public class InvolvedPeople extends ActionBarActivity {
 		findTimesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(meeting.getInvolvedPeople().size() != 0) { //People have been added to the meeting
-					putMeeting();
-
-					Intent i = new Intent(getBaseContext(), Results.class);
-					startActivity(i);
-
-				} else { //Nobody has been added to the meeting
-					Toast.makeText(getApplicationContext(), "Please add some people.", Toast.LENGTH_SHORT).show();
+				if(meeting.getInvolvedPeople() == null) { //Nobody has been added to the meeting
+                    Toast.makeText(getApplicationContext(), "Please add some people.", Toast.LENGTH_SHORT).show();
 				}
+                else {
+                    // Loop through the people and check that each person has at least one availability or obligation
+                    boolean ready = true;
+                    for (Person p : meeting.getInvolvedPeople()) {
+                        if (p.getAvailability() == null) {
+                            ready = false;
+                            break;
+                        }
+                    }
 
+                    if (ready == false) // One or more people have no availability or obligation
+                    {
+                        Toast.makeText(getApplicationContext(), "Please enter at least one obligation or availability for each person.", Toast.LENGTH_SHORT).show();
+                    } else // People have been added to the meeting and have added obligation(s) / availabilitie(s)
+                    {
+                        putMeeting();
+
+                        Intent i = new Intent(getBaseContext(), Results.class);
+                        startActivity(i);
+                    }
+                }
 			}
 		});
 
