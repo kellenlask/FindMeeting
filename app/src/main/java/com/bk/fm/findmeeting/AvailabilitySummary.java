@@ -50,7 +50,6 @@ public class AvailabilitySummary extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_availability);
 
-
         initializeFields();
 	}
 
@@ -152,6 +151,9 @@ public class AvailabilitySummary extends ActionBarActivity {
 		@Override
 		public void onClick(View v) {
 			addPersonToMeeting();
+
+			DataBase db = new DataBase(getBaseContext());
+			db.updatePerson(person);
 
 			SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 			SharedPreferences.Editor editor = sp.edit();

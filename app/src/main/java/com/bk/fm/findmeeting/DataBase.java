@@ -11,10 +11,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.view.ContextMenu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +46,7 @@ public class DataBase extends SQLiteOpenHelper {
 				+ TABLE_PEOPLE + "("
 				+ PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT," //Arbitrary primary key
 				+ NAME_KEY + " TEXT NOT NULL," //The person's name
-				+ AVAIL_KEY + " BLOB NOT NULL" + ")"; //The person's availability (serialized to a byte[])
+				+ AVAIL_KEY + " TEXT NOT NULL" + ")"; //The person's availability (serialized to a byte[])
 		db.execSQL(CREATE_PEOPLE_TABLE);
 
 	}
@@ -87,7 +83,12 @@ public class DataBase extends SQLiteOpenHelper {
 
 				p.setPrimaryKey(Long.parseLong(cursor.getString(0)));
 				p.setName(cursor.getString(1));
-				//p.setAvailability(cursor.getString(2)); //TODO: Im sure this needs to be fixed (gives blob cannot be converted to string exception when called)
+				try {
+					p.setAvailability(cursor.getString(2)); //TODO: Im sure this needs to be fixed (gives blob cannot be converted to string exception when called)
+				} catch(Exception e) {
+
+				}
+
 
 				people.add(p);
 
