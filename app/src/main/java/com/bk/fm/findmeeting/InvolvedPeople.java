@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -112,7 +113,7 @@ public class InvolvedPeople extends ActionBarActivity {
 		//Go to AvailabilitySummary for a given person onShortPress
 		peopleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				String personName = peopleList.getItemAtPosition(position).toString(); //temporary
+				String personName = peopleList.getItemAtPosition(position).toString();
 				Person p = meeting.getInvolvedPeople().get(peopleNames.indexOf(personName));
 
 				Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
@@ -121,7 +122,20 @@ public class InvolvedPeople extends ActionBarActivity {
 
 			}
 		});
-	} //End addEventHandlers()
+
+        peopleList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String personName = peopleList.getItemAtPosition(position).toString();
+                meeting.getInvolvedPeople().remove(peopleNames.indexOf(personName));
+
+                updateList();
+                Toast.makeText(getApplicationContext(), "A person has been removed from the meeting.", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
+    } //End addEventHandlers()
 
     public void onBackPressed() {
         Intent i = new Intent(getBaseContext(), Summary.class);
