@@ -17,7 +17,6 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,7 +69,7 @@ public class SavedPeople extends ActionBarActivity {
 	public void addActionHandlers() {
 
 		//Add person to the meeting when shortClicked
-		savedPeopleList.setOnItemClickListener(new OnItemClickListener() {
+		savedPeopleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				for (Person p: people)
 				{

@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -108,7 +107,17 @@ public class InvolvedPeople extends ActionBarActivity {
 		});
 
 		//On Long-Press: bring up delete menu
-		//TODO: set InvolvedPeople List's action handlers
+		peopleList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				String personName = peopleList.getItemAtPosition(position).toString();
+				meeting.getInvolvedPeople().remove(peopleNames.indexOf(personName));
+
+				updateList();
+
+				return true;
+			}
+		});
 
 		//Go to AvailabilitySummary for a given person onShortPress
 		peopleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,18 +132,6 @@ public class InvolvedPeople extends ActionBarActivity {
 			}
 		});
 
-        peopleList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String personName = peopleList.getItemAtPosition(position).toString();
-                meeting.getInvolvedPeople().remove(peopleNames.indexOf(personName));
-
-                updateList();
-                Toast.makeText(getApplicationContext(), "A person has been removed from the meeting.", Toast.LENGTH_SHORT).show();
-
-                return true;
-            }
-        });
     } //End addEventHandlers()
 
     public void onBackPressed() {

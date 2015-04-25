@@ -1,7 +1,5 @@
 package com.bk.fm.findmeeting;
 
-import java.util.HashMap;
-import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,10 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import java.util.List;
 
 public class AvailabilityArrayAdapter extends ArrayAdapter {
 
@@ -35,11 +32,11 @@ public class AvailabilityArrayAdapter extends ArrayAdapter {
 
         TextView text = (TextView) view;
 
-        if (getItem(position).toString().contains("availability"))
+        if (getItem(position).toString().contains("Availability"))
         {
             view.setBackgroundColor(Color.GREEN);
         }
-        else if (getItem(position).toString().contains("obligation"))
+        else if (getItem(position).toString().contains("Obligation"))
         {
             view.setBackgroundColor(Color.RED);
         }

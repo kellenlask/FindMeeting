@@ -77,7 +77,6 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 		if(selectedItem.equals("Edit"))
 		{
-			// TODO: Implement this method
 			int j = 0;
 			for (ScheduleObject s : person.getAvailability()) {
 				if (scheduleAdapter.getItem(info.position).equals(s.toString(this)))
@@ -150,10 +149,10 @@ public class AvailabilitySummary extends ActionBarActivity {
 	private View.OnClickListener doneClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			addPersonToMeeting();
-
 			DataBase db = new DataBase(getBaseContext());
 			db.updatePerson(person);
+
+			addPersonToMeeting();
 
 			SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 			SharedPreferences.Editor editor = sp.edit();
