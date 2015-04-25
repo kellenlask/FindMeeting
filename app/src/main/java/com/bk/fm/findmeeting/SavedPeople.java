@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
-//TODO: Finish replacing the strings in this activity with string resources.
 
 public class SavedPeople extends ActionBarActivity {
 //----------------------------------------------------

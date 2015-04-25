@@ -31,7 +31,6 @@ public class DataBase extends SQLiteOpenHelper {
 	private static final String NAME_KEY = "name";
 	private static final String AVAIL_KEY = "availability";
 
-//TODO: Improve DataBase class's comments
 //----------------------------------------------------
 //
 //	SQLiteOpenHelper
@@ -83,12 +82,7 @@ public class DataBase extends SQLiteOpenHelper {
 
 				p.setPrimaryKey(Long.parseLong(cursor.getString(0)));
 				p.setName(cursor.getString(1));
-				try {
-					p.setAvailability(cursor.getString(2)); //TODO: Im sure this needs to be fixed (gives blob cannot be converted to string exception when called)
-				} catch(Exception e) {
-
-				}
-
+				p.setAvailability(cursor.getString(2)); //------------------------------------------------------------------------------------------------
 
 				people.add(p);
 
@@ -202,6 +196,24 @@ public class DataBase extends SQLiteOpenHelper {
 		} catch(IOException e) {
 			return 0;
 		}
+	}
+
+	public int updatePersonAvail(Person p) {
+		try {
+			SQLiteDatabase db = this.getWritableDatabase();
+			ContentValues values = new ContentValues();
+			values.put(AVAIL_KEY, p.getSerializedAvial());
+
+			int updates = db.update(TABLE_PEOPLE, values, NAME_KEY + " = '" + p.getName() + "'", null);
+
+			db.close();
+
+			return updates;
+
+		} catch(Exception e) {
+			return 0;
+		}
+
 	}
 
     public void updatePersonName(String oldName, String newName) {

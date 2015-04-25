@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -150,8 +151,8 @@ public class AvailabilitySummary extends ActionBarActivity {
 		@Override
 		public void onClick(View v) {
 			DataBase db = new DataBase(getBaseContext());
-			db.updatePerson(person);
-
+			int updates = db.updatePersonAvail(person);
+			Toast.makeText(getApplicationContext(), "Updated: " + updates, Toast.LENGTH_SHORT).show();
 			addPersonToMeeting();
 
 			SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);

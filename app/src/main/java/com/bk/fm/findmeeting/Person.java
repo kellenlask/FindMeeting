@@ -93,14 +93,14 @@ public class Person implements Parcelable, Serializable {
 		return name;
 	}
 
-	public byte[] getSerializedAvial() throws IOException {
+	public String getSerializedAvial() throws IOException {
 
 		try {
 			ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 			ObjectOutputStream outStream = new ObjectOutputStream(byteOut);
 			outStream.writeObject(availability);
 
-			return byteOut.toByteArray();
+			return byteOut.toString("ISO-8859-1");
 
 		} catch (IOException e) {
 			throw new IOException("Invalid Byte Array");
@@ -137,7 +137,7 @@ public class Person implements Parcelable, Serializable {
 	public void setAvailability(String serializedObj) {
 		LinkedList<ScheduleObject> avail = null;
 		try {
-			byte[] bts = serializedObj.getBytes(); //If this doesn't work, here is where it's messing up
+			byte[] bts = serializedObj.getBytes("ISO-8859-1"); //If this doesn't work, here is where it's messing up
 
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(bts);
 			ObjectInputStream si = new ObjectInputStream(inputStream);
