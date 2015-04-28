@@ -21,7 +21,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -134,11 +133,11 @@ public class Meeting implements Parcelable, Serializable {
 
 
 		for(Person p : involvedPeople) {
-			LinkedList<ScheduleObject> list = p.getAvailability();
+			ArrayList<ScheduleObject> list = p.getAvailability();
 
 			while(list.size() > 0) {
-				ScheduleObject o = list.getLast();
-				list.removeLast();
+				ScheduleObject o = list.get(list.size() - 1);
+				list.remove(list.size() - 1);
 
 				for(Integer i : totalAvailability.keySet()) {
 					for(Range r : totalAvailability.get(i)) {
@@ -150,7 +149,7 @@ public class Meeting implements Parcelable, Serializable {
 
 					}
 				} //End for-each integer in totalAvailability
-			} //End While LinkedList is Loop
+			} //End While ArrayList is Loop
 		} //End for-each person in people
 
 

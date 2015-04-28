@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 
 
 public class SavedPeople extends ActionBarActivity {
@@ -119,7 +118,7 @@ public class SavedPeople extends ActionBarActivity {
 						if (peopleNames.contains(p.getName())) { // Make sure there are no duplicate people in the db
 							Toast.makeText(getApplicationContext(), getString(R.string.person_exists),Toast.LENGTH_SHORT).show();
 						} else {
-							p.setAvailability(new LinkedList<ScheduleObject>());
+							p.setAvailability(new ArrayList<ScheduleObject>());
 
 							//Store the person to the database
 							db = new DataBase(getBaseContext());

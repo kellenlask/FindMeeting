@@ -103,6 +103,22 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 		return startTimes && stopTimes && days;
 	}
 
+	public boolean touches(Range r) {
+		if(day.equals(r.getDay())) {
+			int os = r.getStartTime().getTimeInMinutes();
+			int oe = r.getStopTime().getTimeInMinutes();
+			int s = getStartTime().getTimeInMinutes();
+			int e = getStopTime().getTimeInMinutes();
+
+			//    (The other's end time falls between our start and stop)
+			// or (The other's start time falls between our start and stop)
+			return (oe >= s && oe <= e) || (os <= e && os >= s);
+
+		} else {
+			return false;
+		}
+	}
+
 	public boolean overlaps(Range r) {
 		if(day.equals(r.getDay())) {
 			int os = r.getStartTime().getTimeInMinutes();
@@ -149,10 +165,6 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 	}
 
 	public Range removeOverlap(Range r) {
-		//If the ranges don't overlap, then return null
-		if(!overlaps(r)) {
-			return null;
-		}
 
 		//Store the starts and stops
 		//int os = r.getStartTime().getTimeInMinutes();

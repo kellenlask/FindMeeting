@@ -156,7 +156,7 @@ public class Interval implements Comparable<Interval>, Cloneable, Serializable {
 		} else if(!stopTime.equals(t)) {
 			startTime = t;
 		} else {
-			throw new IllegalArgumentException("Invalid Start Time.");
+			throw new IllegalArgumentException("Invalid Start Time: " + t.toString());
 		}
 
 		//If the times are defined backwards, switch them.
@@ -172,7 +172,7 @@ public class Interval implements Comparable<Interval>, Cloneable, Serializable {
 		} else if(!startTime.equals(t)) {
 			stopTime = t;
 		} else {
-			throw new IllegalArgumentException("Invalid Stop Time.");
+			throw new IllegalArgumentException("Invalid Stop Time: " + t.toString());
 		}
 
 		//If the times are defined backwards, switch them.

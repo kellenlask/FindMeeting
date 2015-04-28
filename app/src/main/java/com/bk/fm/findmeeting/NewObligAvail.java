@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 
 public class NewObligAvail extends ActionBarActivity {
@@ -68,11 +68,26 @@ public class NewObligAvail extends ActionBarActivity {
 		@Override
 		public void onClick(View v) {
 
-			addScheduleObject();
+			boolean noneChecked = true;
 
-			Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
-			i.putExtra("PERSON", (Parcelable) person);
-			startActivity(i);
+			for(boolean b : getSelectedDays()) {
+				if(b) {
+					noneChecked = false;
+					break;
+				}
+
+			}
+
+			if (!noneChecked) {
+				addScheduleObject();
+
+				Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+				i.putExtra("PERSON", (Parcelable) person);
+				startActivity(i);
+
+			} else {
+				Toast.makeText(getApplicationContext(), "Please select a day.", Toast.LENGTH_SHORT).show();
+			}
 		}
 	};
 
@@ -188,7 +203,7 @@ public class NewObligAvail extends ActionBarActivity {
         }
         catch (Exception e)
         {
-            Toast.makeText(getApplicationContext(), "Invalid Interval", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Invalid time range.", Toast.LENGTH_SHORT).show();
         }
 
         for (int i = 0; i < days.length; i++) {
@@ -216,7 +231,7 @@ public class NewObligAvail extends ActionBarActivity {
                     if (person.getAvailability() == null)
                     {
                         ScheduleObject schedOb = new ScheduleObject(false, range);
-                        person.setAvailability(new LinkedList<ScheduleObject>());
+                        person.setAvailability(new ArrayList<ScheduleObject>());
                         person.addScheduleObject(schedOb);
                     }
                     else
@@ -230,7 +245,7 @@ public class NewObligAvail extends ActionBarActivity {
                     if (person.getAvailability() == null)
                     {
                         ScheduleObject schedOb = new ScheduleObject(true, range);
-                        person.setAvailability(new LinkedList<ScheduleObject>());
+                        person.setAvailability(new ArrayList<ScheduleObject>());
                         person.addScheduleObject(schedOb);
                     }
                     else
@@ -240,7 +255,7 @@ public class NewObligAvail extends ActionBarActivity {
                     }
                 }
             }
-        }
+        } //End for loop
 
     } //End public void addScheduleObject()
 
