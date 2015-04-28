@@ -95,6 +95,68 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 		return day.toString(c) + ": " + interval.toString();
 	}
 
+	//inclusive
+	public boolean touches(Range r) { //ToDo: This might need to be less line overlaps to be a best practice...
+		if(day.equals(r.getDay())) {
+			int os = r.getStartTime().getTimeInMinutes();
+			int oe = r.getStopTime().getTimeInMinutes();
+			int s = getStartTime().getTimeInMinutes();
+			int e = getStopTime().getTimeInMinutes();
+
+			boolean overlaps = overlaps(r);
+
+			return overlaps && (oe == s) && (os == e);
+
+		} else {
+			return false;
+		}
+	}
+
+	//Not inclusive
+	public boolean overlaps(Range r) {
+		if(day.equals(r.getDay())) {
+			int os = r.getStartTime().getTimeInMinutes();
+			int oe = r.getStopTime().getTimeInMinutes();
+			int s = getStartTime().getTimeInMinutes();
+			int e = getStopTime().getTimeInMinutes();
+
+			boolean overlaps = false;
+
+			if(os < s && oe < e && s < oe) {
+				overlaps = true;
+
+			} else if(s < os && e < oe && os < e) {
+				overlaps = true;
+
+			} else if(s < os && oe < e) {
+				overlaps = true;
+
+			} else if(os < s && e < oe) {
+				overlaps = true;
+
+			} else if(oe == e && os < s) {
+				overlaps = true;
+
+			} else if(os == s && e < oe) {
+				overlaps = true;
+
+			} else if(os == s && oe < e) {
+				overlaps = true;
+
+			} else if(oe == e && s < os) {
+				overlaps = true;
+
+			} else if(os == s && oe == e) {
+				overlaps = true;
+			}
+
+			return overlaps;
+
+		} else {
+			return false;
+		}
+	}
+
 	public boolean contains(Range r) { //Is the passed range completely contained within this one?
 		boolean days = r.getDay().equals(day);
 		boolean startTimes = getStartTime().getTimeInMinutes() < r.getStartTime().getTimeInMinutes();
@@ -103,36 +165,12 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 		return startTimes && stopTimes && days;
 	}
 
-	public boolean touches(Range r) {
-		if(day.equals(r.getDay())) {
-			int os = r.getStartTime().getTimeInMinutes();
-			int oe = r.getStopTime().getTimeInMinutes();
-			int s = getStartTime().getTimeInMinutes();
-			int e = getStopTime().getTimeInMinutes();
+	public boolean containsInclusive(Range r) {
+		boolean days = r.getDay().equals(day);
+		boolean startTimes = getStartTime().getTimeInMinutes() <= r.getStartTime().getTimeInMinutes();
+		boolean stopTimes = getStopTime().getTimeInMinutes() >= r.getStopTime().getTimeInMinutes();
 
-			//    (The other's end time falls between our start and stop)
-			// or (The other's start time falls between our start and stop)
-			return (oe >= s && oe <= e) || (os <= e && os >= s);
-
-		} else {
-			return false;
-		}
-	}
-
-	public boolean overlaps(Range r) {
-		if(day.equals(r.getDay())) {
-			int os = r.getStartTime().getTimeInMinutes();
-			int oe = r.getStopTime().getTimeInMinutes();
-			int s = getStartTime().getTimeInMinutes();
-			int e = getStopTime().getTimeInMinutes();
-
-			//    (The other's end time falls between our start and stop)
-			// or (The other's start time falls between our start and stop)
-			return (oe > s && oe < e) || (os < e && os > s);
-
-		} else {
-			return false;
-		}
+		return startTimes && stopTimes && days;
 	}
 
 //----------------------------------------------------

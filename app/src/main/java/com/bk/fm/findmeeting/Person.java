@@ -188,8 +188,18 @@ public class Person implements Parcelable, Serializable {
 					if(availability.get(i).overlaps(availability.get(j)) && availability.get(j).isObligation())
 					{
 						int[] indexes = fixOverlap(i, j);
-						i = indexes[0];
-						j = indexes[1];
+
+						if (!(indexes[0] >= availability.size() || indexes[0] < 0)) {
+							i = indexes[0];
+						} else {
+							i = (indexes[0] >= availability.size()) ? (availability.size() - 1) : (0);
+						}
+
+						if (!(indexes[1] >= availability.size() || indexes[1] < 0)) {
+							j = indexes[1];
+						} else {
+							j = (indexes[1] >= availability.size()) ? (availability.size() - 1) : (0);
+						}
 
 					} //End if #2
 
@@ -257,17 +267,17 @@ public class Person implements Parcelable, Serializable {
 
 		//Determine the type of overlap
 		int type;
-		if(jStart < iStart) {
+		if(jStart < iStart && jEnd < iEnd) {
 			//	i:		|----------|
 			//	j: |----------|
 			type = 0;
 
-		} else if(jEnd > iEnd) {
+		} else if(jEnd > iEnd && jStart > iStart) {
 			//	i: |----------|
 			//	j:        |----------|
 			type = 0;
 
-		} else if(objI.contains(objJ)) { //.touches() is .contains(), only inclusive.
+		} else if(objI.containsInclusive(objJ)) { //.touches() is .contains(), only inclusive.
 			//	i: |-------------------|
 			//	j:     |----------|
 			type = 1;
@@ -288,16 +298,28 @@ public class Person implements Parcelable, Serializable {
 				case 1:
 					//Split i into two ranges
 					availability.remove(i);
-					ScheduleObject o1 = new ScheduleObject(objI.isObligation(), new Range(objI.getStartTime().clone(), objJ.getStartTime().clone(), objI.getDay()));
-					ScheduleObject o2 = new ScheduleObject(objI.isObligation(), new Range(objJ.getStopTime().clone(), objI.getStopTime().clone(), objI.getDay()));
+
+					ScheduleObject o1 = null;
+					ScheduleObject o2 = null;
+
+					try {
+						o1 = new ScheduleObject(objI.isObligation(), new Range(objI.getStartTime().clone(), objJ.getStartTime().clone(), objI.getDay()));
+					} catch (Exception e) {	}
+
+					try {
+						o2 = new ScheduleObject(objI.isObligation(), new Range(objJ.getStopTime().clone(), objI.getStopTime().clone(), objI.getDay()));
+					} catch (Exception e) {	}
 
 					//Add the ranges back in
-					availability.add(i, o1);
-					availability.add(i, o2);
+					if (o1 != null) {
+						availability.add(i, o1);
+						indexes[0]--;
+					}
+					if (o2 != null) {
+						availability.add(i, o2);
+						indexes[1]++;
+					}
 
-					//Change the indexing
-					indexes[0]--;
-					indexes[1]++;
 					break;
 
 				default: //case 2
@@ -327,16 +349,29 @@ public class Person implements Parcelable, Serializable {
 				default: //case 2
 					//Split the range
 					availability.remove(j);
-					ScheduleObject o1 = new ScheduleObject(objJ.isObligation(), new Range(objJ.getStartTime().clone(), objI.getStartTime().clone(), objJ.getDay()));
-					ScheduleObject o2 = new ScheduleObject(objJ.isObligation(), new Range(objI.getStopTime().clone(), objJ.getStopTime().clone(), objJ.getDay()));
+
+					ScheduleObject o1 = null;
+					ScheduleObject o2 = null;
+
+					try {
+						o1 = new ScheduleObject(objJ.isObligation(), new Range(objJ.getStartTime().clone(), objI.getStartTime().clone(), objJ.getDay()));
+					} catch (Exception e) {	}
+
+					try {
+						o2 = new ScheduleObject(objJ.isObligation(), new Range(objI.getStopTime().clone(), objJ.getStopTime().clone(), objJ.getDay()));
+					} catch (Exception e) {	}
 
 					//Add the new ranges
-					availability.add(j, o1);
-					availability.add(j, o2);
+					if (o1 != null) {
+						availability.add(j, o1);
+						indexes[0]++;
+					}
 
-					//Update the indexing
-					indexes[0]++;
-					indexes[1]++;
+					if (o2 != null) {
+						availability.add(j, o2);
+						indexes[1]++;
+					}
+
 					break;
 			} //End Switch
 
