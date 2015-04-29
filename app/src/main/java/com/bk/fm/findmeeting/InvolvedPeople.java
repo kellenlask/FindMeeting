@@ -58,6 +58,12 @@ public class InvolvedPeople extends ActionBarActivity {
 
 	} //End protected void onCreate()
 
+	public void onBackPressed() {
+		Intent i = new Intent(getBaseContext(), Summary.class);
+		i.putExtra("MEETING", (Parcelable) meeting);
+		startActivity(i);
+	}
+
 //----------------------------------------------------
 //
 //	Event Handlers
@@ -134,12 +140,6 @@ public class InvolvedPeople extends ActionBarActivity {
 
     } //End addEventHandlers()
 
-    public void onBackPressed() {
-        Intent i = new Intent(getBaseContext(), Summary.class);
-        i.putExtra("MEETING", (Parcelable) meeting);
-        startActivity(i);
-    }
-
 //----------------------------------------------------
 //
 //	Other Methods
@@ -158,6 +158,7 @@ public class InvolvedPeople extends ActionBarActivity {
 		peopleList = (ListView) findViewById(R.id.peopleList);
 
 		updateList();
+
 	} //End initializeFields()
 
 	public void updateList() {
