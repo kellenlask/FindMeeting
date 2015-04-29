@@ -103,7 +103,7 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 			int s = getStartTime().getTimeInMinutes();
 			int e = getStopTime().getTimeInMinutes();
 
-			boolean overlaps = overlaps(r);
+			boolean overlaps = (overlaps(r) == 0) ? (false) : (true);
 
 			return overlaps && (oe == s) && (os == e);
 
@@ -113,47 +113,47 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 	}
 
 	//Not inclusive
-	public boolean overlaps(Range r) {
+	public int overlaps(Range r) { //ToDo: Some of this logic might be simplified into fewer if statements
 		if(day.equals(r.getDay())) {
 			int os = r.getStartTime().getTimeInMinutes();
 			int oe = r.getStopTime().getTimeInMinutes();
 			int s = getStartTime().getTimeInMinutes();
 			int e = getStopTime().getTimeInMinutes();
 
-			boolean overlaps = false;
+			int overlap = 0;
 
 			if(os < s && oe < e && s < oe) {
-				overlaps = true;
+				overlap = 1;
 
 			} else if(s < os && e < oe && os < e) {
-				overlaps = true;
+				overlap = 2;
 
 			} else if(s < os && oe < e) {
-				overlaps = true;
+				overlap = 3;
 
 			} else if(os < s && e < oe) {
-				overlaps = true;
+				overlap = 4;
 
 			} else if(oe == e && os < s) {
-				overlaps = true;
+				overlap = 5;
 
 			} else if(os == s && e < oe) {
-				overlaps = true;
+				overlap = 6;
 
 			} else if(os == s && oe < e) {
-				overlaps = true;
+				overlap = 7;
 
 			} else if(oe == e && s < os) {
-				overlaps = true;
+				overlap = 8;
 
 			} else if(os == s && oe == e) {
-				overlaps = true;
+				overlap = 9;
 			}
 
-			return overlaps;
+			return overlap;
 
 		} else {
-			return false;
+			return 0;
 		}
 	}
 

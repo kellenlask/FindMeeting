@@ -128,57 +128,89 @@ public class Meeting implements Parcelable, Serializable {
 
 	//Calculates the overlaps in all of the people's availabilities and obligations
 	public TreeMap<Integer, TreeSet<Range>> calcTotalAvailability() {
-		//Setup the treemap
+		//Setup the blank TreeMap
 		initializeAverages();
 
+		/*	YES, THIS LOOKS TERRIBLE -- LET ME EXPLAIN:
+		*
+		* - For each person
+		* 	- Grab their availability
+		* 	- For each of their Obligations in the Availability
+		* 		- Compare the Obligation against every Range in the collective availability Map
+		* 			- If the person's Obligation intersects a Range in the collective availability
+		* 				- Adjust the collective availability (down)
+		*/
 
-		for(Person p : involvedPeople) {
+		for(Person p : involvedPeople)
+		{
 			ArrayList<ScheduleObject> list = p.getAvailability();
 
-			while(list.size() > 0) {
-				ScheduleObject o = list.get(list.size() - 1);
-				list.remove(list.size() - 1);
+			for(int j = 0; j < list.size(); j++)
+			{
+				ScheduleObject o = list.get(j);
 
-				for(Integer i : totalAvailability.keySet()) {
-					for(Range r : totalAvailability.get(i)) {
 
-						if(r.overlaps(o)) {
+				for(Integer i : totalAvailability.keySet())
+				{
+					for(Range r : totalAvailability.get(i))
+					{
+
+						if(r.overlaps(o) != 0) {
 							fixOverlap(o, r, i);
 
 						}
 
 					}
 				} //End for-each integer in totalAvailability
-			} //End While ArrayList is Loop
+			} //End for each element in ArrayList Loop
 		} //End for-each person in people
 
-
-		pruneMap();
+		pruneMap(); //Remove ranges smaller than the meeting duration
 
 		return totalAvailability;
-	}
+
+	} //End public TreeMap<Integer, TreeSet<Range>> calcTotalAvailability()
 
 
+	//Fixes a given overlap between a Person's Obligation and a Range in the Collective Availability
 	public void fixOverlap(ScheduleObject o, Range r, int index) {
-		if (r.contains(o)) { //We need to make two ranges
-			totalAvailability.get(index).remove(r);
+		int type = r.overlaps(o);
 
-			//Add the two new ranges to the map
-			Range r1 = new Range(r.getStartTime(), o.getStartTime(), r.getDay());
-			Range r2 = new Range(o.getStopTime(), r.getStopTime(), r.getDay());
-			totalAvailability.get(index).add(r1);
-			totalAvailability.get(index).add(r2);
+		/*	THERE ARE 9 WAYS FOR TWO RANGES TO OVERLAP
+		*
+		* 	As you can imagine, two ranges can overlap in many different ways.
+		* 	However, the same solution can resolve multiple types of overlap.
+		*/
 
-			moveRange(o.clone(), o.isObligation(), index);
+		switch(type) {
+			case 1:
+			case 2:
+			case 7:
+			case 8:
+				moveRange(r.removeOverlap(o), o.isObligation(), index);
+				break;
 
-		} else if (o.contains(r) || r.equals(o)) { //The whole Range is moving
-			totalAvailability.get(index).remove(r);
-			moveRange(r, o.isObligation(), index);
+			case 3:
+				totalAvailability.get(index).remove(r);
 
-		} else { //We can safely truncate and move the Range
-			moveRange(r.removeOverlap(o), o.isObligation(), index);
+				//Add the two new ranges to the map
+				Range r1 = new Range(r.getStartTime(), o.getStartTime(), r.getDay());
+				Range r2 = new Range(o.getStopTime(), r.getStopTime(), r.getDay());
+				totalAvailability.get(index).add(r1);
+				totalAvailability.get(index).add(r2);
 
-		}
+				moveRange(o.clone(), o.isObligation(), index);
+				break;
+
+			case 4:
+			case 5:
+			case 6:
+			case 9:
+				totalAvailability.get(index).remove(r);
+				moveRange(r, o.isObligation(), index);
+				break;
+
+		} //End Switch
 
 
 	} //End public void fixOverlap(ScheduleObject, Range, int)

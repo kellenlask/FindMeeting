@@ -174,6 +174,8 @@ public class Person implements Parcelable, Serializable {
 //
 //----------------------------------------------------
 
+	//Simplify the Person's entered availabilities and obligations down into the smallest list possible
+	//of only obligations for ease of calculation later
 	public void reduceAvailability() {
 		//
 		//Cancel overlaps of different ScheduleObjects based on priority
@@ -185,7 +187,7 @@ public class Person implements Parcelable, Serializable {
 				for(int j = 0; j < availability.size(); j++)
 				{
 					//If the two objects overlap, and they're not of the same type
-					if(availability.get(i).overlaps(availability.get(j)) && availability.get(j).isObligation())
+					if(availability.get(i).overlaps(availability.get(j)) != 0 && availability.get(j).isObligation())
 					{
 						int[] indexes = fixOverlap(i, j);
 
