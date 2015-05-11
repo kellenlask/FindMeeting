@@ -59,7 +59,7 @@ public class Time implements Comparable<Time>, Cloneable, Serializable {
 		return new Time(hours, minutes);
 	}
 
-	//Compares by earlier before later
+	//Earlier < Later: 1:00 < 3:00
 	public int compareTo(Time t) {
 		return getTimeInMinutes() - t.getTimeInMinutes();
 	}

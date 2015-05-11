@@ -35,10 +35,12 @@ public class InvolvedPeople extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
+	//GUI Fields
 	private ListView peopleList;
 	private Button addPersonButton;
 	private Button findTimesButton;
 
+	//Logic Fields
     private ArrayList<String> peopleNames;
 	private Meeting meeting;
 
