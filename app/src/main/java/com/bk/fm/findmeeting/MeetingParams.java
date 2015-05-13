@@ -84,7 +84,7 @@ public class MeetingParams extends ActionBarActivity {
 			public void onClick(View v) {
 			try {
 				//Ensure that our internal storage matches the User's inputs
-				updateMap();
+				updateMapDays();
 
 				//If a time is set for all available days, make a usable map to reflect that
 				String day = (String) dayComboBox.getSelectedItem();
@@ -213,33 +213,75 @@ public class MeetingParams extends ActionBarActivity {
 	} //End public void initializeFields()
 
 
-	//For each selected checkbox, add the day to the comboBox
-	public void updateComboBox() {
-		boolean[] days = getSelectedDays();
-		ArrayList<String> selectedDays = new ArrayList<>(); //This will be the list we hand the comboBox.
+	//Display a Time Picker, and change the Button argument's text to match the selected time.
+	public void showTimePicker(final Button txtTime) {
+		//Grab the current selected time
+		int hours = Time.parseHours(txtTime.getText());
+		int minutes = Time.parseMinutes(txtTime.getText());
 
-		//Update the internal map to reflect the checkBoxes
-		updateMap();
+		//Make the Time Picker with the current selected time
+		TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
 
-		//If we don't have times for any particular day, they can set one for all days.
-		if (map.isEmpty()) {
-			selectedDays.add(getString(R.string.all_selected_days));
-		}
+			@Override
+			public void onTimeSet(TimePicker view, int hour, int minute) {
+				String h = "" + hour;
+				String m = "" + minute;
 
-		//For each day, if selected, add it to the list
-		for (int i = 0; i < days.length; i++) {
-			if (days[i]) {
-				selectedDays.add(Day.getDay(i).toString(this)); //You've got to pass the context to toString() in order to access the strings.xml resources.
+				//Ensure the output hour is two digits.
+				if (h.length() == 1) {
+					h = "0" + h;
+				}
+
+				//Ensure the output minutes are two digits.
+				if (m.length() == 1) {
+					m = "0" + m;
+				}
+
+				// Display Selected time in button
+				txtTime.setText(h + ":" + m);
+				storeDay();
 			}
-		}
+		}, hours, minutes, true);
+		tpd.show();
+	} //End public void showTimePicker(final TextView)
 
-		//Throw the list into the combo box.
-		ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectedDays);
-		data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		dayComboBox.setAdapter(data);
 
-	}//End public void updateComboBox()
+//----------------------------------------------------
+//
+//	Accessing Methods
+//
+//----------------------------------------------------
 
+	//Get an interval of the start and end times
+	public Interval getInterval() throws Exception {
+		Time start = new Time(startTime.getText());
+		Time end = new Time(endTime.getText());
+
+		return new Interval(start, end);
+
+	} //End public Interval getInterval()
+
+	//Make a boolean array representing the available days as selected by the user via checkboxes.
+	public boolean[] getSelectedDays() {
+		boolean[] days = new boolean[7];
+
+		days[0] = sunday.isChecked();
+		days[1] = monday.isChecked();
+		days[2] = tuesday.isChecked();
+		days[3] = wednesday.isChecked();
+		days[4] = thursday.isChecked();
+		days[5] = friday.isChecked();
+		days[6] = saturday.isChecked();
+
+		return days;
+	} //End public boolean[] getSelectedDays()
+
+
+//----------------------------------------------------
+//
+//	Mutating Methods
+//
+//----------------------------------------------------
 
 	//Make sure the time fields are showing the time associated with the selected day
 	public void updateTimeFields() {
@@ -277,44 +319,32 @@ public class MeetingParams extends ActionBarActivity {
 	} //End public void updateTimeFields()
 
 
-	//Display a Time Picker, and change the Button argument's text to match the selected time.
-	public void showTimePicker(final Button txtTime) {
-		//Grab the current selected time
-		int hours = Time.parseHours(txtTime.getText());
-		int minutes = Time.parseMinutes(txtTime.getText());
+	//For each selected checkbox, add the day to the comboBox
+	public void updateComboBox() {
+		boolean[] days = getSelectedDays();
+		ArrayList<String> selectedDays = new ArrayList<>(); //This will be the list we hand the comboBox.
 
-		//Make the Time Picker with the current selected time
-		TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+		//Update the internal map to reflect the checkBoxes
+		updateMapDays();
 
-			@Override
-			public void onTimeSet(TimePicker view, int hour, int minute) {
-				String h = "" + hour;
-				String m = "" + minute;
+		//If we don't have times for any particular day, they can set one for all days.
+		if (map.isEmpty()) {
+			selectedDays.add(getString(R.string.all_selected_days));
+		}
 
-				//Ensure the output hour is two digits.
-				if (h.length() == 1) {
-					h = "0" + h;
-				}
-
-				//Ensure the output minutes are two digits.
-				if (m.length() == 1) {
-					m = "0" + m;
-				}
-
-				// Display Selected time in button
-				txtTime.setText(h + ":" + m);
-				storeDay();
+		//For each day, if selected, add it to the list
+		for (int i = 0; i < days.length; i++) {
+			if (days[i]) {
+				selectedDays.add(Day.getDay(i).toString(this)); //You've got to pass the context to toString() in order to access the strings.xml resources.
 			}
-		}, hours, minutes, true);
-		tpd.show();
-	} //End public void showTimePicker(final TextView)
+		}
 
+		//Throw the list into the combo box.
+		ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectedDays);
+		data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		dayComboBox.setAdapter(data);
 
-//----------------------------------------------------
-//
-//	Logical Methods
-//
-//----------------------------------------------------
+	}//End public void updateComboBox()
 
 
 	//Store the current times to a time Range
@@ -365,17 +395,9 @@ public class MeetingParams extends ActionBarActivity {
 
 	}//End public void addDay(Day, CharSequence, CharSequence)
 
-	//Get an interval of the start and end times
-	public Interval getInterval() throws Exception {
-		Time start = new Time(startTime.getText());
-		Time end = new Time(endTime.getText());
-
-		return new Interval(start, end);
-
-	} //End public Interval getInterval()
 
 	//Update the map to reflect the check boxes
-	public void updateMap() {
+	public void updateMapDays() {
 		boolean[] days = getSelectedDays();
 
 		//Update the internal map to reflect the checkBoxes
@@ -384,21 +406,5 @@ public class MeetingParams extends ActionBarActivity {
 				map.remove(Day.getDay(i));
 			}
 		}
-	}
-
-	//Make a boolean array representing the available days as selected by the user via checkboxes.
-	public boolean[] getSelectedDays() {
-		boolean[] days = new boolean[7];
-
-		days[0] = sunday.isChecked();
-		days[1] = monday.isChecked();
-		days[2] = tuesday.isChecked();
-		days[3] = wednesday.isChecked();
-		days[4] = thursday.isChecked();
-		days[5] = friday.isChecked();
-		days[6] = saturday.isChecked();
-
-		return days;
-	} //End public boolean[] getSelectedDays()
-
+	} // End public void updateMapDays()
 } //End class MeetingParams extends ActionBarActivity
