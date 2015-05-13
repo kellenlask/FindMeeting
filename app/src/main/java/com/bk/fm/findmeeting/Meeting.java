@@ -108,6 +108,16 @@ public class Meeting implements Parcelable, Serializable {
 		return involvedPeople;
 	}
 
+	public boolean isValid() {
+		// Loop through the people and check that each person has at least one availability or obligation
+		for (Person p : involvedPeople) {
+			if (p.getAvailability() == null) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 
 //----------------------------------------------------
 //
@@ -125,6 +135,12 @@ public class Meeting implements Parcelable, Serializable {
 	public void setMeetingDuration(Interval meetingDuration) {
 		this.meetingDuration = meetingDuration;
 	}
+
+//----------------------------------------------------
+//
+//	Overlap Processing
+//
+//----------------------------------------------------
 
 	//Calculates the overlaps in all of the people's availabilities and obligations
 	public TreeMap<Integer, TreeSet<Range>> calcTotalAvailability() {
@@ -227,20 +243,6 @@ public class Meeting implements Parcelable, Serializable {
 	} //End public void moveRange(Range, boolean, int)
 
 
-	public void initializeAverages() {
-		totalAvailability = new TreeMap<>();
-
-		//For each possible level of availability, create a TreeSet<Range> to store the matching time ranges
-		for(int i = 0; i <= involvedPeople.size(); i++) {
-			totalAvailability.put(i, new TreeSet<Range>());
-		}
-
-		//Throw the meeting params into the 100% available time range
-		totalAvailability.get(involvedPeople.size()).addAll(possibleDays.values());
-
-	}//End public void initializeAverages(ArrayList<Person>)
-
-
 	//Remove all Ranges from the map that are shorter than the meeting time
 	//After this, the Map will only contain valid meeting time Ranges
 	private void pruneMap() {
@@ -263,6 +265,20 @@ public class Meeting implements Parcelable, Serializable {
 		} //End For-Each Loop
 
 	} //End private void pruneMap()
+
+
+	public void initializeAverages() {
+		totalAvailability = new TreeMap<>();
+
+		//For each possible level of availability, create a TreeSet<Range> to store the matching time ranges
+		for(int i = 0; i <= involvedPeople.size(); i++) {
+			totalAvailability.put(i, new TreeSet<Range>());
+		}
+
+		//Throw the meeting params into the 100% available time range
+		totalAvailability.get(involvedPeople.size()).addAll(possibleDays.values());
+
+	}//End public void initializeAverages(ArrayList<Person>)
 
 //----------------------------------------------------
 //

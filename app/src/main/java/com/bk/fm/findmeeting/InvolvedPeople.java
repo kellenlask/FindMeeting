@@ -76,10 +76,7 @@ public class InvolvedPeople extends ActionBarActivity {
 		addPersonButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) { //Show the SavedPeople Activity on AddPerson Button-Click
-				putMeeting();
-
-				Intent i = new Intent(getBaseContext(), SavedPeople.class);
-				startActivity(i);
+				goToActivity(SavedPeople.class);
 			}
 		});
 
@@ -87,30 +84,19 @@ public class InvolvedPeople extends ActionBarActivity {
 		findTimesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(meeting.getInvolvedPeople() == null) { //Nobody has been added to the meeting
-                    Toast.makeText(getApplicationContext(), "Please add some people.", Toast.LENGTH_SHORT).show();
-				}
-                else {
-                    // Loop through the people and check that each person has at least one availability or obligation
-                    boolean ready = true;
-                    for (Person p : meeting.getInvolvedPeople()) {
-                        if (p.getAvailability() == null) {
-                            ready = false;
-                            break;
-                        }
-                    }
+				if(meeting.getInvolvedPeople() != null) { //Nobody has been added to the meeting
+                    if (meeting.isValid()) { // One or more people have no availability or obligation
+						goToActivity(Results.class);
 
-                    if (ready == false) // One or more people have no availability or obligation
-                    {
-                        Toast.makeText(getApplicationContext(), "Please enter at least one obligation or availability for each person.", Toast.LENGTH_SHORT).show();
-                    } else // People have been added to the meeting and have added obligation(s) / availabilitie(s)
-                    {
-                        putMeeting();
+                    } else { // People have been added to the meeting and have added obligation(s) / availabilitie(s)
+						Toast.makeText(getApplicationContext(), "Please enter at least one obligation or availability for each person.", Toast.LENGTH_SHORT).show();
 
-                        Intent i = new Intent(getBaseContext(), Results.class);
-                        startActivity(i);
-                    }
-                }
+					}
+
+				} else { //Meeting object is null
+					Toast.makeText(getApplicationContext(), "Please add some people.", Toast.LENGTH_SHORT).show();
+
+                } //End outer if-else
 			}
 		});
 
@@ -182,11 +168,22 @@ public class InvolvedPeople extends ActionBarActivity {
 		peopleList.setAdapter(data);
 	}
 
+	public void goToActivity(Class c) {
+		putMeeting();
+
+		Intent i = new Intent(getBaseContext(), c);
+		startActivity(i);
+	}
+
 	//Put the meeting object into sharedpreferences
 	public void putMeeting() {
 		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
+
 		editor.putString("MEETING", Meeting.serializeMeeting(meeting));
+
 		editor.commit();
-	}
+
+	} //End public void putMeeting()
+
 } //End Class
