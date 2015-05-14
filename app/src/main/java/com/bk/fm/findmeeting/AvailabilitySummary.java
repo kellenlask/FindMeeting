@@ -156,6 +156,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 			addPersonToMeeting();
 
+			//Put the Meeting into SharedPreferences
 			SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 			SharedPreferences.Editor editor = sp.edit();
 			editor.putString("MEETING", Meeting.serializeMeeting(meeting));

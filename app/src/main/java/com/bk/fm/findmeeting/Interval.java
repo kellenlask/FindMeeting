@@ -46,8 +46,8 @@ public class Interval implements Comparable<Interval>, Cloneable, Serializable {
 //----------------------------------------------------
 	//Compares by length
 	public int compareTo(Interval i) {
-	return getLengthInMinutes() - i.getLengthInMinutes();
-}
+		return getLengthInMinutes() - i.getLengthInMinutes();
+	}
 
 	public Interval clone() {
 		return new Interval(startTime.clone(), stopTime.clone());
@@ -59,6 +59,14 @@ public class Interval implements Comparable<Interval>, Cloneable, Serializable {
 //	Accessors
 //
 //----------------------------------------------------
+
+	public boolean equals(Interval i) {
+		return startTime.equals(i.getStartTime()) && stopTime.equals(i.getStopTime());
+	}
+
+	public boolean contains(Interval i) {
+		return contains(i.getStartTime()) && contains(i.getStopTime());
+	}
 
 	public String toString(String intervalOrSingle) {
         String returnString = "see method";   // Just in case we use this incorrectly in the future.
@@ -74,36 +82,6 @@ public class Interval implements Comparable<Interval>, Cloneable, Serializable {
 		return startTime.toString() + " - " + stopTime.toString();
 	}
 
-	public boolean contains(Time t) {
-		int time = t.getTimeInMinutes();
-
-		return startTime.getTimeInMinutes() <= time && time <= stopTime.getTimeInMinutes();
-	}
-
-	public int getLengthInMinutes(){
-		return stopTime.getTimeInMinutes() - startTime.getTimeInMinutes();
-	}
-
-	public double getLengthInHours() {
-		return (stopTime.getTimeInMinutes() - startTime.getTimeInMinutes()) / 60;
-	}
-
-	public Time getStartTime() {
-		return startTime;
-	}
-
-	public Time getStopTime() {
-		return stopTime;
-	}
-
-	public boolean equals(Interval i) {
-		return startTime.equals(i.getStartTime()) && stopTime.equals(i.getStopTime());
-	}
-
-	public boolean contains(Interval i) {
-		return contains(i.getStartTime()) && contains(i.getStopTime());
-	}
-
 	public boolean overlaps(Interval i) {
 		if(contains(i.getStartTime())) {
 			return true;
@@ -117,6 +95,12 @@ public class Interval implements Comparable<Interval>, Cloneable, Serializable {
 		}
 	}
 
+	public boolean contains(Time t) {
+		int time = t.getTimeInMinutes();
+
+		return startTime.getTimeInMinutes() <= time && time <= stopTime.getTimeInMinutes();
+	}
+
 	public boolean startsSooner(Interval i) {
 		return startTime.getTimeInMinutes() < i.getStartTime().getTimeInMinutes();
 	}
@@ -125,7 +109,6 @@ public class Interval implements Comparable<Interval>, Cloneable, Serializable {
 		return stopTime.getTimeInMinutes() < i.getStopTime().getTimeInMinutes();
 	}
 
-	//ToDo: Double-check this method:
 	public Interval getOverlap(Interval i) {
 		if (overlaps(i)) {
 			if (i.contains(this)) {
@@ -143,6 +126,22 @@ public class Interval implements Comparable<Interval>, Cloneable, Serializable {
 		}
 
 		return null;
+	}
+
+	public int getLengthInMinutes(){
+		return stopTime.getTimeInMinutes() - startTime.getTimeInMinutes();
+	}
+
+	public double getLengthInHours() {
+		return (stopTime.getTimeInMinutes() - startTime.getTimeInMinutes()) / 60;
+	}
+
+	public Time getStartTime() {
+		return startTime;
+	}
+
+	public Time getStopTime() {
+		return stopTime;
 	}
 
 //----------------------------------------------------

@@ -59,13 +59,13 @@ public class Summary extends ActionBarActivity {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-            SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putString("MEETING", Meeting.serializeMeeting(meeting));
-            editor.commit();
+				SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+				SharedPreferences.Editor editor = sp.edit();
+				editor.putString("MEETING", Meeting.serializeMeeting(meeting));
+				editor.commit();
 
-            Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
-            startActivity(i);
+				Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
+				startActivity(i);
 
 			}
 		});
@@ -82,12 +82,13 @@ public class Summary extends ActionBarActivity {
 //
 //----------------------------------------------------
 	public void initializeFields() {
-		//Pull Meeting object out
-		meeting = (Meeting)getIntent().getSerializableExtra("MEETING");
+		//Pull meeting from sharedpreferences
+		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
 
 		//Set the meeting length in the GUI
 		meetingLengthTextView = (TextView)findViewById(R.id.meetingLengthLabel);
-		meetingLengthTextView.setText(" " + meeting.getMeetingDuration().toString("Single"));
+		meetingLengthTextView.setText(" " + meeting.getMeetingDuration().toString("Single")); //Todo: Rename this shit.
 
 		//Populate the list of days and times
 		daysTimesListView = (ListView)findViewById(R.id.daysTimesListView);

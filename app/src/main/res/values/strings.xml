@@ -60,4 +60,6 @@
     <string name="person_already_added">This person has already been added to meeting.</string>
     <string name="edit">EDIT</string>
     <string name="delete">DELETE</string>
+    <string name="invalidConfig">Invalid Meeting Configuration</string>
+    <string name="invalidRange">Invalid Time Range</string>
 </resources>

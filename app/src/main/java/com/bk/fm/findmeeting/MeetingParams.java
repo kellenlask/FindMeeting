@@ -8,8 +8,8 @@ package com.bk.fm.findmeeting;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -64,10 +64,10 @@ public class MeetingParams extends ActionBarActivity {
 		initializeFields();
 
 		//Add our event handlers
-		setCheckBoxActionHandlers();
-		setButtonActionHandler();
-		setTimeInputActionHandlers();
-		setSpinnerActionHandler();
+		setCheckBoxActionHandlers(); //When a checkbox is selected, update the combobox
+		setButtonActionHandler(); //Move on to the next screen
+		setTimeInputActionHandlers(); //Accept time inputs
+		setSpinnerActionHandler(); //Switch between selected days
 
 	} //End protected void onCreate(Bundle)
 
@@ -77,7 +77,7 @@ public class MeetingParams extends ActionBarActivity {
 //
 //----------------------------------------------------
 
-	//When the Next Button is clicked...
+	//When the Next Button is clicked, validate, and move on to the next activity
 	public void setButtonActionHandler() {
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -110,16 +110,21 @@ public class MeetingParams extends ActionBarActivity {
 					//Make the meeting object
 					Meeting meeting = new Meeting(map, meetingLength);
 
+					//Put the Meeting into SharedPreferences
+					SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+					SharedPreferences.Editor editor = sp.edit();
+					editor.putString("MEETING", Meeting.serializeMeeting(meeting));
+					editor.commit();
+
 					//Send the Meeting Object along to the Summary Activity (Make an intent)
 					Intent i = new Intent(getBaseContext(), Summary.class);
-					i.putExtra("MEETING", (Parcelable) meeting);
 					startActivity(i);
 				} else {
 					throw new Exception("No days selected.");
 				} //End if-else
 
 			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(), "Invalid Meeting Configuration", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), getString(R.string.invalidConfig), Toast.LENGTH_SHORT).show();
 			} //End Try-Catch
 
 		} //End public void onClick(View)
@@ -378,7 +383,7 @@ public class MeetingParams extends ActionBarActivity {
 
 		} catch (Exception e) {
 			//R.string.invalidInterval_1 +
-			Toast.makeText(getApplicationContext(), "Invalid Time Range", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), getString(R.string.invalidRange), Toast.LENGTH_SHORT).show();
 		}
 	} //End public void storeDay()
 

@@ -1,7 +1,8 @@
 /*
 This file contains the class definition for a Meeting object which would represent a prospective
 meeting's desired parameters. EX: We're willing to meet either Tuesday from 12am - 3pm or Thursday
-from 8am to 6pm; the meeting should last about a half-hour.
+from 8am to 6pm; the meeting should last about a half-hour. As well, this class maintains a list of
+involved people, and can calculate the overlaps between their various availabilities.
  */
 
 package com.bk.fm.findmeeting;
@@ -45,6 +46,7 @@ public class Meeting implements Parcelable, Serializable {
 	public Meeting(TreeMap<Day, Range> days, Interval meetingDuration) {
 		this.setPossibleDays(days);
 		this.setMeetingDuration(meetingDuration);
+
 	} //End constructor
 
 //----------------------------------------------------
