@@ -203,7 +203,7 @@ public class Person implements Parcelable, Serializable {
 		} //End outer for loop
 
 		//
-		//Remove all left-over availabilities
+		//Remove all left-over availabilities (The default is being available)
 		//
 		for(int i = 0; i < availability.size(); i++) {
 			if(!availability.get(i).isObligation()) {
@@ -219,7 +219,7 @@ public class Person implements Parcelable, Serializable {
 		{
 			for(int j = i + 1; j < availability.size(); j++)
 			{
-				if(availability.get(i).touches(availability.get(j))) {
+				if(availability.get(i).overlaps(availability.get(j)) != 0) {
 					combine(j, i);
 					j--;
 				}

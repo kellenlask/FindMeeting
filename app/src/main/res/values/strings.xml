@@ -38,8 +38,8 @@
     <string name="saturday">Saturday</string>
 
     <!-- Generic Terms -->
-    <string name="obligation">Obligation</string>
-    <string name="availability">Availability</string>
+    <string name="obligation">Obligation - </string>
+    <string name="availability">Availability - </string>
     <string name="next">Next</string>
     <string name="addTitle_6">Add</string>
     <string name="saveText_5">DONE</string>
@@ -48,6 +48,7 @@
     <string name="cancel">CANCEL</string>
     <string name="edit">EDIT</string>
     <string name="delete">DELETE</string>
+    <string name="days">Days:</string>
 
     <!-- MeetingParams Activity -->
     <string name="stored_1">Stored</string>

@@ -29,7 +29,6 @@ public class AvailabilitySummary extends ActionBarActivity {
 //
 //----------------------------------------------------
     private ListView AvailObligListView;
-    private ArrayAdapter<String> scheduleAdapter;
 
     private Button newAvailabilityButton;
     private Button doneButton;
@@ -38,6 +37,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 	private Meeting meeting;
     private ArrayList<String> schedule;
     private Person person;
+	private ArrayAdapter<String> scheduleAdapter;
 
 //----------------------------------------------------
 //
@@ -225,7 +225,8 @@ public class AvailabilitySummary extends ActionBarActivity {
             for (ScheduleObject s : person.getAvailability()) {
                 schedule.add(s.toString(this));
             }
-            scheduleAdapter = new AvailabilityArrayAdapter(this, schedule);
+
+			scheduleAdapter = new AvailabilityArrayAdapter(this, schedule);
 
             AvailObligListView.setAdapter(scheduleAdapter);
         }
