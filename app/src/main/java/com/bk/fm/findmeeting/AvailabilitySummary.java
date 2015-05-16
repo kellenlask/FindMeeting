@@ -65,10 +65,10 @@ public class AvailabilitySummary extends ActionBarActivity {
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
 		super.onCreateContextMenu(menu, view, menuInfo);
 
-		menu.setHeaderTitle("Availability / Obligation");
+		menu.setHeaderTitle("Schedule Object");
 
-		menu.add("Edit");
-		menu.add("Delete");
+		menu.add(getString(R.string.edit));
+		menu.add(getString(R.string.delete));
 	}
 
 
@@ -81,108 +81,109 @@ public class AvailabilitySummary extends ActionBarActivity {
 	//When one of the context menu items is pressed, do this:
 	public boolean onContextItemSelected(MenuItem item) {
 		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-		StringBuilder sb = new StringBuilder(item.getTitle());
-		String selectedItem = sb.toString();
+		String selectedItem = item.getTitle().toString();
 
-		if(selectedItem.equals("Edit"))
-		{
-			int j = 0;
-			for (ScheduleObject s : person.getAvailability()) {
-				if (scheduleAdapter.getItem(info.position).equals(s.toString(this)))
-				{
-					Intent i = new Intent(getBaseContext(), NewObligAvail.class);
-					i.putExtra("PERSON", (Parcelable) person);
-					i.putExtra("SCHEDULE_OBJECT_INDEX", j);
+		//Grab the selected element
+		ScheduleObject schObj = null;
+		for(int i = 0; i < person.getAvailability().size(); i++) {
+			schObj = person.getAvailability().get(i);
 
-					if (s.isObligation())
-					{
-						i.putExtra("ACTIVITY_TYPE", "Edit Obligation");
-					}
-					else
-					{
-						i.putExtra("ACTIVITY_TYPE", "Edit Availability");
-					}
+			if (scheduleAdapter.getItem(info.position).equals(schObj.toString(this))) {
+				break;
 
-					startActivity(i);
-				}
-				j++;
-			}
-		}
-		else if(selectedItem.equals("Delete"))
-		{
-			int deletePosition = -1;
-			int index = 0;
-
-			for (ScheduleObject s : person.getAvailability()) {
-				if (scheduleAdapter.getItem(info.position).equals(s.toString(this)))
-				{
-					deletePosition = index;
-				}
-				index++;
 			}
 
-			person.getAvailability().remove(deletePosition);
+		} //End for-loop
+
+		//Handle the selected element accordingly
+		if(selectedItem.equals(getString(R.string.edit))) { //"Edit" Pressed
+			Intent i = new Intent(getBaseContext(), NewObligAvail.class);
+			i.putExtra("PERSON", (Parcelable) person);
+			i.putExtra("SCHEDULE_OBJECT_INDEX", person.getAvailability().indexOf(schObj));
+
+			if (schObj.isObligation()) {
+				i.putExtra("ACTIVITY_TYPE", "Edit Obligation");
+
+			} else {
+				i.putExtra("ACTIVITY_TYPE", "Edit Availability");
+			}
+
+			startActivity(i);
+
+		} else {  //"Delete" Pressed
+			person.getAvailability().remove(schObj);
 
 			updateAvailability();
+
 		}
 
 		return false;
+
 	} //End public boolean onContextItemSelected(MenuItem)
 
-
-
-	private View.OnClickListener addAvailObligClickListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-
-			if (v.getId() == R.id.newAvailabilityButton)
-			{
-				Intent i = new Intent(getBaseContext(), NewObligAvail.class);
-				i.putExtra("PERSON", (Parcelable) person);
-				i.putExtra("ACTIVITY_TYPE", "New Availability");
-				startActivity(i);
-			}
-			else if (v.getId() == R.id.newObligationButton)
-			{
-				Intent i = new Intent(getBaseContext(), NewObligAvail.class);
-				i.putExtra("PERSON", (Parcelable) person);
-				i.putExtra("ACTIVITY_TYPE", "New Obligation");
-				startActivity(i);
-			}
-		}
-	};
-
-	private View.OnClickListener doneClickListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			person.reduceAvailability();
-
-			DataBase db = new DataBase(getBaseContext());
-			db.updatePersonAvail(person);
-
-			addPersonToMeeting();
-
-			//Put the Meeting into SharedPreferences
-			SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
-			SharedPreferences.Editor editor = sp.edit();
-			editor.putString("MEETING", Meeting.serializeMeeting(meeting));
-			editor.commit();
-
-			Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
-			startActivity(i);
-		}
-	};
-
 	public void addActionHandlers() {
-		// Initialize button listeners
-		newAvailabilityButton.setOnClickListener(addAvailObligClickListener);
+
+		//Save the person's availability and go back to InvolvedPeople
+		View.OnClickListener doneClickListener = new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//Simplify the person's availability down to simplest terms
+				person.reduceAvailability();
+
+				//Update the database entry
+				DataBase db = new DataBase(getBaseContext());
+				db.updatePersonAvail(person);
+
+				//Update the person in the Meeting Object
+				addPersonToMeeting();
+
+				//Put the Meeting into SharedPreferences
+				SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+				SharedPreferences.Editor editor = sp.edit();
+				editor.putString("MEETING", Meeting.serializeMeeting(meeting));
+				editor.commit();
+
+				//Move on to the InvolvedPeople Activity
+				Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
+				startActivity(i);
+			}
+		};
+
+		//Setup the done button
 		doneButton.setOnClickListener(doneClickListener);
+
+		//Go to the NewObligAvail Activity to create a new obligation/availability
+		View.OnClickListener addAvailObligClickListener = new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				if (v.getId() == R.id.newAvailabilityButton)
+				{
+					Intent i = new Intent(getBaseContext(), NewObligAvail.class);
+					i.putExtra("PERSON", (Parcelable) person);
+					i.putExtra("ACTIVITY_TYPE", "New Availability");
+					startActivity(i);
+				}
+				else if (v.getId() == R.id.newObligationButton)
+				{
+					Intent i = new Intent(getBaseContext(), NewObligAvail.class);
+					i.putExtra("PERSON", (Parcelable) person);
+					i.putExtra("ACTIVITY_TYPE", "New Obligation");
+					startActivity(i);
+				}
+			}
+		};
+
+		//Setup the new Availability and Obligation buttons
+		newAvailabilityButton.setOnClickListener(addAvailObligClickListener);
 		newObligationButton.setOnClickListener(addAvailObligClickListener);
 
+		//Register the ListView's items for opening the context menu
 		registerForContextMenu(AvailObligListView);
 
 	} //End public void addActionHandlers()
 
+	@Override
     public void onBackPressed() {
         Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
         startActivity(i);
@@ -216,8 +217,8 @@ public class AvailabilitySummary extends ActionBarActivity {
 
     } //End private void initializeFields()
 
-    private void updateAvailability()
-    {
+	//
+    private void updateAvailability() {
         if (person.getAvailability() != null) {
             schedule = new ArrayList<>();
 
@@ -229,7 +230,7 @@ public class AvailabilitySummary extends ActionBarActivity {
             AvailObligListView.setAdapter(scheduleAdapter);
         }
 
-    }
+    } //End private void updateAvailability()
 
 	public void addPersonToMeeting() {
 		for(Person p : meeting.getInvolvedPeople()) {
@@ -238,6 +239,6 @@ public class AvailabilitySummary extends ActionBarActivity {
 			}
 		}
 
-	}
+	} //End public void addPersonToMeeting()
 
 } //End Class

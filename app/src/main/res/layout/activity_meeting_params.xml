@@ -273,8 +273,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.16"
             android:height="20dp"
-            android:hint="@string/nextLabel"
-            android:text="@string/nextLabel"
+            android:hint="@string/next"
+            android:text="@string/next"
             android:textSize="@dimen/abc_text_size_large_material"/>
 
     </LinearLayout>
