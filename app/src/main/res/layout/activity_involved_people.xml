@@ -48,13 +48,14 @@
             android:layout_width="match_parent"
             android:layout_height="144dp"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.96"/>
+            android:layout_weight="0.84"/>
 
         <Button
             android:id="@+id/findTimesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/calcAvailability_3"
-            />
+            android:layout_weight="0.12"
+            android:textSize="25dp"/>
     </LinearLayout>
 </RelativeLayout>

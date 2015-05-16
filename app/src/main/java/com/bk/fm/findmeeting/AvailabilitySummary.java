@@ -51,6 +51,8 @@ public class AvailabilitySummary extends ActionBarActivity {
 		setContentView(R.layout.activity_availability);
 
         initializeFields();
+
+		addActionHandlers();
 	}
 
 //----------------------------------------------------
@@ -59,17 +61,24 @@ public class AvailabilitySummary extends ActionBarActivity {
 //
 //----------------------------------------------------
 	@Override
+	//Define the context menu items.
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
 		super.onCreateContextMenu(menu, view, menuInfo);
 
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
 		menu.setHeaderTitle("Availability / Obligation");
 
 		menu.add("Edit");
 		menu.add("Delete");
 	}
 
+
+//----------------------------------------------------
+//
+//	Action Handlers
+//
+//----------------------------------------------------
 	@Override
+	//When one of the context menu items is pressed, do this:
 	public boolean onContextItemSelected(MenuItem item) {
 		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
 		StringBuilder sb = new StringBuilder(item.getTitle());
@@ -118,12 +127,9 @@ public class AvailabilitySummary extends ActionBarActivity {
 		}
 
 		return false;
-	}
-//----------------------------------------------------
-//
-//	Action Handlers
-//
-//----------------------------------------------------
+	} //End public boolean onContextItemSelected(MenuItem)
+
+
 
 	private View.OnClickListener addAvailObligClickListener = new View.OnClickListener() {
 		@Override
@@ -192,7 +198,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
 		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
 
-		//Pull the person object out
+		//Pull the Person from the Intent
 		person = (Person)getIntent().getSerializableExtra("PERSON");
 
         // Initialize list view
@@ -201,14 +207,12 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 		//Initialize Title Text
 		TextView title = (TextView) findViewById(R.id.titleText);
-		title.setText(title.getText().toString() + " " + person.getName());
+		title.setText(title.getText().toString() + " " + person.getName()); //Does use a String Resource
 
         // Initialize buttons
         newAvailabilityButton = (Button) findViewById(R.id.newAvailabilityButton);
         doneButton = (Button) findViewById(R.id.saveButton);
         newObligationButton = (Button) findViewById(R.id.newObligationButton);
-
-        addActionHandlers();
 
     } //End private void initializeFields()
 

@@ -41,7 +41,7 @@
     <string name="possibleMeetings">Possible Meetings</string>
     <string name="title_activity_summary">Meeting Summary</string>
     <string name="title_activity_involved_people">People Involved</string>
-    <string name="title_activity_availability">Availability</string>
+    <string name="title_activity_availability">Summary of Availability</string>
     <string name="title_activity_new_oblig_avail">Find Meeting</string>
     <string name="title_activity_results">Results</string>
     <string name="all_selected_days">All Selected Days</string>

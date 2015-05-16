@@ -11,12 +11,18 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/*
+*   The following is the custom ListView ArrayAdapter that allows for color-coding of the
+*   availability/obligation entries on the Availability Summary Page
+*   (AvailabilitySummary.java / activity_availability.xml)
+ */
+
 public class AvailabilityArrayAdapter extends ArrayAdapter {
 
     List<String> values;
 
     public AvailabilityArrayAdapter(Context context, List<String> values) {
-        super(context, android.R.layout.simple_list_item_1, values);
+		super(context, android.R.layout.simple_list_item_1, values);
         this.values = values;
     }
 
