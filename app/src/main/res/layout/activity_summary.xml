@@ -9,34 +9,26 @@
                 tools:context="com.bk.fm.findmeeting.Summary">
 
     <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/summaryTitle_2"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-    <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView14"
-        android:layout_alignStart="@+id/textView14"
-        android:layout_below="@+id/textView14"
         android:text="@string/lengthLabel_2"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
     <TextView
         android:id="@+id/meetingLengthLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textView14"
-        android:layout_alignRight="@+id/textView14"
-        android:layout_alignTop="@+id/textView15"
         android:text="1hr"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_above="@+id/tableLayout"
+        android:layout_toRightOf="@+id/textView15"
+        android:layout_toEndOf="@+id/textView15"/>
 
     <TableLayout
         android:id="@+id/tableLayout"
@@ -49,25 +41,6 @@
         android:divider="@android:color/darker_gray"
         android:measureWithLargestChild="false"
         android:layout_above="@+id/nextButton">
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="@string/dayLabel_2"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"
-                />
-
-        </TableRow>
 
         <TableRow
             android:layout_width="fill_parent"
