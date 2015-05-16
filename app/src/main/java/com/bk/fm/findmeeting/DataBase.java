@@ -26,10 +26,24 @@ public class DataBase extends SQLiteOpenHelper {
 //----------------------------------------------------
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "MeetingFinder";
+
+	//Tables
 	private static final String TABLE_PEOPLE = "people";
-	private static final String PRIMARY_KEY = "id";
-	private static final String NAME_KEY = "name";
+
+	//Fields
+	private static final String PRIMARY_KEY = "name";
 	private static final String AVAIL_KEY = "availability";
+
+
+//----------------------------------------------------
+//
+//	Constructor
+//
+//----------------------------------------------------
+
+	public DataBase(Context context) {
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	}
 
 //----------------------------------------------------
 //
@@ -43,8 +57,7 @@ public class DataBase extends SQLiteOpenHelper {
 
 		String CREATE_PEOPLE_TABLE = "CREATE TABLE IF NOT EXISTS "
 				+ TABLE_PEOPLE + "("
-				+ PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT," //Arbitrary primary key
-				+ NAME_KEY + " TEXT NOT NULL," //The person's name
+				+ PRIMARY_KEY + " TEXT NOT NULL," //Name Key
 				+ AVAIL_KEY + " TEXT NOT NULL" + ")"; //The person's availability (serialized to a byte[])
 		db.execSQL(CREATE_PEOPLE_TABLE);
 
@@ -54,16 +67,6 @@ public class DataBase extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		//This upgrades it when the version changes
 		//So, we don't care about this.
-	}
-
-//----------------------------------------------------
-//
-//	Constructor
-//
-//----------------------------------------------------
-
-	public DataBase(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
 //----------------------------------------------------
@@ -80,63 +83,38 @@ public class DataBase extends SQLiteOpenHelper {
 			do { //Make people from the stuff
 				Person p = new Person();
 
-				p.setPrimaryKey(Long.parseLong(cursor.getString(0)));
-				p.setName(cursor.getString(1));
-				p.setAvailability(cursor.getString(2)); //------------------------------------------------------------------------------------------------
+				p.setName(cursor.getString(0));
+				p.setAvailability(cursor.getString(1));
 
 				people.add(p);
 
-			} while(cursor.moveToNext()); //Is there more stuff?
-		}
+			} while(cursor.moveToNext()); //While there are people left from the database
+		} //End if
 
 		return people;
 	}
 
-	public Person getPerson(long id) {
+	public Person getPerson(String name) {
 		Person p = null;
 
 		SQLiteDatabase db = this.getWritableDatabase();
-		String query = "SELECT * FROM " + TABLE_PEOPLE + " WHERE " + PRIMARY_KEY + " = '" + id + "'";
+		String query = "SELECT * FROM " + TABLE_PEOPLE + " WHERE " + PRIMARY_KEY + " = '" + name + "'";
 		Cursor cursor = db.rawQuery(query, null);
 
 		if(cursor.moveToFirst()) { //If we got stuff
-			p.setPrimaryKey(Long.parseLong(cursor.getString(0)));
-			p.setName(cursor.getString(1));
-			p.setAvailability(cursor.getString(2));
+			p.setName(cursor.getString(0));
+			p.setAvailability(cursor.getString(1));
 		}
 
 		return p;
-	}
-
-	//Returns a list because multiple entries might have the same name.
-	public ArrayList<Person> getPerson(String name) {
-		ArrayList<Person> people = new ArrayList<>();
-		SQLiteDatabase db = this.getWritableDatabase();
-		String query = "SELECT * FROM " + TABLE_PEOPLE + " WHERE " + NAME_KEY + " = '" + name + "'";
-		Cursor cursor = db.rawQuery(query, null);
-
-		if(cursor.moveToFirst()) { //If we got stuff
-			do { //Make people from the stuff
-				Person p = new Person();
-
-				p.setPrimaryKey(Long.parseLong(cursor.getString(0)));
-				p.setName(cursor.getString(1));
-				p.setAvailability(cursor.getString(2));
-
-				people.add(p);
-
-			} while(cursor.moveToNext()); //Is there more stuff?
-		}
-
-		return people;
 	}
 
 	public boolean contains(Person p) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		//query(TABLE, COLUMNS, SELECTION, SELECTION ARGS, OTHER CRAP)
-		Cursor cursor = db.query(TABLE_PEOPLE, new String[] {PRIMARY_KEY, NAME_KEY},
-				PRIMARY_KEY + " = ?", new String[] {String.valueOf(p.getPrimaryKey())},
+		Cursor cursor = db.query(TABLE_PEOPLE, new String[] {PRIMARY_KEY},
+				PRIMARY_KEY + " = ?", new String[] {p.getName()},
 				null, null, null, null);
 
 		boolean results = (cursor != null);
@@ -154,21 +132,21 @@ public class DataBase extends SQLiteOpenHelper {
 	public void deletePerson(String name) {
 
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete(TABLE_PEOPLE, (NAME_KEY + " = '" + name + "'"), null);
+		db.delete(TABLE_PEOPLE, (PRIMARY_KEY + " = '" + name + "'"), null);
 
 		db.close();
 	}
 
-	public boolean addPerson(Person p) {
+	public boolean addPerson(Person p) { //TODO: Catch repeat names
 		try {
 			SQLiteDatabase db = this.getWritableDatabase();
 
 			ContentValues values = new ContentValues();
-			values.put(NAME_KEY, p.getName());
+			values.put(PRIMARY_KEY, p.getName());
 			values.put(AVAIL_KEY, p.getSerializedAvial());
 
 			// Inserting Row
-			p.setPrimaryKey(db.insert(TABLE_PEOPLE, null, values));
+			db.insert(TABLE_PEOPLE, null, values);
 			db.close(); // Closing database connection
 
 			return true;
@@ -183,12 +161,12 @@ public class DataBase extends SQLiteOpenHelper {
 			SQLiteDatabase db = this.getWritableDatabase();
 
 			ContentValues values = new ContentValues();
-			values.put(NAME_KEY, p.getName());
+			values.put(PRIMARY_KEY, p.getName());
 			values.put(AVAIL_KEY, p.getSerializedAvial());
 
 			// Updating Row
 			int updates = db.update(TABLE_PEOPLE, values, PRIMARY_KEY + " = ?",
-					new String[] {String.valueOf(p.getPrimaryKey())});
+					new String[] {p.getName()});
 			db.close(); // Closing database connection
 
 			return updates;
@@ -204,11 +182,11 @@ public class DataBase extends SQLiteOpenHelper {
 			ContentValues values = new ContentValues();
 			values.put(AVAIL_KEY, p.getSerializedAvial());
 
-			int updates = db.update(TABLE_PEOPLE, values, NAME_KEY + " = '" + p.getName() + "'", null);
+			int updates = db.update(TABLE_PEOPLE, values, PRIMARY_KEY + " = '" + p.getName() + "'", null);
 
 			db.close();
 
-			return updates;
+			return updates; //Number of fields changed
 
 		} catch(Exception e) {
 			return 0;
@@ -220,9 +198,9 @@ public class DataBase extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(NAME_KEY, newName);
+        values.put(PRIMARY_KEY, newName);
 
-        db.update(TABLE_PEOPLE, values, NAME_KEY + " = '" + oldName + "'", null);
+        db.update(TABLE_PEOPLE, values, PRIMARY_KEY + " = '" + oldName + "'", null);
 
         db.close();
     }

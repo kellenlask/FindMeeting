@@ -11,9 +11,6 @@ package com.bk.fm.findmeeting;
  * Created by Kellen on 3/4/2015.
  */
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,7 +22,7 @@ import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class Meeting implements Parcelable, Serializable {
+public class Meeting implements Serializable {
 //----------------------------------------------------
 //
 //	Fields
@@ -48,49 +45,6 @@ public class Meeting implements Parcelable, Serializable {
 		this.setMeetingDuration(meetingDuration);
 
 	} //End constructor
-
-//----------------------------------------------------
-//
-//	Interfaces
-//
-//----------------------------------------------------
-	//Parcelable
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	public Meeting(Parcel in) {
-		possibleDays = (TreeMap<Day, Range>) in.readSerializable();
-		meetingDuration = (Interval) in.readSerializable();
-
-		if (in.dataSize() == 3) {
-			in.readSerializable();
-		}
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeSerializable(possibleDays);
-		dest.writeSerializable(meetingDuration);
-
-		if (totalAvailability != null) {
-			dest.writeSerializable(totalAvailability);
-		}
-	}
-
-	//This is actually a field, shhhhh...
-	public static final Creator<Meeting> CREATOR = new Creator<Meeting>() {
-		@Override
-		public Meeting createFromParcel(Parcel source) {
-			return new Meeting(source);
-		}
-
-		@Override
-		public Meeting[] newArray(int size) {
-			return new Meeting[size];
-		}
-	};
 
 //----------------------------------------------------
 //
@@ -120,6 +74,18 @@ public class Meeting implements Parcelable, Serializable {
 
 		return true;
 	}
+
+	public Person getPerson(String name) {
+		for(Person p : involvedPeople) {
+			if(p.getName().equals(name)) {
+				return p;
+
+			}
+		} //End For-Loop
+
+		return null;
+
+	} //End public Person getPerson(String)
 
 //----------------------------------------------------
 //

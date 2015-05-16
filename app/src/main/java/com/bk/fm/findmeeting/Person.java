@@ -28,7 +28,6 @@ public class Person implements Parcelable, Serializable {
 //
 //----------------------------------------------------
 	private String name;
-	private long primaryKey;
 	private ArrayList<ScheduleObject> availability;
 
 //----------------------------------------------------
@@ -108,10 +107,6 @@ public class Person implements Parcelable, Serializable {
 
 	}
 
-	public long getPrimaryKey() {
-		return primaryKey;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
@@ -139,10 +134,6 @@ public class Person implements Parcelable, Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public void setPrimaryKey(long primaryKey) {
-		this.primaryKey = primaryKey;
 	}
 
 	public void setAvailability(ArrayList<ScheduleObject> availability) {

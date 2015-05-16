@@ -89,12 +89,12 @@ public class InvolvedPeople extends ActionBarActivity {
 						goToActivity(Results.class);
 
                     } else { // People have been added to the meeting and have added obligation(s) / availabilitie(s)
-						Toast.makeText(getApplicationContext(), "Please enter at least one obligation or availability for each person.", Toast.LENGTH_SHORT).show();
+						Toast.makeText(getApplicationContext(), getString(R.string.moreObligations), Toast.LENGTH_SHORT).show();
 
 					}
 
 				} else { //Meeting object is null
-					Toast.makeText(getApplicationContext(), "Please add some people.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.morePeople), Toast.LENGTH_SHORT).show();
 
                 } //End outer if-else
 			}
@@ -116,8 +116,8 @@ public class InvolvedPeople extends ActionBarActivity {
 		//Go to AvailabilitySummary for a given person onShortPress
 		peopleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				String personName = peopleList.getItemAtPosition(position).toString();
-				Person p = meeting.getInvolvedPeople().get(peopleNames.indexOf(personName));
+				String selectedPerson = peopleList.getItemAtPosition(position).toString();
+				Person p = meeting.getPerson(selectedPerson);
 
 				Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
 				i.putExtra("PERSON", (Parcelable) p);

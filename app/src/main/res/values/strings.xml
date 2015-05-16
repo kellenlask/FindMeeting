@@ -62,4 +62,10 @@
     <string name="delete">DELETE</string>
     <string name="invalidConfig">Invalid Meeting Configuration</string>
     <string name="invalidRange">Invalid Time Range</string>
+    <string name="moreObligations">Please enter at least one obligation or availability for each person.</string>
+    <string name="morePeople">Please add some people.</string>
+
+
+
+
 </resources>

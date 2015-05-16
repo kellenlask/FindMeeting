@@ -88,7 +88,7 @@ public class Summary extends ActionBarActivity {
 
 		//Set the meeting length in the GUI
 		meetingLengthTextView = (TextView)findViewById(R.id.meetingLengthLabel);
-		meetingLengthTextView.setText(" " + meeting.getMeetingDuration().toString("Single")); //Todo: Rename this shit.
+		meetingLengthTextView.setText(" " + meeting.getMeetingDuration().toString("Single")); //Todo: Use a more descriptive name.
 
 		//Populate the list of days and times
 		daysTimesListView = (ListView)findViewById(R.id.daysTimesListView);
