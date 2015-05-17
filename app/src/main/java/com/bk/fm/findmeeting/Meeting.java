@@ -44,6 +44,8 @@ public class Meeting implements Serializable {
 		this.setPossibleDays(days);
 		this.setMeetingDuration(meetingDuration);
 
+		involvedPeople = new ArrayList<>();
+
 	} //End constructor
 
 //----------------------------------------------------
@@ -67,7 +69,7 @@ public class Meeting implements Serializable {
 	public boolean isValid() {
 		// Loop through the people and check that each person has at least one availability or obligation
 		for (Person p : involvedPeople) {
-			if (p.getAvailability() == null) {
+			if (p.getAvailability() == null || p.getAvailability().size() == 0) {
 				return false;
 			}
 		}
@@ -83,7 +85,7 @@ public class Meeting implements Serializable {
 			}
 		} //End For-Loop
 
-		return null;
+		return new Person();
 
 	} //End public Person getPerson(String)
 
@@ -164,6 +166,7 @@ public class Meeting implements Serializable {
 		*
 		* 	As you can imagine, two ranges can overlap in many different ways.
 		* 	However, the same solution can resolve multiple types of overlap.
+		*   Checkout the comments in the Range class for more information.
 		*/
 
 		switch(type) {

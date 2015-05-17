@@ -1,8 +1,3 @@
-/*
-This file contains the Java code for the class definition of a Person Object. This object should
-store the information of a person, i.e. Name, Database Primary Key, and Availabilities/Obligations.
- */
-
 package com.bk.fm.findmeeting;
 
 /**
@@ -20,6 +15,11 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/*
+This file contains the Java code for the class definition of a Person Object. This object should
+store the information of a person, i.e. Name, Database Primary Key, and a list of
+Availabilities/Obligations.
+*/
 
 public class Person implements Parcelable, Serializable {
 //----------------------------------------------------
@@ -36,7 +36,8 @@ public class Person implements Parcelable, Serializable {
 //
 //----------------------------------------------------
 	public Person() {
-
+		this.name = "";
+		this.availability = new ArrayList<>();
 	}
 
 	public Person(String name) {

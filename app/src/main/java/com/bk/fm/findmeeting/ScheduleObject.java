@@ -1,18 +1,18 @@
+package com.bk.fm.findmeeting;
+
+/**
+ * Created by Kellen on 3/14/2015.
+ */
+
+import android.content.Context;
+import java.io.Serializable;
+
 /*
 This file contains the Java code for a Schedule Object class definition. This is the super class for
 Availability, and Obligation. Other than that, this class's primary purpose is to allow for
 polymorphism between Availability and Obligation objects.
  */
 
-package com.bk.fm.findmeeting;
-
-import android.content.Context;
-
-import java.io.Serializable;
-
-/**
- * Created by Kellen on 3/14/2015.
- */
 public class ScheduleObject extends Range implements Serializable {
 //----------------------------------------------------
 //

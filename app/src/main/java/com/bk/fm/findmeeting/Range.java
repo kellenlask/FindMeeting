@@ -95,65 +95,68 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 		return day.toString(c) + ": " + interval.toString();
 	}
 
-	//inclusive
-	public boolean touches(Range r) { //ToDo: This might need to be less line overlaps to be a best practice...
+	//Determines if two ranges overlap, and returns an integer representing the overlap type
+	public int overlaps(Range r) {
+		//0 means no overlap
+		int overlap = 0;
+
 		if(day.equals(r.getDay())) {
 			int os = r.getStartTime().getTimeInMinutes();
 			int oe = r.getStopTime().getTimeInMinutes();
 			int s = getStartTime().getTimeInMinutes();
 			int e = getStopTime().getTimeInMinutes();
 
-			boolean overlaps = (overlaps(r) == 0) ? (false) : (true);
-
-			return overlaps && (oe == s) && (os == e);
-
-		} else {
-			return false;
-		}
-	}
-
-	//Not inclusive
-	public int overlaps(Range r) { //ToDo: Some of this logic might be simplified into fewer if statements
-		if(day.equals(r.getDay())) {
-			int os = r.getStartTime().getTimeInMinutes();
-			int oe = r.getStopTime().getTimeInMinutes();
-			int s = getStartTime().getTimeInMinutes();
-			int e = getStopTime().getTimeInMinutes();
-
-			int overlap = 0;
 
 			if(os < s && oe < e && s < oe) {
+				//    |---------|  <---- This
+				// |---------| <---- Other
 				overlap = 1;
 
 			} else if(s < os && e < oe && os < e) {
+				// |----------|
+				//    |----------|
 				overlap = 2;
 
 			} else if(s < os && oe < e) {
+				// |------------|
+				//    |------|
 				overlap = 3;
 
 			} else if(os < s && e < oe) {
+				//    |------|
+				// |------------|
 				overlap = 4;
 
 			} else if(oe == e && os < s) {
+				//    |-----|
+				// |--------|
 				overlap = 5;
 
 			} else if(os == s && e < oe) {
+				//	|------|
+				//	|----------|
 				overlap = 6;
 
 			} else if(os == s && oe < e) {
+				// |----------|
+				// |------|
 				overlap = 7;
 
 			} else if(oe == e && s < os) {
+				// |----------|
+				//    |-------|
 				overlap = 8;
 
 			} else if(os == s && oe == e) {
+				// |--------|
+				// |--------|
 				overlap = 9;
 			}
 
 			return overlap;
 
 		} else {
-			return 0;
+			return overlap;
 		}
 	}
 

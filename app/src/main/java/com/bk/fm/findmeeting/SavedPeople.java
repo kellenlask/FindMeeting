@@ -54,6 +54,7 @@ public class SavedPeople extends ActionBarActivity {
         setContentView(R.layout.activity_saved_people);
 
         initializeFields();
+
 		addActionHandlers();
 
     }
@@ -69,23 +70,17 @@ public class SavedPeople extends ActionBarActivity {
 		//Add person to the meeting when shortClicked
 		savedPeopleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				for (Person p: people)
-				{
+				for (Person p: people) {
 					if (p.getName() == peopleNames.get(position)) {
-						if(meeting.getInvolvedPeople() == null) {
-							meeting.setInvolvedPeople(new ArrayList<Person>());
-							meeting.getInvolvedPeople().add(p);
-							Toast.makeText(getApplicationContext(), getString(R.string.person_added),Toast.LENGTH_SHORT).show();
-
-						} else if (meeting.getInvolvedPeople().contains(p)) {
+						if (meeting.getInvolvedPeople().contains(p)) {
 							Toast.makeText(getApplicationContext(), getString(R.string.person_already_added),Toast.LENGTH_SHORT).show();
 						} else {
 							meeting.getInvolvedPeople().add(p);
 							Toast.makeText(getApplicationContext(), getString(R.string.person_added),Toast.LENGTH_SHORT).show();
 						}
 
-					}
-				}
+					} //End outer if
+				} //End for loop
 
 				updateListView();
 				putMeeting();
