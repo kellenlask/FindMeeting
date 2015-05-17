@@ -17,13 +17,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 /*
 This file contains the Java code to describe the behavior of the Availability Summary view
 The Activity's layout information is contained in the xml file under /res/layout/
 This view is meant to summarize the availability of one Person.
- */
+*/
 
 public class AvailabilitySummary extends ActionBarActivity {
 //----------------------------------------------------
@@ -68,7 +70,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
 		super.onCreateContextMenu(menu, view, menuInfo);
 
-		menu.setHeaderTitle("Schedule Object");
+		menu.setHeaderTitle(getString(R.string.changeItem));
 
 		menu.add(getString(R.string.edit));
 		menu.add(getString(R.string.delete));
@@ -134,7 +136,9 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 				//Update the database entry
 				DataBase db = new DataBase(getBaseContext());
-				db.updatePersonAvail(person);
+				int updates = db.updatePersonAvail(person);
+				Toast.makeText(getApplicationContext(), "Updated: " + updates, Toast.LENGTH_SHORT).show();
+
 
 				//Update the person in the Meeting Object
 				addPersonToMeeting();

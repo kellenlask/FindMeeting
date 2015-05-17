@@ -1,11 +1,8 @@
-/*
-This file contains the Java code to describe the behavior of the Meeting Summary view
-The Activity's layout information is contained in the xml file under /res/layout/
-The intent is to summarize the Meeting parameters to the user before he/she moves on to add people
-to the meeting.
- */
-
 package com.bk.fm.findmeeting;
+
+/**
+ * Created by Kellen on 3/15/2015.
+ */
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,9 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
+/*
+This file contains the Java code to describe the behavior of the Meeting Summary view
+The Activity's layout information is contained in the xml file under /res/layout/
+The intent is to summarize the Meeting parameters to the user before he/she moves on to add people
+to the meeting.
+ */
 
 public class Summary extends ActionBarActivity {
 //----------------------------------------------------

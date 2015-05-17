@@ -77,6 +77,7 @@
     <!-- Availability Summary Activity -->
     <string name="availButtonText_5">New Availability</string>
     <string name="newObligation_5">New Obligation</string>
+    <string name="changeItem">ChangeItem</string>
 
     <!-- Results Activity -->
     <string name="possibleMeetings">Possible Meetings</string>

@@ -1,11 +1,8 @@
-/*
-This file contains the Java code to describe the behavior of the Saved People view
-The Activity's layout information is contained in the xml file under /res/layout/
-The intent is to present a list of people currently in the database, and allow for the creation
-and editing of people.
- */
-
 package com.bk.fm.findmeeting;
+
+/**
+ * Created by Kellen on 3/15/2015.
+ */
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,10 +19,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
+/*
+This file contains the Java code to describe the behavior of the Saved People view
+The Activity's layout information is contained in the xml file under /res/layout/
+The intent is to present a list of people currently in the database, and allow for the creation
+and editing of people.
+*/
 
 public class SavedPeople extends ActionBarActivity {
 //----------------------------------------------------
@@ -110,7 +112,9 @@ public class SavedPeople extends ActionBarActivity {
 						//Make a new person from the text from the dialog
 						Person p = new Person(input.getText().toString());
 
-						if (peopleNames.contains(p.getName())) { // Make sure there are no duplicate people in the db
+						DataBase db = new DataBase(getBaseContext());
+
+						if (db.contains(p.getName())) { // Make sure there are no duplicate people in the db
 							Toast.makeText(getApplicationContext(), getString(R.string.person_exists),Toast.LENGTH_SHORT).show();
 						} else {
 							p.setAvailability(new ArrayList<ScheduleObject>());
