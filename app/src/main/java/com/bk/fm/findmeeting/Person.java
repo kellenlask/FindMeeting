@@ -143,12 +143,17 @@ public class Person implements Parcelable, Serializable {
 	public void setAvailability(String serializedObj) {
 		ArrayList<ScheduleObject> avail = null;
 		try {
-			byte[] bts = serializedObj.getBytes(); //If this doesn't work, here is where it's messing up
+			byte[] bts = serializedObj.getBytes("ISO-8859-1"); //If this doesn't work, here is where it's messing up
 
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(bts);
 			ObjectInputStream si = new ObjectInputStream(inputStream);
 
 			avail = (ArrayList<ScheduleObject>) si.readObject();
+
+			if(avail ==  null) {
+				avail = new ArrayList<>();
+
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 /*
@@ -85,7 +84,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 	@Override
 	//When one of the context menu items is pressed, do this:
 	public boolean onContextItemSelected(MenuItem item) {
-		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		String selectedItem = item.getTitle().toString();
 
 		//Grab the selected element
@@ -104,14 +103,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 			Intent i = new Intent(getBaseContext(), NewObligAvail.class);
 			i.putExtra("PERSON", (Parcelable) person);
 			i.putExtra("SCHEDULE_OBJECT_INDEX", person.getAvailability().indexOf(schObj));
-
-			if (schObj.isObligation()) {
-				i.putExtra("ACTIVITY_TYPE", "Edit Obligation");
-
-			} else {
-				i.putExtra("ACTIVITY_TYPE", "Edit Availability");
-			}
-
+			i.putExtra("ACTIVITY_TYPE", "Edit");
 			startActivity(i);
 
 		} else {  //"Delete" Pressed
@@ -139,7 +131,6 @@ public class AvailabilitySummary extends ActionBarActivity {
 				int updates = db.updatePersonAvail(person);
 				Toast.makeText(getApplicationContext(), "Updated: " + updates, Toast.LENGTH_SHORT).show();
 
-
 				//Update the person in the Meeting Object
 				addPersonToMeeting();
 
@@ -160,7 +151,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 			public void onClick(View v) {
 					Intent i = new Intent(getBaseContext(), NewObligAvail.class);
 					i.putExtra("PERSON", (Parcelable) person);
-					i.putExtra("ACTIVITY_TYPE", "");
+					i.putExtra("ACTIVITY_TYPE", ""); //(Not "edit")
 					startActivity(i);
 			}
 		});
