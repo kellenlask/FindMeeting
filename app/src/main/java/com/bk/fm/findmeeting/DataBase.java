@@ -109,6 +109,18 @@ public class DataBase extends SQLiteOpenHelper {
 		return p;
 	}
 
+	public boolean contains(String name) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		String query = "SELECT * FROM " + TABLE_PEOPLE + " WHERE " + PRIMARY_KEY + " = '" + name + "'";
+		Cursor cursor = db.rawQuery(query, null);
+
+		if(cursor.moveToFirst()) { //If we got stuff
+			return true;
+		}
+
+		return false;
+	}
+
 	public boolean contains(Person p) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
@@ -137,24 +149,28 @@ public class DataBase extends SQLiteOpenHelper {
 		db.close();
 	}
 
-	public boolean addPerson(Person p) { //TODO: Catch repeat names
-		try {
-			SQLiteDatabase db = this.getWritableDatabase();
-
-			ContentValues values = new ContentValues();
-			values.put(PRIMARY_KEY, p.getName());
-			values.put(AVAIL_KEY, p.getSerializedAvial());
-
-			// Inserting Row
-			db.insert(TABLE_PEOPLE, null, values);
-			db.close(); // Closing database connection
-
-			return true;
-
-		} catch(IOException e) {
+	public boolean addPerson(Person p) {
+		if(contains(p.getName())) {
 			return false;
-		}
-	}
+		} else {
+			try {
+				SQLiteDatabase db = this.getWritableDatabase();
+
+				ContentValues values = new ContentValues();
+				values.put(PRIMARY_KEY, p.getName());
+				values.put(AVAIL_KEY, p.getSerializedAvial());
+
+				// Inserting Row
+				db.insert(TABLE_PEOPLE, null, values);
+				db.close(); // Closing database connection
+
+				return true;
+
+			} catch(IOException e) {
+				return false;
+			} //End try-catch
+		} //End if-else
+	} //End public boolean addPerson(Person)
 
 	public int updatePerson(Person p) {
 		try {
@@ -188,11 +204,11 @@ public class DataBase extends SQLiteOpenHelper {
 
 			return updates; //Number of fields changed
 
-		} catch(Exception e) {
+		} catch(IOException e) {
 			return 0;
 		}
 
-	}
+	}//End public int updatePersonAvail(Person)
 
     public void updatePersonName(String oldName, String newName) {
 
