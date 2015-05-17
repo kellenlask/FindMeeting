@@ -15,7 +15,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:orientation="vertical"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:layout_above="@+id/nextButton">
 
         <TextView
             android:id="@+id/textView"
@@ -267,16 +268,16 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.22"/>
 
-        <Button
-            android:id="@+id/nextButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.16"
-            android:height="20dp"
-            android:hint="@string/next"
-            android:text="@string/next"
-            android:textSize="@dimen/abc_text_size_large_material"/>
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:height="20dp"
+        android:hint="@string/next"
+        android:text="@string/next"
+        android:textSize="20dp"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

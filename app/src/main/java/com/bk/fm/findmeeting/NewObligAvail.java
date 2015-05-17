@@ -1,11 +1,8 @@
-/*
-This file contains the Java code to describe the behavior of the Obligation/Availability view
-The Activity's layout information is contained in the xml file under /res/layout/
-The intent is to accept the parameters for a new Obligation or Availability (the view should change
-its type based on the button pressed in the Availability Summary Activity)
- */
-
 package com.bk.fm.findmeeting;
+
+/**
+ * Created by Kellen on 3/15/2015.
+ */
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -15,12 +12,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
-import java.util.ArrayList;
-
+/*
+This file contains the Java code to describe the behavior of the Obligation/Availability view
+The Activity's layout information is contained in the xml file under /res/layout/
+The intent is to accept the parameters for a new Obligation or Availability (the view should change
+its type based on the button pressed in the Availability Summary Activity)
+*/
 
 public class NewObligAvail extends ActionBarActivity {
 //----------------------------------------------------
@@ -36,13 +37,13 @@ public class NewObligAvail extends ActionBarActivity {
     private CheckBox friday;
     private CheckBox saturday;
 
+	private ToggleButton toggle;
     private Button saveButton;
     private Button startTime;
     private Button endTime;
 
     private Person person;
     private String activityType;
-    private int scheduleObjectIndex;
 
 //----------------------------------------------------
 //
@@ -56,7 +57,8 @@ public class NewObligAvail extends ActionBarActivity {
 		setContentView(R.layout.activity_new_oblig_avail);
 
         initializeFields();
-        setTimeInputActionHandlers();
+
+		setActionHandlers();
 	}
 
 //----------------------------------------------------
@@ -64,35 +66,35 @@ public class NewObligAvail extends ActionBarActivity {
 //	Action Handlers
 //
 //----------------------------------------------------
-	private View.OnClickListener saveButtonListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
+	public void setActionHandlers() {
+		//Save Button
+		saveButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//Make sure at least one day was selected
+				boolean noneChecked = true;
+				for(boolean b : getSelectedDays()) {
+					if(b) {
+						noneChecked = false;
+						break;
+					}
+				} //End for-loop
 
-			boolean noneChecked = true;
+				//If one was selected, store the ScheduleObject and get the hell out.
+				if (!noneChecked) {
+					addScheduleObject();
 
-			for(boolean b : getSelectedDays()) {
-				if(b) {
-					noneChecked = false;
-					break;
+					Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+					i.putExtra("PERSON", (Parcelable) person);
+					startActivity(i);
+
+				} else {
+					Toast.makeText(getApplicationContext(), "Please select a day.", Toast.LENGTH_SHORT).show();
 				}
-
 			}
+		});
 
-			if (!noneChecked) {
-				addScheduleObject();
-
-				Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
-				i.putExtra("PERSON", (Parcelable) person);
-				startActivity(i);
-
-			} else {
-				Toast.makeText(getApplicationContext(), "Please select a day.", Toast.LENGTH_SHORT).show();
-			}
-		}
-	};
-
-	public void setTimeInputActionHandlers() {
-		//Show the time picker when the field is clicked.
+		//Time Input Dialog
 		View.OnClickListener getTime = new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -103,13 +105,14 @@ public class NewObligAvail extends ActionBarActivity {
 		startTime.setOnClickListener(getTime);
 		endTime.setOnClickListener(getTime);
 
-	} //End public void setTimeInputActionHandlers()
+	} //End public void setActionHandlers()
 
     public void onBackPressed() {
         Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
         i.putExtra("PERSON", (Parcelable) person);
         startActivity(i);
     }
+
 //----------------------------------------------------
 //
 //	GUI Methods
@@ -149,11 +152,13 @@ public class NewObligAvail extends ActionBarActivity {
 
 //----------------------------------------------------
 //
-//	Logical Methods
+//	Mutating Methods
 //
 //----------------------------------------------------
 
     public void initializeFields() {
+		//Grab the Availability/Obligation toggle
+		toggle = (ToggleButton) findViewById(R.id.toggleButton);
 
         // Initialize text boxes
         sunday = (CheckBox) findViewById(R.id.sunday);
@@ -164,136 +169,84 @@ public class NewObligAvail extends ActionBarActivity {
         friday = (CheckBox) findViewById(R.id.friday);
         saturday = (CheckBox) findViewById(R.id.saturday);
 
-        // Initialize save button
+        // Grab the buttons
         saveButton = (Button) findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(saveButtonListener);
-
-        // Time Inputs
         startTime = (Button) findViewById(R.id.startTime);
         endTime = (Button) findViewById(R.id.endTime);
 
-        // Initialize activity type and person object
-        activityType = (String)getIntent().getSerializableExtra("ACTIVITY_TYPE");
+		//Pull the person object
         person = (Person)getIntent().getSerializableExtra("PERSON");
 
-        // Set title
-        TextView title = (TextView) findViewById(R.id.titleTextView);
-        title.setText(activityType);
-
         // Check if this activity is an edit. If so, preload the checkboxes and time buttons
+		activityType = (String)getIntent().getSerializableExtra("ACTIVITY_TYPE");
         if (activityType.contains("Edit"))
         {
-            // Pull the index of the schedule object in the linked list
-            scheduleObjectIndex = (int)getIntent().getSerializableExtra("SCHEDULE_OBJECT_INDEX");
+            // Pull the index of the ScheduleObject
+            int scheduleObjectIndex = (int) getIntent().getSerializableExtra("SCHEDULE_OBJECT_INDEX");
 
-            loadEditActivity();
+			//Populate the activity from the existing object
+            loadEditActivity(scheduleObjectIndex);
         }
     } //End  private void initializeFields()
 
-    //Update the map to reflect the check boxes
+    //Add the ScheduleObject to the person's availability ArrayList
     public void addScheduleObject() {
 
         boolean[] days = getSelectedDays();
-        Range range = null;
-        Interval interval = null;
-
-        try
-        {
-            interval = getInterval();
-        }
-        catch (Exception e)
-        {
-            Toast.makeText(getApplicationContext(), "Invalid time range.", Toast.LENGTH_SHORT).show();
-        }
+		Interval interval = getInterval();
 
         for (int i = 0; i < days.length; i++) {
 
             if (days[i] == true) {
-                switch (i) {
-                    case 0: range = new Range(interval, Day.SUNDAY);
-                            break;
-                    case 1: range = new Range(interval, Day.MONDAY);
-                            break;
-                    case 2: range = new Range(interval, Day.TUESDAY);
-                            break;
-                    case 3: range = new Range(interval, Day.WEDNESDAY);
-                            break;
-                    case 4: range = new Range(interval, Day.THURSDAY);
-                            break;
-                    case 5: range = new Range(interval, Day.FRIDAY);
-                            break;
-                    case 6: range = new Range(interval, Day.SATURDAY);
-                            break;
-                }
+				Range range = new Range(interval, Day.getDay(i));
 
-                if (activityType.contains("Availability"))
-                {
-                    if (person.getAvailability() == null)
-                    {
-                        ScheduleObject schedOb = new ScheduleObject(false, range);
-                        person.setAvailability(new ArrayList<ScheduleObject>());
-                        person.addScheduleObject(schedOb);
-                    }
-                    else
-                    {
-                        ScheduleObject schedOb = new ScheduleObject(false, range);
-                        person.addScheduleObject(schedOb);
-                    }
-                }
-                else if (activityType.contains("Obligation"))
-                {
-                    if (person.getAvailability() == null)
-                    {
-                        ScheduleObject schedOb = new ScheduleObject(true, range);
-                        person.setAvailability(new ArrayList<ScheduleObject>());
-                        person.addScheduleObject(schedOb);
-                    }
-                    else
-                    {
-                        ScheduleObject schedOb = new ScheduleObject(true, range);
-                        person.addScheduleObject(schedOb);
-                    }
-                }
-            }
+				ScheduleObject schedOb = new ScheduleObject(toggle.isChecked(), range);
+				person.addScheduleObject(schedOb);
+
+            } //End outer if
         } //End for loop
 
     } //End public void addScheduleObject()
 
-    public void loadEditActivity() {
+    public void loadEditActivity(int scheduleObjectIndex) {
 
         ScheduleObject schedObj = person.getAvailability().get(scheduleObjectIndex);
 
-        // Set the checkbox
-        String day = schedObj.getDay().toString(this);
+		//Set the ScheduleObject Type
+		toggle.setChecked(schedObj.isObligation());
 
-        if (day.equals("Sunday"))
-        {
-            sunday.setChecked(true);
-        }
-        else if (day.equals("Monday"))
-        {
-            monday.setChecked(true);
-        }
-        else if (day.equals("Tuesday"))
-        {
-            tuesday.setChecked(true);
-        }
-        else if (day.equals("Wednesday"))
-        {
-            wednesday.setChecked(true);
-        }
-        else if (day.equals("Thursday"))
-        {
-            thursday.setChecked(true);
-        }
-        else if (day.equals("Friday"))
-        {
-            friday.setChecked(true);
-        }
-        else if (day.equals("Saturday"))
-        {
-            saturday.setChecked(true);
-        }
+        // Set the checkbox
+        int day = schedObj.getDay().getIndex();
+
+		switch(day) {
+			case 0:
+				sunday.setChecked(true);
+				break;
+
+			case 1:
+				monday.setChecked(true);
+				break;
+
+			case 2:
+				tuesday.setChecked(true);
+				break;
+
+			case 3:
+				wednesday.setChecked(true);
+				break;
+
+			case 4:
+				thursday.setChecked(true);
+				break;
+
+			case 5:
+				friday.setChecked(true);
+				break;
+
+			case 6:
+				saturday.setChecked(true);
+				break;
+		} //End Switch
 
         // Set time interval buttons
         String start = schedObj.getStartTime().toString();
@@ -304,7 +257,14 @@ public class NewObligAvail extends ActionBarActivity {
 
         // Delete the schedule object
         person.getAvailability().remove(scheduleObjectIndex);
-    }
+
+    } //End public void loadEditActivity(int)
+
+//----------------------------------------------------
+//
+//	Accessing Methods
+//
+//----------------------------------------------------
 
     //Make a boolean array representing the available days as selected by the user via checkboxes.
     public boolean[] getSelectedDays() {
@@ -323,7 +283,7 @@ public class NewObligAvail extends ActionBarActivity {
     } //End public boolean[] getSelectedDays()
 
     //Get an interval of the start and end times
-    public Interval getInterval() throws Exception {
+    public Interval getInterval() {
         Time start = new Time(startTime.getText());
         Time end = new Time(endTime.getText());
 
@@ -332,4 +292,4 @@ public class NewObligAvail extends ActionBarActivity {
     } //End public Interval getInterval()
 
 
-}
+} //End Class

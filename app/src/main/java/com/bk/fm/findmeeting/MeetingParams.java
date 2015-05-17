@@ -1,10 +1,8 @@
-/*
-This file contains the Java code to describe the behavior of the Meeting Parameters view
-The Activity's layout information is contained in the xml file under /res/layout/
-The intent is to take in the Meeting's parameters and construct a Meeting object from them.
- */
-
 package com.bk.fm.findmeeting;
+
+/**
+ * Created by Kellen on 3/15/2015.
+ */
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -20,9 +18,14 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.TreeMap;
+
+/*
+This file contains the Java code to describe the behavior of the Meeting Parameters view
+The Activity's layout information is contained in the xml file under /res/layout/
+The intent is to take in the Meeting's parameters and construct a Meeting object from them.
+ */
 
 public class MeetingParams extends ActionBarActivity {
 //----------------------------------------------------
@@ -120,7 +123,7 @@ public class MeetingParams extends ActionBarActivity {
 					Intent i = new Intent(getBaseContext(), Summary.class);
 					startActivity(i);
 				} else {
-					throw new Exception("No days selected.");
+					Toast.makeText(getApplicationContext(), getString(R.string.invalidConfig), Toast.LENGTH_SHORT).show();
 				} //End if-else
 
 			} catch (Exception e) {

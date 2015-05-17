@@ -11,24 +11,35 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:layout_above="@+id/saveButton"
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/addTitle_6"
+            android:text="@string/newItem"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold"/>
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toggleButton"
+            android:checked="false"
+            android:textOff="@string/avail"
+            android:textOn="@string/ablig"
+            android:layout_gravity="center_horizontal"/>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.15"/>
+            android:layout_weight="0.13"/>
 
         <TextView
             android:id="@+id/textView21"
@@ -185,7 +196,7 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.15"/>
+            android:layout_weight="0.17"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -227,13 +238,16 @@
             android:layout_height="20dp"
             android:layout_weight="0.15"/>
 
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/saveText_5"
-            android:textStyle="bold"
-            android:layout_weight="0.06"/>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/saveText_5"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

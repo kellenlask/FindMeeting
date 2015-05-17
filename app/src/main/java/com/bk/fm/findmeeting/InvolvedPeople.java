@@ -1,11 +1,8 @@
-/*
-This file contains the Java code to describe the behavior of the Involved People view
-The Activity's layout information is contained in the xml file under /res/layout/
-The intent is to maintain a list of people who are involved in a meeting event that can be
-interacted with.
- */
-
 package com.bk.fm.findmeeting;
+
+/**
+ * Created by Kellen on 3/15/2015.
+ */
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,9 +15,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Collections;
+
+/*
+This file contains the Java code to describe the behavior of the Involved People view
+The Activity's layout information is contained in the xml file under /res/layout/
+The intent is to maintain a list of people who are involved in a meeting event that can be
+interacted with.
+ */
 
 //Basic Logic:
 //
@@ -61,8 +64,9 @@ public class InvolvedPeople extends ActionBarActivity {
 	} //End protected void onCreate()
 
 	public void onBackPressed() {
+		putMeeting();
+
 		Intent i = new Intent(getBaseContext(), Summary.class);
-		i.putExtra("MEETING", (Parcelable) meeting);
 		startActivity(i);
 	}
 
@@ -84,8 +88,8 @@ public class InvolvedPeople extends ActionBarActivity {
 		findTimesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(meeting.getInvolvedPeople() != null) { //Nobody has been added to the meeting
-                    if (meeting.isValid()) { // One or more people have no availability or obligation
+				if(meeting.getInvolvedPeople().size() != 2) { //People have been added to the meeting
+                    if (meeting.isValid()) { //Everybody has some availability set
 						goToActivity(Results.class);
 
                     } else { // People have been added to the meeting and have added obligation(s) / availabilitie(s)

@@ -1,10 +1,8 @@
-/*
-This file contains the Java code to describe the behavior of the Availability Summary view
-The Activity's layout information is contained in the xml file under /res/layout/
-This view is meant to summarize the availability of one Person.
- */
-
 package com.bk.fm.findmeeting;
+
+/**
+ * Created by Kellen on 3/15/2015.
+ */
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,8 +17,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
+
+/*
+This file contains the Java code to describe the behavior of the Availability Summary view
+The Activity's layout information is contained in the xml file under /res/layout/
+This view is meant to summarize the availability of one Person.
+ */
 
 public class AvailabilitySummary extends ActionBarActivity {
 //----------------------------------------------------
@@ -28,12 +31,12 @@ public class AvailabilitySummary extends ActionBarActivity {
 //	Fields
 //
 //----------------------------------------------------
+	//GUI Elements
     private ListView AvailObligListView;
-
-    private Button newAvailabilityButton;
+    private Button newItemButton;
     private Button doneButton;
-    private Button newObligationButton;
 
+	//Logical Elements
 	private Meeting meeting;
     private ArrayList<String> schedule;
     private Person person;
@@ -90,7 +93,6 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 			if (scheduleAdapter.getItem(info.position).equals(schObj.toString(this))) {
 				break;
-
 			}
 
 		} //End for-loop
@@ -123,8 +125,8 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 	public void addActionHandlers() {
 
-		//Save the person's availability and go back to InvolvedPeople
-		View.OnClickListener doneClickListener = new View.OnClickListener() {
+		//Done Button
+		doneButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				//Simplify the person's availability down to simplest terms
@@ -147,36 +149,17 @@ public class AvailabilitySummary extends ActionBarActivity {
 				Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
 				startActivity(i);
 			}
-		};
+		});
 
-		//Setup the done button
-		doneButton.setOnClickListener(doneClickListener);
-
-		//Go to the NewObligAvail Activity to create a new obligation/availability
-		View.OnClickListener addAvailObligClickListener = new View.OnClickListener() {
+		newItemButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				if (v.getId() == R.id.newAvailabilityButton)
-				{
 					Intent i = new Intent(getBaseContext(), NewObligAvail.class);
 					i.putExtra("PERSON", (Parcelable) person);
-					i.putExtra("ACTIVITY_TYPE", "New Availability");
+					i.putExtra("ACTIVITY_TYPE", "");
 					startActivity(i);
-				}
-				else if (v.getId() == R.id.newObligationButton)
-				{
-					Intent i = new Intent(getBaseContext(), NewObligAvail.class);
-					i.putExtra("PERSON", (Parcelable) person);
-					i.putExtra("ACTIVITY_TYPE", "New Obligation");
-					startActivity(i);
-				}
 			}
-		};
-
-		//Setup the new Availability and Obligation buttons
-		newAvailabilityButton.setOnClickListener(addAvailObligClickListener);
-		newObligationButton.setOnClickListener(addAvailObligClickListener);
+		});
 
 		//Register the ListView's items for opening the context menu
 		registerForContextMenu(AvailObligListView);
@@ -208,18 +191,16 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 		//Initialize Title Text
 		TextView title = (TextView) findViewById(R.id.titleText);
-		title.setText(title.getText().toString() + " " + person.getName()); //Does use a String Resource
+		title.setText(person.getName());
 
         // Initialize buttons
-        newAvailabilityButton = (Button) findViewById(R.id.newAvailabilityButton);
+		newItemButton = (Button) findViewById(R.id.addButton);
         doneButton = (Button) findViewById(R.id.saveButton);
-        newObligationButton = (Button) findViewById(R.id.newObligationButton);
+
 
     } //End private void initializeFields()
 
-	//
     private void updateAvailability() {
-        if (person.getAvailability() != null) {
             schedule = new ArrayList<>();
 
             for (ScheduleObject s : person.getAvailability()) {
@@ -229,7 +210,6 @@ public class AvailabilitySummary extends ActionBarActivity {
 			scheduleAdapter = new AvailabilityArrayAdapter(this, schedule);
 
             AvailObligListView.setAdapter(scheduleAdapter);
-        }
 
     } //End private void updateAvailability()
 

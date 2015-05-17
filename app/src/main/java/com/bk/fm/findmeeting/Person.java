@@ -48,6 +48,12 @@ public class Person implements Parcelable, Serializable {
 	public Person(Parcel in) {
 		this.name = in.readString();
 		this.availability = (ArrayList<ScheduleObject>) in.readSerializable();
+
+		//Empty serialized lists are transfered as null...
+		if(availability == null) {
+			availability = new ArrayList<>();
+		}
+
 	}
 
 //----------------------------------------------------
@@ -94,34 +100,27 @@ public class Person implements Parcelable, Serializable {
 	}
 
 	public String getSerializedAvial() throws IOException {
-
-		try {
 			ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 			ObjectOutputStream outStream = new ObjectOutputStream(byteOut);
 			outStream.writeObject(availability);
 
 			return byteOut.toString("ISO-8859-1");
 
-		} catch (IOException e) {
-			throw new IOException("Invalid Byte Array");
-		}
-
-	}
+	} //End public String getSerializedAvial()
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
 		}
+
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final Person other = (Person) obj;
-		if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
-			return false;
-		}
 
-		return true;
+		Person other = (Person) obj;
+
+		return (this.name == null) ? (other.name == null) : this.name.equals(other.name);
 	}
 
 //----------------------------------------------------

@@ -49,6 +49,8 @@
     <string name="edit">EDIT</string>
     <string name="delete">DELETE</string>
     <string name="days">Days:</string>
+    <string name="avail">Availability</string>
+    <string name="ablig">Obligation</string>
 
     <!-- MeetingParams Activity -->
     <string name="stored_1">Stored</string>
@@ -86,6 +88,8 @@
     <string name="person_already_added">Person already in meeting.</string>
     <string name="invalidConfig">Invalid Meeting Configuration</string>
     <string name="invalidRange">Invalid Time Range</string>
-    <string name="moreObligations">Enter at least one obligation or availability for each person.</string>
+    <string name="moreObligations">Enter at least one obligation for each person.</string>
     <string name="morePeople">Add some people.</string>
+    <string name="newItem">New Schedule Item</string>
+
 </resources>
