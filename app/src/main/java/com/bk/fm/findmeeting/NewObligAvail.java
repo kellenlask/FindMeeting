@@ -82,14 +82,19 @@ public class NewObligAvail extends ActionBarActivity {
 
 				//If one was selected, store the ScheduleObject and get the hell out.
 				if (!noneChecked) {
-					addScheduleObject();
 
-					Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
-					i.putExtra("PERSON", (Parcelable) person);
-					startActivity(i);
+					try {
+						addScheduleObject(); //Throws an error with an invalid time range (e.g. 11:00 - 11:00)
+
+						Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+						i.putExtra("PERSON", (Parcelable) person);
+						startActivity(i);
+					} catch (Exception e) {
+						Toast.makeText(getApplicationContext(), getString(R.string.invalidRange), Toast.LENGTH_SHORT).show();
+					}
 
 				} else {
-					Toast.makeText(getApplicationContext(), "Please select a day.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.selectDay), Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -190,7 +195,7 @@ public class NewObligAvail extends ActionBarActivity {
     } //End  private void initializeFields()
 
     //Add the ScheduleObject to the person's availability ArrayList
-    public void addScheduleObject() {
+    public void addScheduleObject() throws IllegalArgumentException {
 
         boolean[] days = getSelectedDays();
 		Interval interval = getInterval();
@@ -283,7 +288,7 @@ public class NewObligAvail extends ActionBarActivity {
     } //End public boolean[] getSelectedDays()
 
     //Get an interval of the start and end times
-    public Interval getInterval() {
+    public Interval getInterval() throws IllegalArgumentException {
         Time start = new Time(startTime.getText());
         Time end = new Time(endTime.getText());
 

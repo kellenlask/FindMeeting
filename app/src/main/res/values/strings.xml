@@ -92,5 +92,6 @@
     <string name="moreObligations">Enter at least one obligation for each person.</string>
     <string name="morePeople">Add some people.</string>
     <string name="newItem">New Schedule Item</string>
+    <string name="selectDay">Please select a day.</string>
 
 </resources>
