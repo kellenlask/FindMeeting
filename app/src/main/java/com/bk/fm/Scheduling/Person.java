@@ -1,4 +1,4 @@
-package com.bk.fm.findmeeting;
+package com.bk.fm.Scheduling;
 
 /**
  * Created by Kellen on 3/4/2015.
@@ -6,6 +6,9 @@ package com.bk.fm.findmeeting;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.bk.fm.HumanTime.Range;
+import com.bk.fm.HumanTime.Time;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

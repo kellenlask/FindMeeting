@@ -19,6 +19,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.bk.fm.Scheduling.Meeting;
+import com.bk.fm.Scheduling.Person;
+import com.bk.fm.Scheduling.ScheduleObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -41,7 +46,7 @@ public class SavedPeople extends ActionBarActivity {
     private ArrayList<String> peopleNames;
     private ArrayList<Person> people;
     private static Meeting meeting;
-	private DataBase db;
+	private Database db;
 
 	private String name; //For edit/new person dialog
 
@@ -112,7 +117,7 @@ public class SavedPeople extends ActionBarActivity {
 						//Make a new person from the text from the dialog
 						Person p = new Person(input.getText().toString());
 
-						DataBase db = new DataBase(getBaseContext());
+						Database db = new Database(getBaseContext());
 
 						if (db.contains(p.getName())) { // Make sure there are no duplicate people in the db
 							Toast.makeText(getApplicationContext(), getString(R.string.person_exists),Toast.LENGTH_SHORT).show();
@@ -120,7 +125,7 @@ public class SavedPeople extends ActionBarActivity {
 							p.setAvailability(new ArrayList<ScheduleObject>());
 
 							//Store the person to the database
-							db = new DataBase(getBaseContext());
+							db = new Database(getBaseContext());
 							db.addPerson(p);
 
 							//Reset the name & refresh the list
@@ -175,7 +180,7 @@ public class SavedPeople extends ActionBarActivity {
             builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    db = new DataBase(getBaseContext());
+                    db = new Database(getBaseContext());
                     // Use a foreach loop to go over the saved people array
                     for (Person p: people)
                     {
@@ -209,7 +214,7 @@ public class SavedPeople extends ActionBarActivity {
         }
         else if(selectedItem.equals(getString(R.string.delete)))
         {
-            db = new DataBase(getBaseContext());
+            db = new Database(getBaseContext());
             db.deletePerson(peopleNames.get(info.position));
 
             peopleNames.remove(info.position);
@@ -239,7 +244,7 @@ public class SavedPeople extends ActionBarActivity {
 
     public void populateSavedPeople() {
 
-        DataBase db = new DataBase(getBaseContext());
+        Database db = new Database(getBaseContext());
 
         people = new ArrayList<>();
         peopleNames = new ArrayList<>();

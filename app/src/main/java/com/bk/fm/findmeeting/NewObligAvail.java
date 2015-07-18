@@ -16,6 +16,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.bk.fm.HumanTime.Day;
+import com.bk.fm.HumanTime.Interval;
+import com.bk.fm.HumanTime.Range;
+import com.bk.fm.HumanTime.Time;
+import com.bk.fm.Scheduling.Person;
+import com.bk.fm.Scheduling.ScheduleObject;
+
 /*
 This file contains the Java code to describe the behavior of the Obligation/Availability view
 The Activity's layout information is contained in the xml file under /res/layout/

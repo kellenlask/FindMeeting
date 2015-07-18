@@ -18,6 +18,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bk.fm.Scheduling.Meeting;
+import com.bk.fm.Scheduling.Person;
+import com.bk.fm.Scheduling.ScheduleObject;
+
 import java.util.ArrayList;
 
 /*
@@ -127,7 +132,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 				person.reduceAvailability();
 
 				//Update the database entry
-				DataBase db = new DataBase(getBaseContext());
+				Database db = new Database(getBaseContext());
 				int updates = db.updatePersonAvail(person);
 				Toast.makeText(getApplicationContext(), "Updated: " + updates, Toast.LENGTH_SHORT).show();
 

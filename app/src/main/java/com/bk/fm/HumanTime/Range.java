@@ -4,7 +4,7 @@ similar to Intervals, except they include a day, and are compared differently. T
 extra methods. In the future, this class may extend the Interval class.
  */
 
-package com.bk.fm.findmeeting;
+package com.bk.fm.HumanTime;
 
 import android.content.Context;
 

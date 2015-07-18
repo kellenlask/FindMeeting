@@ -12,13 +12,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.bk.fm.Scheduling.Person;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * Created by Kellen on 3/15/2015.
  */
-public class DataBase extends SQLiteOpenHelper {
+public class Database extends SQLiteOpenHelper {
 //----------------------------------------------------
 //
 //	Fields
@@ -41,7 +43,7 @@ public class DataBase extends SQLiteOpenHelper {
 //
 //----------------------------------------------------
 
-	public DataBase(Context context) {
+	public Database(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
@@ -91,6 +93,8 @@ public class DataBase extends SQLiteOpenHelper {
 			} while(cursor.moveToNext()); //While there are people left from the database
 		} //End if
 
+		cursor.close();
+
 		return people;
 	}
 
@@ -106,6 +110,8 @@ public class DataBase extends SQLiteOpenHelper {
 			p.setAvailability(cursor.getString(1));
 		}
 
+		cursor.close();
+
 		return p;
 	}
 
@@ -117,6 +123,8 @@ public class DataBase extends SQLiteOpenHelper {
 		if(cursor.moveToFirst()) { //If we got stuff
 			return true;
 		}
+
+		cursor.close();
 
 		return false;
 	}
@@ -131,6 +139,7 @@ public class DataBase extends SQLiteOpenHelper {
 
 		boolean results = (cursor != null);
 
+		cursor.close();
 		db.close();
 
 		return results;

@@ -3,7 +3,7 @@ This file contains the Java code for a Time object class definition. This object
 represent a slice of time, such as 8:46am. It is capable of accepting both 24h and 12h time.
  */
 
-package com.bk.fm.findmeeting;
+package com.bk.fm.HumanTime;
 
 import java.io.Serializable;
 

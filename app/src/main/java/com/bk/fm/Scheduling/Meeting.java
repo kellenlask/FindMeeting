@@ -5,11 +5,15 @@ from 8am to 6pm; the meeting should last about a half-hour. As well, this class 
 involved people, and can calculate the overlaps between their various availabilities.
  */
 
-package com.bk.fm.findmeeting;
+package com.bk.fm.Scheduling;
 
 /**
  * Created by Kellen on 3/4/2015.
  */
+
+import com.bk.fm.HumanTime.Day;
+import com.bk.fm.HumanTime.Interval;
+import com.bk.fm.HumanTime.Range;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

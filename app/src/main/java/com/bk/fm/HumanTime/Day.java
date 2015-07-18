@@ -2,13 +2,16 @@
 This file contains the Java code to describe the days of the week (an enumeration)
  */
 
-package com.bk.fm.findmeeting;
+package com.bk.fm.HumanTime;
 
 /**
  * Created by Kellen on 3/4/2015.
  */
 
 import android.content.Context;
+
+import com.bk.fm.findmeeting.R;
+
 import java.io.Serializable;	//Serializable in order to fully serialize objects that use Day.
 
 public enum Day implements Serializable {

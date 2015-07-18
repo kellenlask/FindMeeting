@@ -18,6 +18,13 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.bk.fm.HumanTime.Day;
+import com.bk.fm.HumanTime.Interval;
+import com.bk.fm.HumanTime.Range;
+import com.bk.fm.HumanTime.Time;
+import com.bk.fm.Scheduling.Meeting;
+
 import java.util.ArrayList;
 import java.util.TreeMap;
 

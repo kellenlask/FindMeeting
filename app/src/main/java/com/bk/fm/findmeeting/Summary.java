@@ -13,6 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.bk.fm.HumanTime.Day;
+import com.bk.fm.Scheduling.Meeting;
+
 import java.util.ArrayList;
 
 /*
@@ -34,7 +38,7 @@ public class Summary extends ActionBarActivity {
 
     private ArrayList<String> daysTimes;
     private ArrayAdapter<String> daysTimesAdapter;
-	private  Meeting meeting;
+	private Meeting meeting;
 
 //----------------------------------------------------
 //

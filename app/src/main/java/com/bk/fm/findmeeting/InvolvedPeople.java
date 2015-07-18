@@ -15,6 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.bk.fm.Scheduling.Meeting;
+import com.bk.fm.Scheduling.Person;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
