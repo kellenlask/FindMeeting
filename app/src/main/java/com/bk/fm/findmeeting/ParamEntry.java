@@ -4,12 +4,13 @@ package com.bk.fm.findmeeting;
  * Created by Kellen on 3/15/2015.
  */
 
+import android.app.Fragment;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,17 +30,19 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 /*
-This file contains the Java code to describe the behavior of the Meeting Parameters view
-The Activity's layout information is contained in the xml file under /res/layout/
-The intent is to take in the Meeting's parameters and construct a Meeting object from them.
- */
+	This file contains the Java code to describe the behavior of the Meeting Parameters view
+	The Activity's layout information is contained in the xml file under /res/layout/
+	The intent is to take in the Meeting's parameters and construct a Meeting object from them.
+*/
 
-public class MeetingParams extends ActionBarActivity {
+public class ParamEntry extends Fragment {
 //----------------------------------------------------
 //
 //	Fields
 //
 //----------------------------------------------------
+	private MainActivity parent;
+
 	private TreeMap<Day, Range> map;
 
 	private CheckBox sunday;
@@ -54,21 +57,25 @@ public class MeetingParams extends ActionBarActivity {
 
 	private Button startTime;
 	private Button endTime;
-
 	private Button meetingDuration;
-
 	private Button nextButton;
 
 //----------------------------------------------------
 //
-//	onCreate
+//	Initialization
 //
 //----------------------------------------------------
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_meeting_params);
+		parent = (MainActivity) getActivity();
+
+	} //End public void onCreate(Bundle)
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
+		View view = inflater.inflate(R.layout.activity_meeting_params, container, false);
 
 		//Setup the view references
 		initializeFields();
@@ -79,7 +86,36 @@ public class MeetingParams extends ActionBarActivity {
 		setTimeInputActionHandlers(); //Accept time inputs
 		setSpinnerActionHandler(); //Switch between selected days
 
-	} //End protected void onCreate(Bundle)
+		return view;
+
+	} //End public View onCreateView(LayoutInflater, ViewGroup, Bundle)
+
+	//Set the fields' values.
+	public void initializeFields() {
+		map = new TreeMap<>(); //To store the selected days and their time ranges
+
+		//Checkboxes
+		sunday = (CheckBox) parent.findViewById(R.id.sunday);
+		monday = (CheckBox) parent.findViewById(R.id.monday);
+		tuesday = (CheckBox) parent.findViewById(R.id.tuesday);
+		wednesday = (CheckBox) parent.findViewById(R.id.wednesday);
+		thursday = (CheckBox) parent.findViewById(R.id.thursday);
+		friday = (CheckBox) parent.findViewById(R.id.friday);
+		saturday = (CheckBox) parent.findViewById(R.id.saturday);
+
+		//Spinner
+		dayComboBox = (Spinner) parent.findViewById(R.id.dayComboBox);
+		updateComboBox();
+
+		//Time Inputs
+		startTime = (Button) parent.findViewById(R.id.startTime);
+		endTime = (Button) parent.findViewById(R.id.endTime);
+		meetingDuration = (Button) parent.findViewById(R.id.duration);
+
+		//Button
+		nextButton = (Button) parent.findViewById(R.id.nextButton);
+
+	} //End public void initializeFields()
 
 //----------------------------------------------------
 //
@@ -121,20 +157,19 @@ public class MeetingParams extends ActionBarActivity {
 					Meeting meeting = new Meeting(map, meetingLength);
 
 					//Put the Meeting into SharedPreferences
-					SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+					SharedPreferences sp = parent.getSharedPreferences("prefs", parent.getBaseContext().MODE_PRIVATE);
 					SharedPreferences.Editor editor = sp.edit();
 					editor.putString("MEETING", Meeting.serializeMeeting(meeting));
 					editor.commit();
 
 					//Send the Meeting Object along to the Summary Activity (Make an intent)
-					Intent i = new Intent(getBaseContext(), Summary.class);
-					startActivity(i);
+					parent.changeToFragment(Shard.SUMMARY);
 				} else {
-					Toast.makeText(getApplicationContext(), getString(R.string.invalidConfig), Toast.LENGTH_SHORT).show();
+					Toast.makeText(parent.getApplicationContext(), getString(R.string.invalidConfig), Toast.LENGTH_SHORT).show();
 				} //End if-else
 
 			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(), getString(R.string.invalidConfig), Toast.LENGTH_SHORT).show();
+				Toast.makeText(parent.getApplicationContext(), getString(R.string.invalidConfig), Toast.LENGTH_SHORT).show();
 			} //End Try-Catch
 
 		} //End public void onClick(View)
@@ -200,33 +235,6 @@ public class MeetingParams extends ActionBarActivity {
 //
 //----------------------------------------------------
 
-	//Set the fields' values.
-	public void initializeFields() {
-		map = new TreeMap<>(); //To store the selected days and their time ranges
-
-		//Checkboxes
-		sunday = (CheckBox) findViewById(R.id.sunday);
-		monday = (CheckBox) findViewById(R.id.monday);
-		tuesday = (CheckBox) findViewById(R.id.tuesday);
-		wednesday = (CheckBox) findViewById(R.id.wednesday);
-		thursday = (CheckBox) findViewById(R.id.thursday);
-		friday = (CheckBox) findViewById(R.id.friday);
-		saturday = (CheckBox) findViewById(R.id.saturday);
-
-		//Spinner
-		dayComboBox = (Spinner) findViewById(R.id.dayComboBox);
-		updateComboBox();
-
-		//Time Inputs
-		startTime = (Button) findViewById(R.id.startTime);
-		endTime = (Button) findViewById(R.id.endTime);
-		meetingDuration = (Button) findViewById(R.id.duration);
-
-		//Button
-		nextButton = (Button) findViewById(R.id.nextButton);
-
-	} //End public void initializeFields()
-
 
 	//Display a Time Picker, and change the Button argument's text to match the selected time.
 	public void showTimePicker(final Button txtTime) {
@@ -235,7 +243,7 @@ public class MeetingParams extends ActionBarActivity {
 		int minutes = Time.parseMinutes(txtTime.getText());
 
 		//Make the Time Picker with the current selected time
-		TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+		TimePickerDialog tpd = new TimePickerDialog(parent, new TimePickerDialog.OnTimeSetListener() {
 
 			@Override
 			public void onTimeSet(TimePicker view, int hour, int minute) {
@@ -350,12 +358,12 @@ public class MeetingParams extends ActionBarActivity {
 		//For each day, if selected, add it to the list
 		for (int i = 0; i < days.length; i++) {
 			if (days[i]) {
-				selectedDays.add(Day.getDay(i).toString(this)); //You've got to pass the context to toString() in order to access the strings.xml resources.
+				selectedDays.add(Day.getDay(i).toString(parent)); //You've got to pass the context to toString() in order to access the strings.xml resources.
 			}
 		}
 
 		//Throw the list into the combo box.
-		ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectedDays);
+		ArrayAdapter<String> data = new ArrayAdapter<>(parent, android.R.layout.simple_spinner_item, selectedDays);
 		data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		dayComboBox.setAdapter(data);
 
@@ -393,7 +401,7 @@ public class MeetingParams extends ActionBarActivity {
 
 		} catch (Exception e) {
 			//R.string.invalidInterval_1 +
-			Toast.makeText(getApplicationContext(), getString(R.string.invalidRange), Toast.LENGTH_SHORT).show();
+			Toast.makeText(parent.getApplicationContext(), getString(R.string.invalidRange), Toast.LENGTH_SHORT).show();
 		}
 	} //End public void storeDay()
 
@@ -422,4 +430,4 @@ public class MeetingParams extends ActionBarActivity {
 			}
 		}
 	} // End public void updateMapDays()
-} //End class MeetingParams extends ActionBarActivity
+} //End class ParamEntry extends ActionBarActivity

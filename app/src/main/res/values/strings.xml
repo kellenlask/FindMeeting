@@ -52,7 +52,7 @@
     <string name="avail">Availability</string>
     <string name="ablig">Obligation</string>
 
-    <!-- MeetingParams Activity -->
+    <!-- ParamEntry Activity -->
     <string name="stored_1">Stored</string>
     <string name="invalidInterval_1">Invalid Time Range.</string>
     <string name="action_settings">Settings</string>
@@ -93,5 +93,8 @@
     <string name="morePeople">Add some people.</string>
     <string name="newItem">New Schedule Item</string>
     <string name="selectDay">Please select a day.</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

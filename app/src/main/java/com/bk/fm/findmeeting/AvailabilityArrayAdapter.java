@@ -14,7 +14,7 @@ import java.util.List;
 /*
 *   The following is the custom ListView ArrayAdapter that allows for color-coding of the
 *   availability/obligation entries on the Availability Summary Page
-*   (AvailabilitySummary.java / activity_availability.xml)
+*   (PersonalSummary.java / activity_availability.xml)
  */
 
 public class AvailabilityArrayAdapter extends ArrayAdapter {

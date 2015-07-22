@@ -4,12 +4,14 @@ package com.bk.fm.findmeeting;
  * Created by Kellen on 3/15/2015.
  */
 
+import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TimePicker;
@@ -30,13 +32,16 @@ The intent is to accept the parameters for a new Obligation or Availability (the
 its type based on the button pressed in the Availability Summary Activity)
 */
 
-public class NewObligAvail extends ActionBarActivity {
+public class NewObligAvail extends Fragment {
 //----------------------------------------------------
 //
 //	Fields
 //
 //----------------------------------------------------
-    private CheckBox sunday;
+	private MainActivity parent;
+
+
+	private CheckBox sunday;
     private CheckBox monday;
     private CheckBox tuesday;
     private CheckBox wednesday;
@@ -54,19 +59,61 @@ public class NewObligAvail extends ActionBarActivity {
 
 //----------------------------------------------------
 //
-//	onCreate()
+//	Initialization
 //
 //----------------------------------------------------
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_new_oblig_avail);
+		parent = (MainActivity) getActivity();
 
-        initializeFields();
+	} //End onCreate()
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
+		View view = inflater.inflate(R.layout.activity_new_oblig_avail, container, false);
+
+		initializeFields();
 
 		setActionHandlers();
-	}
+
+		return view;
+
+	} //End public View onCreateView(LayoutInflater, ViewGroup, Bundle)
+
+	public void initializeFields() {
+		//Grab the Availability/Obligation toggle
+		toggle = (ToggleButton) parent.findViewById(R.id.toggleButton);
+
+		// Initialize text boxes
+		sunday = (CheckBox) parent.findViewById(R.id.sunday);
+		monday = (CheckBox) parent.findViewById(R.id.monday);
+		tuesday = (CheckBox) parent.findViewById(R.id.tuesday);
+		wednesday = (CheckBox) parent.findViewById(R.id.wednesday);
+		thursday = (CheckBox) parent.findViewById(R.id.thursday);
+		friday = (CheckBox) parent.findViewById(R.id.friday);
+		saturday = (CheckBox) parent.findViewById(R.id.saturday);
+
+		// Grab the buttons
+		saveButton = (Button) parent.findViewById(R.id.saveButton);
+		startTime = (Button) parent.findViewById(R.id.startTime);
+		endTime = (Button) parent.findViewById(R.id.endTime);
+
+		//Pull the person object
+		person = (Person) parent.getIntent().getSerializableExtra("PERSON");
+
+		// Check if this activity is an edit. If so, preload the checkboxes and time buttons
+		activityType = (String) parent.getIntent().getSerializableExtra("ACTIVITY_TYPE");
+		if (activityType.contains("Edit"))
+		{
+			// Pull the index of the ScheduleObject
+			int scheduleObjectIndex = (int) parent.getIntent().getSerializableExtra("SCHEDULE_OBJECT_INDEX");
+
+			//Populate the activity from the existing object
+			loadEditActivity(scheduleObjectIndex);
+		}
+	} //End  private void initializeFields()
 
 //----------------------------------------------------
 //
@@ -93,15 +140,15 @@ public class NewObligAvail extends ActionBarActivity {
 					try {
 						addScheduleObject(); //Throws an error with an invalid time range (e.g. 11:00 - 11:00)
 
-						Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+						Intent i = new Intent(parent.getBaseContext(), PersonalSummary.class);
 						i.putExtra("PERSON", (Parcelable) person);
 						startActivity(i);
 					} catch (Exception e) {
-						Toast.makeText(getApplicationContext(), getString(R.string.invalidRange), Toast.LENGTH_SHORT).show();
+						Toast.makeText(parent.getApplicationContext(), getString(R.string.invalidRange), Toast.LENGTH_SHORT).show();
 					}
 
 				} else {
-					Toast.makeText(getApplicationContext(), getString(R.string.selectDay), Toast.LENGTH_SHORT).show();
+					Toast.makeText(parent.getApplicationContext(), getString(R.string.selectDay), Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -120,7 +167,7 @@ public class NewObligAvail extends ActionBarActivity {
 	} //End public void setActionHandlers()
 
     public void onBackPressed() {
-        Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+        Intent i = new Intent(parent.getBaseContext(), PersonalSummary.class);
         i.putExtra("PERSON", (Parcelable) person);
         startActivity(i);
     }
@@ -138,7 +185,7 @@ public class NewObligAvail extends ActionBarActivity {
 		int minutes = Time.parseMinutes(txtTime.getText());
 
 		//Make the Time Picker with the current selected time
-		TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+		TimePickerDialog tpd = new TimePickerDialog(parent, new TimePickerDialog.OnTimeSetListener() {
 
 			@Override
 			public void onTimeSet(TimePicker view, int hour, int minute) {
@@ -167,39 +214,6 @@ public class NewObligAvail extends ActionBarActivity {
 //	Mutating Methods
 //
 //----------------------------------------------------
-
-    public void initializeFields() {
-		//Grab the Availability/Obligation toggle
-		toggle = (ToggleButton) findViewById(R.id.toggleButton);
-
-        // Initialize text boxes
-        sunday = (CheckBox) findViewById(R.id.sunday);
-        monday = (CheckBox) findViewById(R.id.monday);
-        tuesday = (CheckBox) findViewById(R.id.tuesday);
-        wednesday = (CheckBox) findViewById(R.id.wednesday);
-        thursday = (CheckBox) findViewById(R.id.thursday);
-        friday = (CheckBox) findViewById(R.id.friday);
-        saturday = (CheckBox) findViewById(R.id.saturday);
-
-        // Grab the buttons
-        saveButton = (Button) findViewById(R.id.saveButton);
-        startTime = (Button) findViewById(R.id.startTime);
-        endTime = (Button) findViewById(R.id.endTime);
-
-		//Pull the person object
-        person = (Person)getIntent().getSerializableExtra("PERSON");
-
-        // Check if this activity is an edit. If so, preload the checkboxes and time buttons
-		activityType = (String)getIntent().getSerializableExtra("ACTIVITY_TYPE");
-        if (activityType.contains("Edit"))
-        {
-            // Pull the index of the ScheduleObject
-            int scheduleObjectIndex = (int) getIntent().getSerializableExtra("SCHEDULE_OBJECT_INDEX");
-
-			//Populate the activity from the existing object
-            loadEditActivity(scheduleObjectIndex);
-        }
-    } //End  private void initializeFields()
 
     //Add the ScheduleObject to the person's availability ArrayList
     public void addScheduleObject() throws IllegalArgumentException {

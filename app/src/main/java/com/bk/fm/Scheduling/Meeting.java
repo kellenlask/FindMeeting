@@ -44,6 +44,10 @@ public class Meeting implements Serializable {
 //	Constructors
 //
 //----------------------------------------------------
+	public Meeting() {
+
+	}
+
 	public Meeting(TreeMap<Day, Range> days, Interval meetingDuration) {
 		this.setPossibleDays(days);
 		this.setMeetingDuration(meetingDuration);

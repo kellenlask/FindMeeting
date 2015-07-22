@@ -7,9 +7,12 @@ available for that time range, then by earliness in the week.
 
 package com.bk.fm.findmeeting;
 
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -21,31 +24,57 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 
-public class Results extends ActionBarActivity {
+public class Results extends Fragment {
+//----------------------------------------------------
+//
+//	Fields
+//
+//----------------------------------------------------
+	private MainActivity parent;
 
 	private ListView listView;
 	private static Meeting meeting;
 	private ArrayList<String> stringList;
 
+//----------------------------------------------------
+//
+//	Initialization
+//
+//----------------------------------------------------
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_results);
+		parent = (MainActivity) getActivity();
 
-		initializeFields();
 	}
 
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
+		View view = inflater.inflate(R.layout.activity_results, container, false);
+
+		initializeFields();
+
+		return view;
+
+	} //End public View onCreateView(LayoutInflater, ViewGroup, Bundle)
+
 	public void initializeFields() {
-		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+		SharedPreferences sp = parent.getSharedPreferences("prefs", parent.getBaseContext().MODE_PRIVATE);
 		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
 
-		listView = (ListView) findViewById(R.id.resultsList);
+		listView = (ListView) parent.findViewById(R.id.resultsList);
 		stringList = new ArrayList<>();
 
 		makeList();
 		updateList();
 
 	} //End initializeFields()
+
+//----------------------------------------------------
+//
+//	Results Methods
+//
+//----------------------------------------------------
 
 	public void makeList() {
 		TreeMap<Integer, TreeSet<Range>> map = meeting.calcTotalAvailability();
@@ -54,14 +83,14 @@ public class Results extends ActionBarActivity {
 			for(Range r : map.get(i)) {
                 double p = (((double) i / (map.keySet().size() - 1)) * 100);
                 int percent = (int) p;
-				stringList.add(0, percent + "% : " + r.toString(getBaseContext()));
+				stringList.add(0, percent + "% : " + r.toString(parent.getBaseContext()));
 			}
 		}
 
 	} //End makeList()
 
 	public void updateList() {
-		ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, stringList);
+		ArrayAdapter<String> data = new ArrayAdapter<>(parent, android.R.layout.simple_list_item_1, stringList);
 		listView.setAdapter(data);
 
 	} //End updateList()

@@ -4,14 +4,16 @@ package com.bk.fm.findmeeting;
  * Created by Kellen on 3/15/2015.
  */
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.ActionBarActivity;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,12 +33,15 @@ The Activity's layout information is contained in the xml file under /res/layout
 This view is meant to summarize the availability of one Person.
 */
 
-public class AvailabilitySummary extends ActionBarActivity {
+public class PersonalSummary extends Fragment {
 //----------------------------------------------------
 //
 //	Fields
 //
 //----------------------------------------------------
+	private MainActivity parent;
+
+
 	//GUI Elements
     private ListView AvailObligListView;
     private Button newItemButton;
@@ -50,19 +55,51 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 //----------------------------------------------------
 //
-//	onCreate()
+//	Initialization
 //
 //----------------------------------------------------
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_availability);
+		parent = (MainActivity) getActivity();
 
-        initializeFields();
+	} //End onCreate()
 
-		addActionHandlers();
-	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
+		View view = inflater.inflate(R.layout.activity_availability, container, false);
+
+		initializeFields();
+
+		setActionHandlers();
+
+		return view;
+
+	} //End public View onCreateView(LayoutInflater, ViewGroup, Bundle)
+
+	private void initializeFields() {
+		//Pull meeting from sharedpreferences
+		SharedPreferences sp = parent.getSharedPreferences("prefs", parent.getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
+
+		//Pull the Person from the Intent
+		person = (Person) parent.getIntent().getSerializableExtra("PERSON");
+
+		// Initialize list view
+		AvailObligListView = (ListView) parent.findViewById(R.id.AvailObligListView);
+		updateAvailability();
+
+		//Initialize Title Text
+		TextView title = (TextView) parent.findViewById(R.id.titleText);
+		title.setText(person.getName());
+
+		// Initialize buttons
+		newItemButton = (Button) parent.findViewById(R.id.addButton);
+		doneButton = (Button) parent.findViewById(R.id.saveButton);
+
+
+	} //End private void initializeFields()
 
 //----------------------------------------------------
 //
@@ -97,7 +134,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 		for(int i = 0; i < person.getAvailability().size(); i++) {
 			schObj = person.getAvailability().get(i);
 
-			if (scheduleAdapter.getItem(info.position).equals(schObj.toString(this))) {
+			if (scheduleAdapter.getItem(info.position).equals(schObj.toString(parent))) {
 				break;
 			}
 
@@ -105,7 +142,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 		//Handle the selected element accordingly
 		if(selectedItem.equals(getString(R.string.edit))) { //"Edit" Pressed
-			Intent i = new Intent(getBaseContext(), NewObligAvail.class);
+			Intent i = new Intent(parent.getBaseContext(), NewObligAvail.class);
 			i.putExtra("PERSON", (Parcelable) person);
 			i.putExtra("SCHEDULE_OBJECT_INDEX", person.getAvailability().indexOf(schObj));
 			i.putExtra("ACTIVITY_TYPE", "Edit");
@@ -122,7 +159,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 
 	} //End public boolean onContextItemSelected(MenuItem)
 
-	public void addActionHandlers() {
+	public void setActionHandlers() {
 
 		//Done Button
 		doneButton.setOnClickListener(new View.OnClickListener() {
@@ -132,21 +169,21 @@ public class AvailabilitySummary extends ActionBarActivity {
 				person.reduceAvailability();
 
 				//Update the database entry
-				Database db = new Database(getBaseContext());
+				Database db = new Database(parent.getBaseContext());
 				int updates = db.updatePersonAvail(person);
-				Toast.makeText(getApplicationContext(), "Updated: " + updates, Toast.LENGTH_SHORT).show();
+				Toast.makeText(parent.getApplicationContext(), "Updated: " + updates, Toast.LENGTH_SHORT).show();
 
 				//Update the person in the Meeting Object
 				addPersonToMeeting();
 
 				//Put the Meeting into SharedPreferences
-				SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+				SharedPreferences sp = parent.getSharedPreferences("prefs", parent.getBaseContext().MODE_PRIVATE);
 				SharedPreferences.Editor editor = sp.edit();
 				editor.putString("MEETING", Meeting.serializeMeeting(meeting));
 				editor.commit();
 
 				//Move on to the InvolvedPeople Activity
-				Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
+				Intent i = new Intent(parent.getBaseContext(), InvolvedPeople.class);
 				startActivity(i);
 			}
 		});
@@ -154,7 +191,7 @@ public class AvailabilitySummary extends ActionBarActivity {
 		newItemButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-					Intent i = new Intent(getBaseContext(), NewObligAvail.class);
+					Intent i = new Intent(parent.getBaseContext(), NewObligAvail.class);
 					i.putExtra("PERSON", (Parcelable) person);
 					i.putExtra("ACTIVITY_TYPE", ""); //(Not "edit")
 					startActivity(i);
@@ -164,50 +201,22 @@ public class AvailabilitySummary extends ActionBarActivity {
 		//Register the ListView's items for opening the context menu
 		registerForContextMenu(AvailObligListView);
 
-	} //End public void addActionHandlers()
+	} //End public void setActionHandlers()
 
-	@Override
-    public void onBackPressed() {
-        Intent i = new Intent(getBaseContext(), InvolvedPeople.class);
-        startActivity(i);
-    }
 //----------------------------------------------------
 //
 //	Logical Methods
 //
 //----------------------------------------------------
 
-    private void initializeFields() {
-		//Pull meeting from sharedpreferences
-		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
-		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
-
-		//Pull the Person from the Intent
-		person = (Person)getIntent().getSerializableExtra("PERSON");
-
-        // Initialize list view
-        AvailObligListView = (ListView) findViewById(R.id.AvailObligListView);
-		updateAvailability();
-
-		//Initialize Title Text
-		TextView title = (TextView) findViewById(R.id.titleText);
-		title.setText(person.getName());
-
-        // Initialize buttons
-		newItemButton = (Button) findViewById(R.id.addButton);
-        doneButton = (Button) findViewById(R.id.saveButton);
-
-
-    } //End private void initializeFields()
-
     private void updateAvailability() {
             schedule = new ArrayList<>();
 
             for (ScheduleObject s : person.getAvailability()) {
-                schedule.add(s.toString(this));
+                schedule.add(s.toString(parent));
             }
 
-			scheduleAdapter = new AvailabilityArrayAdapter(this, schedule);
+			scheduleAdapter = new AvailabilityArrayAdapter(parent, schedule);
 
             AvailObligListView.setAdapter(scheduleAdapter);
 

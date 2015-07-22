@@ -8,62 +8,66 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MeetingParams"
-            android:label="@string/app_name" >
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
+        <fragment
+            android:name=".ParamEntry"
+            android:label="@string/app_name" >
+
+        </fragment>
+        <fragment
             android:name=".Summary"
             android:label="@string/title_activity_summary"
-            android:parentActivityName=".MeetingParams" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bk.fm.findmeeting.MeetingParams" />
-        </activity>
-        <activity
+                android:value=".MainActivity" />
+        </fragment>
+        <fragment
             android:name=".InvolvedPeople"
             android:label="@string/title_activity_involved_people"
             android:parentActivityName=".Summary" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bk.fm.findmeeting.Summary" />
-        </activity>
-        <activity
+        </fragment>
+        <fragment
             android:name=".SavedPeople"
             android:label="@string/title_activity_saved_people"
             android:parentActivityName=".InvolvedPeople" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bk.fm.findmeeting.InvolvedPeople" />
-        </activity>
-        <activity
-            android:name=".AvailabilitySummary"
+        </fragment>
+        <fragment
+            android:name=".PersonalSummary"
             android:label="@string/title_activity_availability"
             android:parentActivityName=".InvolvedPeople" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bk.fm.findmeeting.InvolvedPeople" />
-        </activity>
-        <activity
+        </fragment>
+        <fragment
             android:name=".NewObligAvail"
             android:label="@string/title_activity_new_oblig_avail"
-            android:parentActivityName=".AvailabilitySummary" >
+            android:parentActivityName=".PersonalSummary" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AvailabilitySummary" />
-        </activity>
-        <activity
+                android:value=".PersonalSummary" />
+        </fragment>
+        <fragment
             android:name=".Results"
             android:label="@string/title_activity_results"
             android:parentActivityName=".InvolvedPeople" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bk.fm.findmeeting.InvolvedPeople" />
-        </activity>
+        </fragment>
     </application>
-
 </manifest>

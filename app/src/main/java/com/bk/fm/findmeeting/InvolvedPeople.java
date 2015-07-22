@@ -4,12 +4,14 @@ package com.bk.fm.findmeeting;
  * Created by Kellen on 3/15/2015.
  */
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,12 +38,15 @@ interacted with.
 //On press, availability page
 //On plus button press, go to add person screen
 //
-public class InvolvedPeople extends ActionBarActivity {
+public class InvolvedPeople extends Fragment {
 //----------------------------------------------------
 //
 //	Fields
 //
 //----------------------------------------------------
+	private MainActivity parent;
+
+
 	//GUI Fields
 	private ListView peopleList;
 	private Button addPersonButton;
@@ -53,33 +58,57 @@ public class InvolvedPeople extends ActionBarActivity {
 
 //----------------------------------------------------
 //
-//	onCreate
+//	Initialization
 //
 //----------------------------------------------------
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_involved_people);
+		parent = (MainActivity) getActivity();
+
+	} //End protected void onCreate()
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
+		View view = inflater.inflate(R.layout.activity_involved_people, container, false);
 
 		initializeFields();
 
-		addEventHandlers();
+		setActionHandlers();
 
-	} //End protected void onCreate()
+		return view;
+
+	} //End public View onCreateView(LayoutInflater, ViewGroup, Bundle)
 
 	public void onBackPressed() {
 		putMeeting();
 
-		Intent i = new Intent(getBaseContext(), Summary.class);
+		Intent i = new Intent(parent.getBaseContext(), Summary.class);
 		startActivity(i);
 	}
+
+	public void initializeFields() {
+		//List of people names to throw into the ListView
+		peopleNames = new ArrayList<>();
+
+		//Pull Meeting object out
+		SharedPreferences sp = parent.getSharedPreferences("prefs", parent.getBaseContext().MODE_PRIVATE);
+		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
+
+		addPersonButton = (Button) parent.findViewById(R.id.addPersonButton);
+		findTimesButton = (Button) parent.findViewById(R.id.findTimesButton);
+		peopleList = (ListView) parent.findViewById(R.id.peopleList);
+
+		updateList();
+
+	} //End initializeFields()
 
 //----------------------------------------------------
 //
 //	Event Handlers
 //
 //----------------------------------------------------
-	public void addEventHandlers() {
+	public void setActionHandlers() {
 		//Go to SavedPeople
 		addPersonButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -97,12 +126,12 @@ public class InvolvedPeople extends ActionBarActivity {
 						goToActivity(Results.class);
 
                     } else { // People have been added to the meeting and have added obligation(s) / availabilitie(s)
-						Toast.makeText(getApplicationContext(), getString(R.string.moreObligations), Toast.LENGTH_SHORT).show();
+						Toast.makeText(parent.getApplicationContext(), getString(R.string.moreObligations), Toast.LENGTH_SHORT).show();
 
 					}
 
 				} else { //Meeting object is null
-					Toast.makeText(getApplicationContext(), getString(R.string.morePeople), Toast.LENGTH_SHORT).show();
+					Toast.makeText(parent.getApplicationContext(), getString(R.string.morePeople), Toast.LENGTH_SHORT).show();
 
                 } //End outer if-else
 			}
@@ -121,41 +150,26 @@ public class InvolvedPeople extends ActionBarActivity {
 			}
 		});
 
-		//Go to AvailabilitySummary for a given person onShortPress
+		//Go to PersonalSummary for a given person onShortPress
 		peopleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				String selectedPerson = peopleList.getItemAtPosition(position).toString();
 				Person p = meeting.getPerson(selectedPerson);
 
-				Intent i = new Intent(getBaseContext(), AvailabilitySummary.class);
+				Intent i = new Intent(parent.getContext(), PersonalSummary.class);
 				i.putExtra("PERSON", (Parcelable) p);
 				startActivity(i);
 
 			}
 		});
 
-    } //End addEventHandlers()
+    } //End setActionHandlers()
 
 //----------------------------------------------------
 //
 //	Other Methods
 //
 //----------------------------------------------------
-	public void initializeFields() {
-		//List of people names to throw into the ListView
-		peopleNames = new ArrayList<>();
-
-		//Pull Meeting object out
-		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
-		meeting = Meeting.deserializeMeeting(sp.getString("MEETING", ""));
-
-		addPersonButton = (Button) findViewById(R.id.addPersonButton);
-		findTimesButton = (Button) findViewById(R.id.findTimesButton);
-		peopleList = (ListView) findViewById(R.id.peopleList);
-
-		updateList();
-
-	} //End initializeFields()
 
 	public void updateList() {
         if (meeting.getInvolvedPeople() != null) {
@@ -172,20 +186,20 @@ public class InvolvedPeople extends ActionBarActivity {
 	} //End updateList()
 
 	public void updateListView() {
-		ArrayAdapter<String> data = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, peopleNames);
+		ArrayAdapter<String> data = new ArrayAdapter<>(parent, android.R.layout.simple_list_item_1, peopleNames);
 		peopleList.setAdapter(data);
 	}
 
 	public void goToActivity(Class c) {
 		putMeeting();
 
-		Intent i = new Intent(getBaseContext(), c);
+		Intent i = new Intent(parent.getBaseContext(), c);
 		startActivity(i);
 	}
 
 	//Put the meeting object into sharedpreferences
 	public void putMeeting() {
-		SharedPreferences sp = getSharedPreferences("prefs", getBaseContext().MODE_PRIVATE);
+		SharedPreferences sp = parent.getSharedPreferences("prefs", parent.getBaseContext().MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 
 		editor.putString("MEETING", Meeting.serializeMeeting(meeting));
