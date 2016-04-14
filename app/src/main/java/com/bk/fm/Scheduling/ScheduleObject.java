@@ -7,7 +7,7 @@ package com.bk.fm.Scheduling;
 import android.content.Context;
 
 import com.bk.fm.HumanTime.Range;
-import com.bk.fm.findmeeting.R;
+import com.bk.fm.FindMeeting.R;
 
 import java.io.Serializable;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bk.fm.findmeeting" >
+    package="com.bk.fm.FindMeeting" >
 
     <application
         android:allowBackup="true"
@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MeetingParams"
+            android:name="com.bk.fm.FindMeeting.MeetingParams"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,52 +17,52 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Summary"
+            android:name="com.bk.fm.FindMeeting.Summary"
             android:label="@string/title_activity_summary"
-            android:parentActivityName=".MeetingParams" >
+            android:parentActivityName="com.bk.fm.FindMeeting.MeetingParams" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bk.fm.findmeeting.MeetingParams" />
+                android:value="com.bk.fm.FindMeeting.MeetingParams" />
         </activity>
         <activity
-            android:name=".InvolvedPeople"
+            android:name="com.bk.fm.FindMeeting.InvolvedPeople"
             android:label="@string/title_activity_involved_people"
-            android:parentActivityName=".Summary" >
+            android:parentActivityName="com.bk.fm.FindMeeting.Summary" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bk.fm.findmeeting.Summary" />
+                android:value="com.bk.fm.FindMeeting.Summary" />
         </activity>
         <activity
-            android:name=".SavedPeople"
+            android:name="com.bk.fm.FindMeeting.SavedPeople"
             android:label="@string/title_activity_saved_people"
-            android:parentActivityName=".InvolvedPeople" >
+            android:parentActivityName="com.bk.fm.FindMeeting.InvolvedPeople" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bk.fm.findmeeting.InvolvedPeople" />
+                android:value="com.bk.fm.FindMeeting.InvolvedPeople" />
         </activity>
         <activity
-            android:name=".AvailabilitySummary"
+            android:name="com.bk.fm.FindMeeting.AvailabilitySummary"
             android:label="@string/title_activity_availability"
-            android:parentActivityName=".InvolvedPeople" >
+            android:parentActivityName="com.bk.fm.FindMeeting.InvolvedPeople" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bk.fm.findmeeting.InvolvedPeople" />
+                android:value="com.bk.fm.FindMeeting.InvolvedPeople" />
         </activity>
         <activity
-            android:name=".NewObligAvail"
+            android:name="com.bk.fm.FindMeeting.NewObligAvail"
             android:label="@string/title_activity_new_oblig_avail"
-            android:parentActivityName=".AvailabilitySummary" >
+            android:parentActivityName="com.bk.fm.FindMeeting.AvailabilitySummary" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AvailabilitySummary" />
+                android:value="com.bk.fm.FindMeeting.AvailabilitySummary" />
         </activity>
         <activity
-            android:name=".Results"
+            android:name="com.bk.fm.FindMeeting.Results"
             android:label="@string/title_activity_results"
-            android:parentActivityName=".InvolvedPeople" >
+            android:parentActivityName="com.bk.fm.FindMeeting.InvolvedPeople" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bk.fm.findmeeting.InvolvedPeople" />
+                android:value="com.bk.fm.FindMeeting.InvolvedPeople" />
         </activity>
     </application>
 

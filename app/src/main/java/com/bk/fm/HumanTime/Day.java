@@ -10,7 +10,7 @@ package com.bk.fm.HumanTime;
 
 import android.content.Context;
 
-import com.bk.fm.findmeeting.R;
+import com.bk.fm.FindMeeting.R;
 
 import java.io.Serializable;	//Serializable in order to fully serialize objects that use Day.
 
