@@ -5,7 +5,7 @@ The intent is to present the user with a list of time ranges ordered first by th
 available for that time range, then by earliness in the week.
  */
 
-package com.bk.fm.findmeeting;
+package com.bk.fm.FindMeeting;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

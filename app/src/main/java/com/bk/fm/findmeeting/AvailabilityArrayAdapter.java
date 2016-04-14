@@ -1,4 +1,4 @@
-package com.bk.fm.findmeeting;
+package com.bk.fm.FindMeeting;
 
 
 import android.content.Context;

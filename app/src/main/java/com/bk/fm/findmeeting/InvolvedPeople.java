@@ -1,4 +1,4 @@
-package com.bk.fm.findmeeting;
+package com.bk.fm.FindMeeting;
 
 /**
  * Created by Kellen on 3/15/2015.
